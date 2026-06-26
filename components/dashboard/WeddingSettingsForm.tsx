@@ -279,7 +279,7 @@ export function WeddingSettingsForm({
                   />
                 </div>
                 <p className="text-xs text-warm-grey leading-relaxed pt-1">
-                  Preview. If the image doesn't appear, the URL may not be publicly accessible or may not allow cross-origin display.
+                  Preview. If the image doesn&apos;t appear, the URL may not be publicly accessible or may not allow cross-origin display.
                 </p>
               </div>
             ) : null}

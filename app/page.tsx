@@ -86,14 +86,13 @@ export default async function Page({
             coupleName={coupleName}
             weddingDate={weddingDate}
             weddingDateLabel={weddingDateLabel}
-            backgroundImageUrl={couplePhotoUrl || undefined}
           />
         </div>
 
         <div data-scroll-section className="relative flex flex-col items-center w-full">
           <GreetingSection guestName={guestName} />
           <ImageBreak
-            src={fallbackConfig.couplePhoto}
+            src={couplePhotoUrl}
             alt={fallbackConfig.couplePhotoAlt}
             priority
           />
