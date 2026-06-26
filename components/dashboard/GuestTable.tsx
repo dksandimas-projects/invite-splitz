@@ -20,6 +20,8 @@ function roleToBadgeVariant(role: GuestRole) {
       return "principal" as const;
     case "Secondary Sponsor":
       return "secondary" as const;
+    case "Officiant":
+      return "officiant" as const;
     case "Entourage":
       return "entourage" as const;
     default:

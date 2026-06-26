@@ -3,8 +3,10 @@ import { Timestamp } from "firebase/firestore";
 export type GuestRole =
   | "Principal Sponsor"
   | "Secondary Sponsor"
+  | "Officiant"
   | "Entourage"
   | "Guest";
+
 
 export interface GuestDoc {
   id: string;

@@ -40,6 +40,7 @@ interface ImportPlan {
 
 const VALID_ROLES: GuestRole[] = [
   "Guest",
+  "Officiant",
   "Entourage",
   "Secondary Sponsor",
   "Principal Sponsor",
@@ -64,7 +65,6 @@ const ENTOURAGE_ROLE_ALIASES: Record<string, string> = {
   "junior groomsmen": "Junior Groomsmen",
   "junior bridesmaid": "Junior Bridesmaids",
   "junior bridesmaids": "Junior Bridesmaids",
-  "officiant": "Officiant",
   "parent": "Parents",
   "parents": "Parents",
   "emcee": "Emcee",

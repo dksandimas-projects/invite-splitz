@@ -106,7 +106,9 @@ export async function syncEntourageFromGuests(): Promise<void> {
     if (guest.role === "Guest") continue;
 
     let groupName = "Entourage";
-    if (guest.role === "Principal Sponsor") {
+    if (guest.role === "Officiant") {
+      groupName = "Officiant";
+    } else if (guest.role === "Principal Sponsor") {
       groupName = "Principal Sponsors";
     } else if (guest.role === "Secondary Sponsor") {
       groupName = "Secondary Sponsors";
@@ -134,12 +136,13 @@ export async function syncEntourageFromGuests(): Promise<void> {
   }));
 
   const PRIORITY: Record<string, number> = {
-    "Principal Sponsors": 1,
-    "Secondary Sponsors": 2,
-    "Best Man": 3,
-    "Maid of Honor": 4,
-    "Groomsmen": 5,
-    "Bridesmaids": 6,
+    "Officiant": 1,
+    "Principal Sponsors": 2,
+    "Secondary Sponsors": 3,
+    "Best Man": 4,
+    "Maid of Honor": 5,
+    "Groomsmen": 6,
+    "Bridesmaids": 7,
   };
 
   entourageList.sort((a, b) => {

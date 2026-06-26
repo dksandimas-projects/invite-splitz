@@ -26,10 +26,12 @@ interface GuestFormProps {
 
 const ROLE_OPTIONS: { value: GuestRole; label: string }[] = [
   { value: "Guest", label: "Guest" },
+  { value: "Officiant", label: "Officiant" },
   { value: "Entourage", label: "Entourage" },
   { value: "Secondary Sponsor", label: "Secondary Sponsor" },
   { value: "Principal Sponsor", label: "Principal Sponsor" },
 ];
+
 
 export function GuestForm({
   isOpen,
