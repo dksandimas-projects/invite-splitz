@@ -18,6 +18,10 @@ const inter = Inter({
   display: "swap",
 });
 
+const weddingId = process.env.NEXT_PUBLIC_WEDDING_ID || "bretch-joyce";
+const isBretchJoyce = weddingId === "bretch-joyce";
+const ogImageUrl = isBretchJoyce ? "/images/og-image.png" : "/og";
+
 export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
@@ -36,7 +40,7 @@ export const metadata: Metadata = {
     siteName: "Bretch & Joyce",
     images: [
       {
-        url: "/og",
+        url: ogImageUrl,
         width: 1200,
         height: 630,
         alt: "Bretch & Joyce — August 1, 2026",
@@ -48,7 +52,7 @@ export const metadata: Metadata = {
     title: "Bretch & Joyce • August 1, 2026",
     description:
       "You're invited to celebrate the wedding of Bretch & Joyce on August 1, 2026.",
-    images: ["/og"],
+    images: [ogImageUrl],
   },
   robots: {
     index: true,

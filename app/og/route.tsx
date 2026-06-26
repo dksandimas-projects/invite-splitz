@@ -1,10 +1,17 @@
 import { ImageResponse } from "next/og";
+import { NextResponse } from "next/server";
 
 export const runtime = "edge";
 
 const DATE_LABEL = "August 1, 2026";
 
-export async function GET() {
+export async function GET(request: Request) {
+  const weddingId = process.env.NEXT_PUBLIC_WEDDING_ID || "bretch-joyce";
+  if (weddingId === "bretch-joyce") {
+    const { origin } = new URL(request.url);
+    return NextResponse.redirect(`${origin}/images/og-image.png`, 307);
+  }
+
   return new ImageResponse(
     (
       <div

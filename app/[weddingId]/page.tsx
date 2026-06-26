@@ -23,8 +23,10 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export async function generateMetadata({
+  params,
   searchParams,
 }: {
+  params: { weddingId: string };
   searchParams: SearchParams;
 }): Promise<Metadata> {
   const wedding = await getWedding();
@@ -43,13 +45,29 @@ export async function generateMetadata({
     }
   }
 
+  const isBretchJoyce = params?.weddingId === "bretch-joyce" || process.env.NEXT_PUBLIC_WEDDING_ID === "bretch-joyce";
+  const ogImageUrl = isBretchJoyce ? "/images/og-image.png" : "/og";
+
   return {
     title: `${title}${personalized}`,
     description,
     openGraph: {
       title,
       description,
-      images: ["/og"],
+      images: [
+        {
+          url: ogImageUrl,
+          width: 1200,
+          height: 630,
+          alt: title,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [ogImageUrl],
     },
   };
 }
