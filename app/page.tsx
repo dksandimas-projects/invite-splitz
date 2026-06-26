@@ -13,6 +13,7 @@ import { EventDetails } from "@/components/site/EventDetails";
 import { DressCode } from "@/components/site/DressCode";
 import { PhotoQR } from "@/components/site/PhotoQR";
 import { BibleVerseFooter } from "@/components/site/BibleVerseFooter";
+import { ScrollDownGuide } from "@/components/site/ScrollDownGuide";
 
 interface SearchParams {
   guest?: string;
@@ -79,35 +80,57 @@ export default async function Page({
     <>
       <GuestTopNav coupleName={coupleName} />
       <main className="bg-offwhite min-h-screen">
-        <HeroSection
-          coupleName={coupleName}
-          weddingDate={weddingDate}
-          weddingDateLabel={weddingDateLabel}
-        />
-        <GreetingSection guestName={guestName} />
-        <ImageBreak />
-        <NoPlusOneNotice text={fallbackConfig.noPlusOneText} />
-        <GiftNote body={fallbackConfig.giftNoteText} />
+        <div data-scroll-section>
+          <HeroSection
+            coupleName={coupleName}
+            weddingDate={weddingDate}
+            weddingDateLabel={weddingDateLabel}
+          />
+        </div>
+
+        <div data-scroll-section className="relative flex flex-col items-center w-full">
+          <GreetingSection guestName={guestName} />
+          <ImageBreak />
+          <NoPlusOneNotice text={fallbackConfig.noPlusOneText} />
+          <GiftNote body={fallbackConfig.giftNoteText} />
+          <ScrollDownGuide
+            label={guest ? "Scroll down for RSVP" : "Scroll down for entourage"}
+          />
+        </div>
+
         {guest ? (
-          <div id="rsvp">
+          <div data-scroll-section id="rsvp" className="relative flex flex-col items-center w-full">
             <RSVPSection
               token={guest.token}
               pax={guest.pax}
               existingRsvpCount={guest.rsvpCount}
             />
+            <ScrollDownGuide label="Scroll down for entourage" />
           </div>
         ) : null}
-        <EntourageSection entourage={entourage} />
-        <EventDetails ceremony={ceremony} reception={reception} />
-        <DressCode
-          description={dressCode.description}
-          palette={dressCode.palette}
-        />
-        <PhotoQR
-          albumUrl={photoAlbumUrl}
-          headline={fallbackConfig.photoQRHeadline}
-          body={fallbackConfig.photoQRBody}
-        />
+
+        <div data-scroll-section className="relative flex flex-col items-center w-full">
+          <EntourageSection entourage={entourage} />
+          <ScrollDownGuide label="Scroll down for celebration details" />
+        </div>
+
+        <div data-scroll-section className="relative flex flex-col items-center w-full">
+          <EventDetails ceremony={ceremony} reception={reception} />
+          <DressCode
+            description={dressCode.description}
+            palette={dressCode.palette}
+          />
+          <ScrollDownGuide label="Scroll down for photo sharing" />
+        </div>
+
+        <div data-scroll-section className="relative flex flex-col items-center w-full">
+          <PhotoQR
+            albumUrl={photoAlbumUrl}
+            headline={fallbackConfig.photoQRHeadline}
+            body={fallbackConfig.photoQRBody}
+          />
+        </div>
+
         <BibleVerseFooter
           text={fallbackConfig.bibleVerse.text}
           reference={fallbackConfig.bibleVerse.reference}

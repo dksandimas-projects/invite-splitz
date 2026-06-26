@@ -1,6 +1,7 @@
 import * as React from "react";
 import { CountdownTimer } from "./CountdownTimer";
 import { BotanicalVines } from "./BotanicalVines";
+import { ScrollDownGuide } from "./ScrollDownGuide";
 
 interface HeroSectionProps {
   coupleName: string;
@@ -55,8 +56,14 @@ export function HeroSection({
         <div className="mt-10">
           <CountdownTimer targetIso={weddingDate} />
         </div>
+
+        <div className="mt-12">
+          <ScrollDownGuide
+            label="Scroll down for the wedding details + RSVP"
+            isHero={true}
+          />
+        </div>
       </div>
     </section>
   );
 }
-
