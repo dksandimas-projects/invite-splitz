@@ -1,0 +1,47 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper: check if the authenticated user owns this wedding
+    function isOwner(weddingId) {
+      return request.auth != null &&
+        request.auth.uid == get(/databases/$(database)/documents/weddings/$(weddingId)).data.ownerId;
+    }
+
+    // Wedding config — public read, owner-only write
+    match /weddings/{weddingId} {
+      allow read: if true;
+      allow write: if isOwner(weddingId);
+    }
+
+    // Private subcollection — authenticated read, owner-only write
+    // Any signed-in user can read (needed for AuthGuard email check after sign-in)
+    // Only the owner can update the authorized emails list
+    match /weddings/{weddingId}/private/{docId} {
+      allow read: if request.auth != null;
+      allow write: if isOwner(weddingId);
+    }
+
+    // Guest records
+    match /weddings/{weddingId}/guests/{guestId} {
+
+      // Public: read a single guest by token only (not list)
+      allow get: if true;
+      allow list: if isOwner(weddingId);
+
+      // Public: submit RSVP — only rsvpCount and rsvpSubmittedAt fields,
+      // only if rsvpCount is currently null (first submission only)
+      allow update: if
+        request.auth == null &&
+        request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly(["rsvpCount", "rsvpSubmittedAt"]) &&
+        resource.data.rsvpCount == null &&
+        request.resource.data.rsvpCount is int &&
+        request.resource.data.rsvpCount >= 0 &&
+        request.resource.data.rsvpCount <= resource.data.pax;
+
+      // Owner: full read/write (dashboard)
+      allow read, write: if isOwner(weddingId);
+    }
+  }
+}

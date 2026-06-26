@@ -16,24 +16,24 @@ interface GuestFormProps {
 }
 
 const ROLE_OPTIONS: { value: GuestRole; label: string }[] = [
-  { value: "guest", label: "Guest" },
-  { value: "entourage", label: "Entourage" },
-  { value: "secondary_sponsor", label: "Secondary Sponsor" },
-  { value: "principal_sponsor", label: "Principal Sponsor" },
+  { value: "Guest", label: "Guest" },
+  { value: "Entourage", label: "Entourage" },
+  { value: "Secondary Sponsor", label: "Secondary Sponsor" },
+  { value: "Principal Sponsor", label: "Principal Sponsor" },
 ];
 
 export function GuestForm({ isOpen, onClose, mode, initial }: GuestFormProps) {
   const [firstName, setFirstName] = React.useState(initial?.firstName ?? "");
   const [lastName, setLastName] = React.useState(initial?.lastName ?? "");
   const [pax, setPax] = React.useState<string>(String(initial?.pax ?? 1));
-  const [role, setRole] = React.useState<GuestRole>(initial?.role ?? "guest");
+  const [role, setRole] = React.useState<GuestRole>(initial?.role ?? "Guest");
 
   React.useEffect(() => {
     if (isOpen) {
       setFirstName(initial?.firstName ?? "");
       setLastName(initial?.lastName ?? "");
       setPax(String(initial?.pax ?? 1));
-      setRole(initial?.role ?? "guest");
+      setRole(initial?.role ?? "Guest");
     }
   }, [isOpen, initial]);
 

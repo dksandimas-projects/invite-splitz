@@ -5,18 +5,28 @@ import QRCode from "react-qr-code";
 import { SectionCard } from "@/components/shared/SectionCard";
 import { FormField } from "@/components/shared/FormField";
 import { Input } from "@/components/shared/Input";
-// (Textarea is used by sub-editors, not directly in this file)
 import { Button } from "@/components/shared/Button";
 import { FormFooter } from "@/components/shared/FormFooter";
 import { PaletteEditor } from "./PaletteEditor";
 import { EntourageEditor } from "./EntourageEditor";
 import { useToast } from "@/components/shared/ToastProvider";
 import { weddingConfig as initialConfig } from "@/lib/config";
-import type { WeddingDoc, EventInfo } from "@/types";
+import type { EventInfo } from "@/types";
+
+type WeddingDraft = {
+  coupleName: string;
+  weddingDate: string;
+  hashtag: string;
+  photoAlbumUrl: string;
+  ceremony: EventInfo;
+  reception: EventInfo;
+  dressCode: { description: string; palette: { name: string; hex: string }[] };
+  entourage: { role: string; members: string[] }[];
+};
 
 interface WeddingSettingsFormProps {
-  initial?: WeddingDoc;
-  onSave?: (next: WeddingDoc) => void;
+  initial?: WeddingDraft;
+  onSave?: (next: WeddingDraft) => void;
 }
 
 interface AccessEntry {
@@ -27,11 +37,8 @@ export function WeddingSettingsForm({
   initial,
   onSave,
 }: WeddingSettingsFormProps) {
-  const seed = initial ?? ({
-    id: "bretch-joyce",
+  const seed: WeddingDraft = initial ?? {
     coupleName: initialConfig.coupleName,
-    partnerOne: initialConfig.partnerOne,
-    partnerTwo: initialConfig.partnerTwo,
     weddingDate: initialConfig.weddingDate,
     hashtag: initialConfig.hashtag,
     photoAlbumUrl: initialConfig.photoAlbumUrl,
@@ -39,14 +46,10 @@ export function WeddingSettingsForm({
     reception: initialConfig.reception,
     dressCode: initialConfig.dressCode,
     entourage: initialConfig.entourage,
-    bibleVerse: initialConfig.bibleVerse,
-    ownerId: "",
-    createdAt: 0,
-    updatedAt: 0,
-  } as WeddingDoc);
+  };
 
-  const [draft, setDraft] = React.useState<WeddingDoc>(seed);
-  const [saved, setSaved] = React.useState<WeddingDoc>(seed);
+  const [draft, setDraft] = React.useState<WeddingDraft>(seed);
+  const [saved, setSaved] = React.useState<WeddingDraft>(seed);
   const [access, setAccess] = React.useState<AccessEntry[]>([
     { email: "dksandimas.projects@gmail.com" },
   ]);
@@ -61,7 +64,10 @@ export function WeddingSettingsForm({
     return JSON.stringify(draft) !== JSON.stringify(saved);
   }, [draft, saved]);
 
-  const update = <K extends keyof WeddingDoc>(key: K, value: WeddingDoc[K]) => {
+  const update = <K extends keyof WeddingDraft>(
+    key: K,
+    value: WeddingDraft[K]
+  ) => {
     setDraft((d) => ({ ...d, [key]: value }));
   };
 

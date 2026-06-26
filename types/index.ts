@@ -1,26 +1,25 @@
-export type GuestRole =
-  | "principal_sponsor"
-  | "secondary_sponsor"
-  | "entourage"
-  | "guest";
+import { Timestamp } from "firebase/firestore";
 
-export interface Guest {
+export type GuestRole =
+  | "Principal Sponsor"
+  | "Secondary Sponsor"
+  | "Entourage"
+  | "Guest";
+
+export interface GuestDoc {
   id: string;
+  token: string;
   firstName: string;
   lastName: string;
   pax: number;
   role: GuestRole;
-  token: string;
   rsvpCount: number | null;
-  rsvpSubmittedAt?: number | null;
+  rsvpSubmittedAt: Timestamp | null;
+  createdAt: Timestamp;
+  updatedAt: Timestamp;
 }
 
-export interface EventInfo {
-  time: string;
-  venue: string;
-  address: string;
-  mapsUrl: string;
-}
+export type Guest = GuestDoc;
 
 export interface ColorSwatch {
   name: string;
@@ -32,12 +31,17 @@ export interface EntourageGroup {
   members: string[];
 }
 
+export interface EventInfo {
+  time: string;
+  venue: string;
+  address: string;
+  mapsUrl: string;
+}
+
 export interface WeddingDoc {
-  id: string;
+  ownerId: string;
   coupleName: string;
-  partnerOne: string;
-  partnerTwo: string;
-  weddingDate: string; // ISO date
+  weddingDate: string;
   hashtag: string;
   photoAlbumUrl: string;
   ceremony: EventInfo;
@@ -47,8 +51,24 @@ export interface WeddingDoc {
     palette: ColorSwatch[];
   };
   entourage: EntourageGroup[];
-  bibleVerse: { text: string; reference: string };
-  ownerId: string;
-  createdAt: number;
-  updatedAt: number;
+  createdAt: Timestamp;
+  updatedAt: Timestamp;
 }
+
+export interface AccessDoc {
+  authorizedEmails: string[];
+}
+
+export type WeddingConfigUpdate = Partial<
+  Pick<
+    WeddingDoc,
+    | "coupleName"
+    | "weddingDate"
+    | "hashtag"
+    | "photoAlbumUrl"
+    | "ceremony"
+    | "reception"
+    | "dressCode"
+    | "entourage"
+  >
+>;

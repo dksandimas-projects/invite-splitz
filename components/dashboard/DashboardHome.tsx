@@ -20,7 +20,11 @@ export function DashboardHome({ weddingId }: DashboardHomeProps) {
 
   // Top 5 recent RSVPs (those with rsvpSubmittedAt set)
   const recent = DUMMY_GUESTS.filter((g) => g.rsvpSubmittedAt)
-    .sort((a, b) => (b.rsvpSubmittedAt ?? 0) - (a.rsvpSubmittedAt ?? 0))
+    .sort(
+      (a, b) =>
+        (b.rsvpSubmittedAt?.toMillis() ?? 0) -
+        (a.rsvpSubmittedAt?.toMillis() ?? 0)
+    )
     .slice(0, 5);
 
   return (
@@ -94,7 +98,7 @@ export function DashboardHome({ weddingId }: DashboardHomeProps) {
                   </div>
                   <span className="text-xs text-warm-grey italic">
                     {g.rsvpSubmittedAt
-                      ? formatRelative(g.rsvpSubmittedAt)
+                      ? formatRelative(g.rsvpSubmittedAt.toMillis())
                       : ""}
                   </span>
                 </li>

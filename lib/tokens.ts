@@ -27,3 +27,14 @@ export const shadow = {
   lg: "0 10px 15px rgba(0,0,0,0.10)",
   soft: "0px 4px 20px rgba(44, 43, 40, 0.05)",
 } as const;
+
+import { customAlphabet } from "nanoid";
+
+// Lowercase alphanumeric only — 12 chars is the spec length.
+// Excludes ambiguous characters (0/O, 1/l/I) for token legibility.
+const ALPHABET = "23456789abcdefghjkmnpqrstuvwxyz";
+const generateRaw = customAlphabet(ALPHABET, 12);
+
+export function generateToken(): string {
+  return generateRaw();
+}

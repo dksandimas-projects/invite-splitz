@@ -15,11 +15,11 @@ interface GuestCardProps {
 
 function roleToBadgeVariant(role: GuestRole) {
   switch (role) {
-    case "principal_sponsor":
+    case "Principal Sponsor":
       return "principal" as const;
-    case "secondary_sponsor":
+    case "Secondary Sponsor":
       return "secondary" as const;
-    case "entourage":
+    case "Entourage":
       return "entourage" as const;
     default:
       return "guest" as const;
@@ -27,16 +27,7 @@ function roleToBadgeVariant(role: GuestRole) {
 }
 
 function roleToLabel(role: GuestRole) {
-  switch (role) {
-    case "principal_sponsor":
-      return "Principal Sponsor";
-    case "secondary_sponsor":
-      return "Secondary Sponsor";
-    case "entourage":
-      return "Entourage";
-    case "guest":
-      return "Guest";
-  }
+  return role;
 }
 
 function rsvpBadge(guest: Guest) {
