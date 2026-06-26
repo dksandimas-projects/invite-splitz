@@ -6,6 +6,23 @@ interface EventDetailsProps {
   reception: EventInfo;
 }
 
+const PinIcon = () => (
+  <svg
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden
+  >
+    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+    <circle cx="12" cy="10" r="3" />
+  </svg>
+);
+
 function EventCard({ label, info }: { label: string; info: EventInfo }) {
   return (
     <div className="border border-stone bg-white rounded-md p-6 sm:p-8 space-y-3">
@@ -23,20 +40,46 @@ function EventCard({ label, info }: { label: string; info: EventInfo }) {
         rel="noopener noreferrer"
         className="inline-flex items-center gap-2 text-forest text-sm font-medium hover:underline min-h-[44px]"
       >
-        <svg
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          aria-hidden
-        >
-          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-          <circle cx="12" cy="10" r="3" />
-        </svg>
+        <PinIcon />
+        Get Directions
+      </a>
+    </div>
+  );
+}
+
+function CombinedEventCard({ ceremony, reception }: { ceremony: EventInfo; reception: EventInfo }) {
+  return (
+    <div className="border border-stone bg-white rounded-md p-6 sm:p-8 space-y-4 max-w-md mx-auto w-full">
+      <p className="text-xs tracking-[0.2em] uppercase text-warm-grey">
+        Ceremony &amp; Reception
+      </p>
+      <h3 className="font-serif text-2xl text-charcoal">{ceremony.venue}</h3>
+      <p className="text-warm-grey text-sm whitespace-pre-line leading-relaxed">
+        {ceremony.address}
+      </p>
+      {/* Timeline of times */}
+      <div className="flex flex-col gap-2 pt-1">
+        <div className="flex items-center gap-3">
+          <span className="text-xs tracking-widest uppercase text-warm-grey w-20 shrink-0">
+            Ceremony
+          </span>
+          <span className="text-sm text-charcoal">{ceremony.time}</span>
+        </div>
+        <div className="w-px h-4 bg-stone ml-9" aria-hidden />
+        <div className="flex items-center gap-3">
+          <span className="text-xs tracking-widest uppercase text-warm-grey w-20 shrink-0">
+            Reception
+          </span>
+          <span className="text-sm text-charcoal">{reception.time}</span>
+        </div>
+      </div>
+      <a
+        href={ceremony.mapsUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-flex items-center gap-2 text-forest text-sm font-medium hover:underline min-h-[44px]"
+      >
+        <PinIcon />
         Get Directions
       </a>
     </div>
@@ -44,6 +87,9 @@ function EventCard({ label, info }: { label: string; info: EventInfo }) {
 }
 
 export function EventDetails({ ceremony, reception }: EventDetailsProps) {
+  const isSameVenue =
+    ceremony.venue.trim().toLowerCase() === reception.venue.trim().toLowerCase();
+
   return (
     <section className="px-6 py-section-gap-mobile md:py-section-gap-desktop">
       <div className="max-w-guest mx-auto">
@@ -53,10 +99,14 @@ export function EventDetails({ ceremony, reception }: EventDetailsProps) {
           </h2>
           <div className="w-12 h-px bg-stone mx-auto mt-4" />
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <EventCard label="Ceremony" info={ceremony} />
-          <EventCard label="Reception" info={reception} />
-        </div>
+        {isSameVenue ? (
+          <CombinedEventCard ceremony={ceremony} reception={reception} />
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <EventCard label="Ceremony" info={ceremony} />
+            <EventCard label="Reception" info={reception} />
+          </div>
+        )}
       </div>
     </section>
   );

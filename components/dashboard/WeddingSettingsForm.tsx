@@ -76,6 +76,14 @@ export function WeddingSettingsForm({
   const [saving, setSaving] = React.useState(false);
   const [accessSaving, setAccessSaving] = React.useState(false);
 
+  // "Same venue" toggle: true when ceremony & reception share the same venue name
+  const [sameVenue, setSameVenue] = React.useState(
+    () =>
+      initialDraft.ceremony.venue.trim().toLowerCase() ===
+      initialDraft.reception.venue.trim().toLowerCase() &&
+      initialDraft.ceremony.venue.trim() !== ""
+  );
+
   const { showToast } = useToast();
 
   const isDirty = React.useMemo(() => {
@@ -98,6 +106,42 @@ export function WeddingSettingsForm({
     patch: Partial<EventInfo>
   ) => {
     setDraft((d) => ({ ...d, [which]: { ...d[which], ...patch } }));
+  };
+
+  const updateCeremony = (patch: Partial<EventInfo>) => {
+    setDraft((d) => {
+      const newCeremony = { ...d.ceremony, ...patch };
+      // If same-venue is active, mirror venue/address/mapsUrl to reception too
+      if (sameVenue) {
+        return {
+          ...d,
+          ceremony: newCeremony,
+          reception: {
+            ...d.reception,
+            venue: newCeremony.venue,
+            address: newCeremony.address,
+            mapsUrl: newCeremony.mapsUrl,
+          },
+        };
+      }
+      return { ...d, ceremony: newCeremony };
+    });
+  };
+
+  const handleSameVenueToggle = (checked: boolean) => {
+    setSameVenue(checked);
+    if (checked) {
+      // Mirror ceremony → reception immediately
+      setDraft((d) => ({
+        ...d,
+        reception: {
+          ...d.reception,
+          venue: d.ceremony.venue,
+          address: d.ceremony.address,
+          mapsUrl: d.ceremony.mapsUrl,
+        },
+      }));
+    }
   };
 
   const handleSave = async () => {
@@ -214,7 +258,7 @@ export function WeddingSettingsForm({
               <Input
                 id="ceremony-time"
                 value={draft.ceremony.time}
-                onChange={(v) => updateEvent("ceremony", { time: v })}
+                onChange={(v) => updateCeremony({ time: v })}
                 placeholder="e.g. 3:00 PM"
               />
             </FormField>
@@ -222,7 +266,7 @@ export function WeddingSettingsForm({
               <Input
                 id="ceremony-venue"
                 value={draft.ceremony.venue}
-                onChange={(v) => updateEvent("ceremony", { venue: v })}
+                onChange={(v) => updateCeremony({ venue: v })}
                 placeholder="e.g. St. John the Baptist Parish"
               />
             </FormField>
@@ -230,7 +274,7 @@ export function WeddingSettingsForm({
               <Input
                 id="ceremony-address"
                 value={draft.ceremony.address}
-                onChange={(v) => updateEvent("ceremony", { address: v })}
+                onChange={(v) => updateCeremony({ address: v })}
                 placeholder="Full address"
               />
             </FormField>
@@ -239,7 +283,7 @@ export function WeddingSettingsForm({
                 id="ceremony-maps"
                 type="url"
                 value={draft.ceremony.mapsUrl}
-                onChange={(v) => updateEvent("ceremony", { mapsUrl: v })}
+                onChange={(v) => updateCeremony({ mapsUrl: v })}
                 placeholder="https://maps.google.com/..."
               />
             </FormField>
@@ -247,6 +291,19 @@ export function WeddingSettingsForm({
         </SectionCard>
 
         <SectionCard heading="Reception">
+          {/* Same-venue toggle */}
+          <label className="flex items-center gap-3 mb-5 cursor-pointer select-none">
+            <input
+              id="same-venue-toggle"
+              type="checkbox"
+              checked={sameVenue}
+              onChange={(e) => handleSameVenueToggle(e.target.checked)}
+              className="w-4 h-4 accent-forest rounded cursor-pointer"
+            />
+            <span className="text-sm text-charcoal">
+              Same venue as ceremony
+            </span>
+          </label>
           <div className="space-y-4">
             <FormField label="Time" required htmlFor="reception-time">
               <Input
@@ -256,33 +313,43 @@ export function WeddingSettingsForm({
                 placeholder="e.g. 6:00 PM"
               />
             </FormField>
-            <FormField label="Venue Name" required htmlFor="reception-venue">
-              <Input
-                id="reception-venue"
-                value={draft.reception.venue}
-                onChange={(v) => updateEvent("reception", { venue: v })}
-                placeholder="e.g. The Garden Pavilion"
-              />
-            </FormField>
-            <FormField label="Address" required htmlFor="reception-address">
-              <Input
-                id="reception-address"
-                value={draft.reception.address}
-                onChange={(v) => updateEvent("reception", { address: v })}
-                placeholder="Full address"
-              />
-            </FormField>
-            <FormField label="Google Maps URL" htmlFor="reception-maps">
-              <Input
-                id="reception-maps"
-                type="url"
-                value={draft.reception.mapsUrl}
-                onChange={(v) => updateEvent("reception", { mapsUrl: v })}
-                placeholder="https://maps.google.com/..."
-              />
-            </FormField>
+            {!sameVenue && (
+              <>
+                <FormField label="Venue Name" required htmlFor="reception-venue">
+                  <Input
+                    id="reception-venue"
+                    value={draft.reception.venue}
+                    onChange={(v) => updateEvent("reception", { venue: v })}
+                    placeholder="e.g. The Garden Pavilion"
+                  />
+                </FormField>
+                <FormField label="Address" required htmlFor="reception-address">
+                  <Input
+                    id="reception-address"
+                    value={draft.reception.address}
+                    onChange={(v) => updateEvent("reception", { address: v })}
+                    placeholder="Full address"
+                  />
+                </FormField>
+                <FormField label="Google Maps URL" htmlFor="reception-maps">
+                  <Input
+                    id="reception-maps"
+                    type="url"
+                    value={draft.reception.mapsUrl}
+                    onChange={(v) => updateEvent("reception", { mapsUrl: v })}
+                    placeholder="https://maps.google.com/..."
+                  />
+                </FormField>
+              </>
+            )}
+            {sameVenue && (
+              <p className="text-sm text-warm-grey italic">
+                Venue, address, and map link will match the ceremony.
+              </p>
+            )}
           </div>
         </SectionCard>
+
 
         <SectionCard heading="Dress Code">
           <div className="space-y-6">
