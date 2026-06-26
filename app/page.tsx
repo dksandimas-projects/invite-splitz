@@ -70,7 +70,7 @@ export default async function Page({
   const weddingDateLabel =
     wedding?.weddingDate ? formatWeddingDate(wedding.weddingDate) : fallbackConfig.weddingDateLabel;
   const photoAlbumUrl = wedding?.photoAlbumUrl ?? fallbackConfig.photoAlbumUrl;
-  const couplePhotoUrl = wedding?.couplePhotoUrl ?? fallbackConfig.couplePhoto;
+  const couplePhotoUrl = wedding?.couplePhotoUrl || fallbackConfig.couplePhoto;
   const ceremony = wedding?.ceremony ?? fallbackConfig.ceremony;
   const reception = wedding?.reception ?? fallbackConfig.reception;
   const dressCode = wedding?.dressCode ?? fallbackConfig.dressCode;
