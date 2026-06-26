@@ -19,9 +19,41 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Bretch & Joyce • invite-splitz",
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
+  ),
+  title: {
+    default: "Bretch & Joyce • August 1, 2026",
+    template: "%s • Bretch & Joyce",
+  },
   description:
-    "You are invited to celebrate the wedding of Bretch & Joyce on August 1, 2026.",
+    "You're invited to celebrate the wedding of Bretch & Joyce on August 1, 2026.",
+  openGraph: {
+    title: "Bretch & Joyce • August 1, 2026",
+    description:
+      "You're invited to celebrate the wedding of Bretch & Joyce on August 1, 2026.",
+    type: "website",
+    siteName: "Bretch & Joyce",
+    images: [
+      {
+        url: "/og",
+        width: 1200,
+        height: 630,
+        alt: "Bretch & Joyce — August 1, 2026",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Bretch & Joyce • August 1, 2026",
+    description:
+      "You're invited to celebrate the wedding of Bretch & Joyce on August 1, 2026.",
+    images: ["/og"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({

@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import { getGuestByToken, getWedding } from "@/lib/firestore";
 import { weddingConfig as fallbackConfig } from "@/lib/config";
 import { GuestTopNav } from "@/components/site/GuestTopNav";
@@ -19,6 +20,38 @@ interface SearchParams {
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
+
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: SearchParams;
+}): Promise<Metadata> {
+  const wedding = await getWedding();
+  const coupleName = wedding?.coupleName ?? fallbackConfig.coupleName;
+  const dateLabel = wedding?.weddingDate
+    ? formatWeddingDate(wedding.weddingDate)
+    : fallbackConfig.weddingDateLabel;
+  const title = `${coupleName} • ${dateLabel}`;
+  const description = `You're invited to celebrate the wedding of ${coupleName} on ${dateLabel}.`;
+
+  let personalized = "";
+  if (searchParams?.guest) {
+    const guest = await getGuestByToken(searchParams.guest);
+    if (guest?.firstName) {
+      personalized = ` — for ${guest.firstName}`;
+    }
+  }
+
+  return {
+    title: `${title}${personalized}`,
+    description,
+    openGraph: {
+      title,
+      description,
+      images: ["/og"],
+    },
+  };
+}
 
 export default async function Page({
   searchParams,
