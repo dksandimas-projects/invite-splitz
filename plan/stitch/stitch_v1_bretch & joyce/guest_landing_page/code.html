@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Bretch & Joyce • invite-splitz</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Inter:wght@300;400;500;600&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet"/>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-background": "#1a1c19",
+                    "stone": "#E2DED8",
+                    "secondary": "#3d6a00",
+                    "primary": "#6e5e00",
+                    "on-secondary": "#ffffff",
+                    "inverse-on-surface": "#f1f1ec",
+                    "on-primary-fixed-variant": "#534600",
+                    "on-surface": "#1a1c19",
+                    "surface-dim": "#dadad6",
+                    "inverse-surface": "#2f312e",
+                    "surface-container-low": "#f4f4ef",
+                    "surface-container-highest": "#e2e3de",
+                    "primary-container": "#e8c800",
+                    "on-primary-container": "#625400",
+                    "on-error-container": "#93000a",
+                    "on-secondary-fixed-variant": "#2d5000",
+                    "warm-grey": "#7A7670",
+                    "tertiary-fixed": "#e6e2dd",
+                    "background": "#fafaf5",
+                    "secondary-fixed-dim": "#9fd762",
+                    "primary-fixed": "#ffe257",
+                    "surface-tint": "#6e5e00",
+                    "surface-container-lowest": "#ffffff",
+                    "outline": "#7e7760",
+                    "on-tertiary-fixed": "#1c1c19",
+                    "on-primary-fixed": "#211b00",
+                    "tertiary": "#605e5a",
+                    "on-tertiary-fixed-variant": "#484743",
+                    "secondary-container": "#baf47a",
+                    "on-primary": "#ffffff",
+                    "error": "#ba1a1a",
+                    "lemon": "#F0E44A",
+                    "surface": "#fafaf5",
+                    "sage": "#B5CC6E",
+                    "on-tertiary-container": "#565451",
+                    "error-container": "#ffdad6",
+                    "primary-fixed-dim": "#e5c500",
+                    "surface-bright": "#fafaf5",
+                    "surface-variant": "#e2e3de",
+                    "tertiary-container": "#ccc9c4",
+                    "inverse-primary": "#e5c500",
+                    "surface-container": "#eeeee9",
+                    "on-secondary-fixed": "#0f2000",
+                    "surface-container-high": "#e8e8e4",
+                    "forest": "#4E8A20",
+                    "on-secondary-container": "#427000",
+                    "on-error": "#ffffff",
+                    "butter": "#F5F2C0",
+                    "tertiary-fixed-dim": "#c9c6c1",
+                    "outline-variant": "#cfc6ac",
+                    "on-tertiary": "#ffffff",
+                    "secondary-fixed": "#baf47a",
+                    "on-surface-variant": "#4c4732"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "section-gap-desktop": "5rem",
+                    "container-max-dashboard": "1024px",
+                    "section-gap-mobile": "3rem",
+                    "gutter": "1.5rem",
+                    "container-max-guest": "576px"
+            },
+            "fontFamily": {
+                    "section-heading": ["Cormorant Garamond"],
+                    "hero-names-mobile": ["Cormorant Garamond"],
+                    "label-caps": ["Inter"],
+                    "body-main": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "hero-names": ["Cormorant Garamond"],
+                    "body-sm": ["Inter"]
+            },
+            "fontSize": {
+                    "section-heading": ["30px", {"lineHeight": "1.4", "fontWeight": "400"}],
+                    "hero-names-mobile": ["48px", {"lineHeight": "1.1", "fontWeight": "300"}],
+                    "label-caps": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.15em", "fontWeight": "400"}],
+                    "body-main": ["16px", {"lineHeight": "1.6", "fontWeight": "300"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "300"}],
+                    "hero-names": ["72px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "300"}],
+                    "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #FAFAF5;
+            -webkit-font-smoothing: antialiased;
+        }
+        .botanical-left {
+            position: absolute;
+            left: 0;
+            top: 10%;
+            pointer-events: none;
+            opacity: 0.6;
+        }
+        .botanical-right {
+            position: absolute;
+            right: 0;
+            top: 15%;
+            pointer-events: none;
+            opacity: 0.6;
+            transform: scaleX(-1);
+        }
+        @media (max-width: 640px) {
+            .botanical-left, .botanical-right { display: none; }
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="text-on-surface font-body-main selection:bg-butter">
+<!-- Top Navigation -->
+<nav class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-md">
+<div class="flex justify-between items-center px-gutter w-full max-w-container-max-guest mx-auto h-16">
+<span class="font-section-heading text-section-heading text-primary">B&J</span>
+<div class="flex gap-4">
+<button class="material-symbols-outlined text-primary hover:opacity-80 transition-opacity">spa</button>
+</div>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="w-full max-w-container-max-guest mx-auto px-6 pt-24 relative overflow-hidden">
+<!-- Hero Section -->
+<section class="flex flex-col items-center text-center py-section-gap-mobile md:py-section-gap-desktop relative">
+<div class="botanical-left hidden md:block">
+<img alt="Botanical Accent" class="w-32 opacity-20" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAHqQkF44pe9-Sg53V2CM43g-6z26TVhNvBQHTd52VU0TYUVLvJ1nH2AstwMAxQwJM--nzQe_KjLQNVN3oLz6UkhS1nRJfRXnkf1J0VUUzLujlWsq3FMdK0VQy8F446MBEak9jXqeX-quI_aEBFBcRKmKmO-MVBVumzyjdylIFg9wALpTcU4IlbjoaWHxAImSqsg86W5m8OHmJeJUtXF4_Jkj4hzSIYPkafsC9GnrA2bgS87EEw4s_JLuCe9tJGaDrLsxHVYCwukzE"/>
+</div>
+<div class="space-y-2 mb-8">
+<h1 class="font-hero-names-mobile md:font-hero-names text-hero-names-mobile md:text-hero-names flex flex-col">
+<span>Bretch</span>
+<span class="italic font-light text-primary py-2 text-4xl">and</span>
+<span>Joyce</span>
+</h1>
+</div>
+<div class="font-label-caps text-label-caps text-warm-grey uppercase tracking-widest mb-12">
+                December 12, 2024 • Tagaytay, PH
+            </div>
+<!-- Countdown -->
+<div class="flex gap-6 md:gap-8 justify-center items-center py-6 border-y border-stone/50 w-full" id="countdown">
+<div class="text-center">
+<div class="text-3xl font-section-heading text-primary" id="days">00</div>
+<div class="text-[10px] font-label-caps text-warm-grey uppercase">Days</div>
+</div>
+<div class="text-center">
+<div class="text-3xl font-section-heading text-primary" id="hours">00</div>
+<div class="text-[10px] font-label-caps text-warm-grey uppercase">Hrs</div>
+</div>
+<div class="text-center">
+<div class="text-3xl font-section-heading text-primary" id="mins">00</div>
+<div class="text-[10px] font-label-caps text-warm-grey uppercase">Mins</div>
+</div>
+</div>
+<div class="botanical-right hidden md:block">
+<img alt="Botanical Accent" class="w-32 opacity-20" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0w4VFrBycTBunA_uGoV7PaFWgi_Y6JrUpfF4kw_W014WlZJ6obUdC8bzMJt4zK4iV2A7YmAaUZew0pqjLkdeqyP79mhBv5UwBj9-b3fGf2Z8hmVVQfCR88i7zDDHI4dVn3jJJyEob74ezXy_u3HQTZZliKPTeYpRLNJck-RtEjuEmVcpAsLycrEip88EGcr7bZGz9uNwDlRySl2CY1NsY7c2IknUNIuA7XFZ1ZeEGKCtJ4wyjW1PFF4Bd1zUJ7xqThAB4Te_Y-UM"/>
+</div>
+</section>
+<!-- Greeting Section -->
+<section class="py-section-gap-mobile text-center space-y-6">
+<div class="flex justify-center mb-4">
+<span class="material-symbols-outlined text-secondary scale-125">auto_awesome</span>
+</div>
+<h2 class="font-section-heading text-section-heading">Our Joyful Beginning</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-sm mx-auto">
+                We invite you to witness the beginning of our new chapter. Your presence is the most meaningful gift we could receive.
+            </p>
+</section>
+<!-- Image Break -->
+<div class="w-full aspect-[4/5] rounded-xl overflow-hidden mb-section-gap-mobile border border-stone">
+<img class="w-full h-full object-cover" data-alt="A sophisticated fine-art wedding photograph of a couple in minimalist attire standing in a sun-drenched botanical garden. The lighting is soft and golden, illuminating the lush garden greenery and off-white textures of the bride's dress. The aesthetic is clean, romantic, and unhurried, reflecting a premium editorial style with gentle highlights and deep forest green shadows." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC_tD8wXNZ7SqmBkqfYgohQvNjEuWMaleaL5eabDAQH3v8mz7x1jVrJe9ZcuHyHpX95BiIbfUI68lbjCUmhSoQSipRzZjdeAgb_RXOzAV7REcnTep0k_su4s2IN_wY5sPzSu-4wK4k5V9vZCO5jygr6BPUt30VTiHk0FqNLaNTz5fEMel3odnhjrxKmK-YmBF__9vBN3nUZpAXmR0uuge95aSzYZaKm-HtqvsthYPnkuzTiBBqwAG_K2QKapSFWb1nsT0LvYrCrdYw"/>
+</div>
+<!-- No Plus One Notice -->
+<section class="mb-section-gap-mobile">
+<div class="bg-surface-container-low border border-stone p-8 text-center rounded-xl">
+<span class="material-symbols-outlined text-warm-grey mb-3">person_off</span>
+<h3 class="font-label-caps text-label-caps text-on-surface mb-2">GUEST POLICY</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                    While we would love to celebrate with everyone, our venue space is limited. We have reserved specifically for the names listed on your invite. We kindly ask for no additional guests.
+                </p>
+</div>
+</section>
+<!-- Event Details -->
+<section class="py-section-gap-mobile space-y-8">
+<div class="text-center space-y-2 mb-12">
+<h2 class="font-section-heading text-section-heading">The Celebration</h2>
+<div class="w-12 h-px bg-primary mx-auto"></div>
+</div>
+<div class="grid grid-cols-1 gap-6">
+<!-- Ceremony -->
+<div class="bg-white p-8 border border-stone rounded-xl space-y-4 hover:shadow-sm transition-shadow">
+<span class="font-label-caps text-label-caps text-primary">CEREMONY</span>
+<h4 class="font-section-heading text-2xl">Caleruega Chapel</h4>
+<p class="font-body-main text-body-main text-on-surface-variant">
+                        Nasugbu, Batangas<br/>
+                        3:30 in the afternoon
+                    </p>
+<a class="inline-flex items-center text-secondary font-body-sm gap-2 hover:underline" href="#">
+<span class="material-symbols-outlined text-sm">location_on</span>
+                        Open in Maps
+                    </a>
+</div>
+<!-- Reception -->
+<div class="bg-white p-8 border border-stone rounded-xl space-y-4 hover:shadow-sm transition-shadow">
+<span class="font-label-caps text-label-caps text-primary">RECEPTION</span>
+<h4 class="font-section-heading text-2xl">Narra Hill</h4>
+<p class="font-body-main text-body-main text-on-surface-variant">
+                        Tagaytay-Nasugbu Highway<br/>
+                        Dinner and dancing to follow
+                    </p>
+<a class="inline-flex items-center text-secondary font-body-sm gap-2 hover:underline" href="#">
+<span class="material-symbols-outlined text-sm">directions_car</span>
+                        Driving Directions
+                    </a>
+</div>
+</div>
+</section>
+<!-- RSVP Section -->
+<section class="py-section-gap-mobile text-center bg-white border border-stone rounded-xl p-12 mb-section-gap-mobile">
+<h2 class="font-section-heading text-section-heading mb-4">Kindly Reply</h2>
+<p class="font-body-main text-body-main text-on-surface-variant mb-8">
+                Please let us know if you can join us by November 15, 2024.
+            </p>
+<div class="flex flex-col gap-4">
+<button class="bg-primary-container text-on-primary-container font-body-main h-12 px-8 rounded-full font-medium hover:opacity-90 transition-all">
+                    Attending with Pleasure
+                </button>
+<button class="border border-stone text-warm-grey font-body-main h-12 px-8 rounded-full hover:bg-surface transition-all">
+                    Regretfully Decline
+                </button>
+</div>
+</section>
+<!-- Entourage Section -->
+<section class="py-section-gap-mobile">
+<div class="text-center mb-12">
+<h2 class="font-section-heading text-section-heading">The Entourage</h2>
+</div>
+<div class="space-y-12">
+<div class="text-center">
+<span class="font-label-caps text-label-caps text-primary block mb-4">PRINCIPAL SPONSORS</span>
+<div class="font-body-lg text-body-lg space-y-2">
+<p>Mr. Robert & Mrs. Maria Santos</p>
+<p>Mr. Thomas & Mrs. Clara Dela Cruz</p>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-8">
+<div class="text-center">
+<span class="font-label-caps text-label-caps text-primary block mb-4 text-[12px]">BEST MAN</span>
+<p class="font-body-main">David Miller</p>
+</div>
+<div class="text-center">
+<span class="font-label-caps text-label-caps text-primary block mb-4 text-[12px]">MAID OF HONOR</span>
+<p class="font-body-main">Sarah Joyce</p>
+</div>
+</div>
+<div class="text-center">
+<span class="font-label-caps text-label-caps text-primary block mb-4 text-[12px]">GROOMSMEN & BRIDESMAIDS</span>
+<div class="font-body-main text-on-surface-variant grid grid-cols-2 gap-2">
+<p>Liam Wilson</p>
+<p>Emma Watson</p>
+<p>Noah Garcia</p>
+<p>Olivia Chen</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Dress Code -->
+<section class="py-section-gap-mobile text-center">
+<h2 class="font-section-heading text-section-heading mb-4">Dress Code</h2>
+<p class="font-body-main text-body-main text-on-surface-variant mb-8">
+                Garden Formal. We invite you to dress in our wedding palette:
+            </p>
+<div class="flex justify-center gap-4">
+<div class="group flex flex-col items-center">
+<div class="w-12 h-12 rounded-full bg-primary-container border border-stone mb-2"></div>
+<span class="text-[10px] font-label-caps text-warm-grey">SUNFLOWER</span>
+</div>
+<div class="group flex flex-col items-center">
+<div class="w-12 h-12 rounded-full bg-sage border border-stone mb-2"></div>
+<span class="text-[10px] font-label-caps text-warm-grey">SAGE</span>
+</div>
+<div class="group flex flex-col items-center">
+<div class="w-12 h-12 rounded-full bg-secondary border border-stone mb-2"></div>
+<span class="text-[10px] font-label-caps text-warm-grey">GARDEN</span>
+</div>
+<div class="group flex flex-col items-center">
+<div class="w-12 h-12 rounded-full bg-forest border border-stone mb-2"></div>
+<span class="text-[10px] font-label-caps text-warm-grey">FOREST</span>
+</div>
+</div>
+</section>
+<!-- Gift Note & Photo -->
+<section class="py-section-gap-mobile grid grid-cols-1 gap-6">
+<div class="bg-surface-container-high p-8 rounded-xl text-center">
+<span class="material-symbols-outlined text-primary mb-4">favorite</span>
+<h3 class="font-section-heading text-xl mb-3">A Note on Gifting</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                    Your presence is our greatest gift. Should you wish to honor us with a gift, a contribution towards our future home would be sincerely appreciated.
+                </p>
+</div>
+<div class="bg-white border border-stone p-8 rounded-xl text-center flex flex-col items-center">
+<span class="material-symbols-outlined text-warm-grey mb-4">photo_camera</span>
+<h3 class="font-section-heading text-xl mb-3">Share Your Photos</h3>
+<div class="w-32 h-32 bg-stone/20 rounded-lg flex items-center justify-center border border-dashed border-stone mb-4">
+<span class="material-symbols-outlined text-3xl text-stone">qr_code_2</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                    Scan or use #BretchAndJoyce to share memories from the day.
+                </p>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full py-section-gap-mobile bg-surface border-t border-stone">
+<div class="flex flex-col items-center gap-8 px-gutter text-center max-w-container-max-guest mx-auto">
+<div class="space-y-4">
+<p class="font-section-heading italic text-xl text-on-surface-variant max-w-xs mx-auto">
+                    "And over all these virtues put on love, which binds them all together in perfect unity."
+                </p>
+<span class="font-label-caps text-xs tracking-[0.2em] text-warm-grey">COLOSSIANS 3:14</span>
+</div>
+<div class="flex justify-center">
+<img alt="Footer sprig" class="w-6 opacity-30" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDrSFomCpRmUAZdFVd7Xo04Xu4nBJrKf0nTRmOWBDLxrlfcSvVFtHQyRqjZfjHJ1iBcYJggOjR1Cog1afk5Esbn4VhikPpf-pUhZNOGPhH2PhWprgzqOl-ia7WFh7CU6SmbjH5Gy0z6MnumqToexRw1MxMNwyLECoOTyLZU6V59SA_SJW7zZVY4EQFsgeg4ps_NIJ13Xuia8FGNmbTSmC18rdKCd-yZI9u_cCtZVVW9A3dEB27Y8vJJ4beaKyqWdGIxSReCmGlNZm0"/>
+</div>
+<div class="flex flex-col items-center gap-4">
+<div class="flex gap-6">
+<a class="text-warm-grey hover:text-primary transition-colors text-body-sm" href="#">RSVP</a>
+<a class="text-warm-grey hover:text-primary transition-colors text-body-sm" href="#">Details</a>
+<a class="text-warm-grey hover:text-primary transition-colors text-body-sm" href="#">Gift Note</a>
+</div>
+<p class="font-body-sm text-warm-grey opacity-60">2024 Bretch & Joyce • invite-splitz</p>
+</div>
+</div>
+</footer>
+<script>
+        // Simple Countdown Logic
+        function updateCountdown() {
+            const targetDate = new Date('December 12, 2024 15:30:00').getTime();
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60</script></body></html>

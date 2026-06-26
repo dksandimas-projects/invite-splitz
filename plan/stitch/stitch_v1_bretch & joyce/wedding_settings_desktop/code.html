@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Wedding Settings | Elena &amp; Marcus</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-fixed": "#e6e2dd",
+                    "surface-container-highest": "#e2e3de",
+                    "on-error-container": "#93000a",
+                    "on-background": "#1a1c19",
+                    "tertiary-container": "#ccc9c4",
+                    "on-secondary-container": "#427000",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary-fixed-variant": "#2d5000",
+                    "tertiary": "#605e5a",
+                    "secondary-fixed-dim": "#9fd762",
+                    "forest": "#4E8A20",
+                    "inverse-primary": "#e5c500",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary": "#3d6a00",
+                    "secondary-fixed": "#baf47a",
+                    "inverse-on-surface": "#f1f1ec",
+                    "surface-bright": "#fafaf5",
+                    "primary": "#6e5e00",
+                    "on-error": "#ffffff",
+                    "surface-container": "#eeeee9",
+                    "outline-variant": "#cfc6ac",
+                    "on-secondary-fixed": "#0f2000",
+                    "tertiary-fixed-dim": "#c9c6c1",
+                    "secondary-container": "#baf47a",
+                    "error-container": "#ffdad6",
+                    "error": "#ba1a1a",
+                    "warm-grey": "#7A7670",
+                    "surface-tint": "#6e5e00",
+                    "sage": "#B5CC6E",
+                    "surface-dim": "#dadad6",
+                    "surface-container-low": "#f4f4ef",
+                    "primary-container": "#e8c800",
+                    "butter": "#F5F2C0",
+                    "on-tertiary-fixed-variant": "#484743",
+                    "on-surface-variant": "#4c4732",
+                    "on-tertiary-fixed": "#1c1c19",
+                    "on-tertiary-container": "#565451",
+                    "on-primary-fixed": "#211b00",
+                    "on-surface": "#1a1c19",
+                    "primary-fixed": "#ffe257",
+                    "surface-container-high": "#e8e8e4",
+                    "outline": "#7e7760",
+                    "background": "#fafaf5",
+                    "on-primary": "#ffffff",
+                    "inverse-surface": "#2f312e",
+                    "on-primary-container": "#625400",
+                    "surface": "#fafaf5",
+                    "on-primary-fixed-variant": "#534600",
+                    "stone": "#E2DED8",
+                    "primary-fixed-dim": "#e5c500",
+                    "on-secondary": "#ffffff",
+                    "surface-variant": "#e2e3de",
+                    "lemon": "#F0E44A"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "section-gap-desktop": "5rem",
+                    "gutter": "1.5rem",
+                    "container-max-guest": "576px",
+                    "container-max-dashboard": "1024px",
+                    "section-gap-mobile": "3rem"
+            },
+            "fontFamily": {
+                    "hero-names": ["Cormorant Garamond"],
+                    "body-lg": ["Inter"],
+                    "label-caps": ["Inter"],
+                    "body-main": ["Inter"],
+                    "section-heading": ["Cormorant Garamond"],
+                    "body-sm": ["Inter"]
+            },
+            "fontSize": {
+                    "hero-names": ["72px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "300"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "300"}],
+                    "label-caps": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.15em", "fontWeight": "400"}],
+                    "body-main": ["16px", {"lineHeight": "1.6", "fontWeight": "300"}],
+                    "section-heading": ["30px", {"lineHeight": "1.4", "fontWeight": "400"}],
+                    "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #fafaf5;
+            -webkit-font-smoothing: antialiased;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .form-input-romantic {
+            border: 1px solid #E2DED8;
+            background-color: #ffffff;
+            transition: border-color 0.2s ease;
+        }
+        .form-input-romantic:focus {
+            border-color: #6e5e00;
+            outline: none;
+            ring: 0;
+        }
+        /* Dashboard Card Shadow from Style Guidance */
+        .dashboard-card {
+            box-shadow: 0px 4px 20px rgba(44, 43, 40, 0.05);
+        }
+    </style>
+</head>
+<body class="font-body-main text-on-surface">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky bg-surface border-b border-stone z-40">
+<div class="flex justify-between items-center px-gutter py-4 max-w-container-dashboard mx-auto">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 0;">local_florist</span>
+<span class="font-hero-names text-section-heading text-primary">Elena &amp; Marcus</span>
+</div>
+<nav class="hidden md:flex gap-8 items-center">
+<a class="font-label-caps text-on-surface-variant hover:text-primary transition-all" href="#">Guests</a>
+<a class="font-label-caps text-primary font-medium transition-all" href="#">Settings</a>
+<button class="font-label-caps text-on-surface-variant hover:bg-butter px-4 py-2 transition-colors cursor-pointer active:scale-95">Logout</button>
+</nav>
+<div class="md:hidden">
+<span class="material-symbols-outlined cursor-pointer">menu</span>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="max-w-2xl mx-auto px-gutter pt-12 pb-32">
+<header class="mb-12 text-center">
+<h1 class="font-hero-names text-[42px] leading-tight text-on-surface mb-2">Wedding Settings</h1>
+<p class="font-body-main text-warm-grey">Manage your digital invitation and venue details.</p>
+</header>
+<div class="space-y-8">
+<!-- 1. THE COUPLE -->
+<section class="bg-white p-8 rounded-xl dashboard-card border border-stone">
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-primary">favorite</span>
+<h2 class="font-section-heading text-section-heading">The Couple</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div>
+<label class="block font-label-caps text-xs text-warm-grey mb-2">PARTNER ONE</label>
+<input class="w-full form-input-romantic p-3 font-body-main text-on-surface" type="text" value="Elena Rossi"/>
+</div>
+<div>
+<label class="block font-label-caps text-xs text-warm-grey mb-2">PARTNER TWO</label>
+<input class="w-full form-input-romantic p-3 font-body-main text-on-surface" type="text" value="Marcus Thorne"/>
+</div>
+</div>
+</section>
+<!-- 2. CEREMONY -->
+<section class="bg-white p-8 rounded-xl dashboard-card border border-stone">
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-primary">church</span>
+<h2 class="font-section-heading text-section-heading">Ceremony</h2>
+</div>
+<div class="space-y-6">
+<div>
+<label class="block font-label-caps text-xs text-warm-grey mb-2">LOCATION NAME</label>
+<input class="w-full form-input-romantic p-3 font-body-main text-on-surface" placeholder="St. Margaret's Cathedral" type="text"/>
+</div>
+<div class="grid grid-cols-2 gap-6">
+<div>
+<label class="block font-label-caps text-xs text-warm-grey mb-2">DATE</label>
+<input class="w-full form-input-romantic p-3 font-body-main text-on-surface" type="date" value="2025-06-15"/>
+</div>
+<div>
+<label class="block font-label-caps text-xs text-warm-grey mb-2">TIME</label>
+<input class="w-full form-input-romantic p-3 font-body-main text-on-surface" type="time" value="15:00"/>
+</div>
+</div>
+</div>
+</section>
+<!-- 3. RECEPTION -->
+<section class="bg-white p-8 rounded-xl dashboard-card border border-stone">
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-primary">celebration</span>
+<h2 class="font-section-heading text-section-heading">Reception</h2>
+</div>
+<div class="space-y-6">
+<div>
+<label class="block font-label-caps text-xs text-warm-grey mb-2">VENUE</label>
+<input class="w-full form-input-romantic p-3 font-body-main text-on-surface" placeholder="The Glass House Garden" type="text"/>
+</div>
+<div>
+<label class="block font-label-caps text-xs text-warm-grey mb-2">ADDRESS</label>
+<textarea class="w-full form-input-romantic p-3 font-body-main text-on-surface" rows="2">122 Botanical Ave, Kensington, London SW7 2RL</textarea>
+</div>
+</div>
+</section>
+<!-- 4. DRESS CODE -->
+<section class="bg-white p-8 rounded-xl dashboard-card border border-stone">
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-primary">apparel</span>
+<h2 class="font-section-heading text-section-heading">Dress Code</h2>
+</div>
+<div class="space-y-6">
+<div>
+<label class="block font-label-caps text-xs text-warm-grey mb-2">DRESS CODE DESCRIPTION</label>
+<input class="w-full form-input-romantic p-3 font-body-main text-on-surface" type="text" value="Formal Garden Party Attire"/>
+</div>
+<div>
+<label class="block font-label-caps text-xs text-warm-grey mb-4">COLOR PALETTE EDITOR</label>
+<div class="flex flex-wrap gap-4 items-center">
+<div class="group relative">
+<div class="w-12 h-12 rounded-full border border-stone bg-forest cursor-pointer shadow-sm hover:scale-110 transition-transform"></div>
+<div class="absolute -bottom-6 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity text-[10px] font-label-caps">Forest</div>
+</div>
+<div class="group relative">
+<div class="w-12 h-12 rounded-full border border-stone bg-sage cursor-pointer shadow-sm hover:scale-110 transition-transform"></div>
+<div class="absolute -bottom-6 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity text-[10px] font-label-caps">Sage</div>
+</div>
+<div class="group relative">
+<div class="w-12 h-12 rounded-full border border-stone bg-butter cursor-pointer shadow-sm hover:scale-110 transition-transform"></div>
+<div class="absolute -bottom-6 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity text-[10px] font-label-caps">Butter</div>
+</div>
+<div class="group relative">
+<div class="w-12 h-12 rounded-full border border-stone bg-[#D3E1FF] cursor-pointer shadow-sm hover:scale-110 transition-transform"></div>
+<div class="absolute -bottom-6 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity text-[10px] font-label-caps">Sky</div>
+</div>
+<button class="w-12 h-12 rounded-full border border-dashed border-warm-grey flex items-center justify-center text-warm-grey hover:bg-stone transition-colors">
+<span class="material-symbols-outlined">add</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- 5. PHOTO ALBUM -->
+<section class="bg-white p-8 rounded-xl dashboard-card border border-stone">
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-primary">photo_library</span>
+<h2 class="font-section-heading text-section-heading">Photo Album</h2>
+</div>
+<div class="flex flex-col md:flex-row gap-8 items-start">
+<div class="flex-1 space-y-4">
+<p class="font-body-main text-warm-grey">Enable guests to upload photos directly to your shared drive. This QR code will be printed on table cards.</p>
+<div class="flex items-center gap-4">
+<input class="flex-1 form-input-romantic p-3 font-body-main text-on-surface text-sm" readonly="" type="text" value="https://elena-marcus.drive.com/upload"/>
+<button class="p-3 text-primary hover:bg-butter rounded transition-colors">
+<span class="material-symbols-outlined">content_copy</span>
+</button>
+</div>
+</div>
+<div class="w-full md:w-32 aspect-square bg-surface border border-stone rounded-lg flex flex-col items-center justify-center p-2">
+<img alt="Wedding Photo Upload QR Code" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida/AP1WRLsNE5QYbYs_RoEYVz9VOTJrozdfEmG_RBGt5EmzxY_gOCuNSDIopPUD7Mwnyttil2c5CN54e24Imjwr8zWS3KIA1Y7mldbsYePBqqnO1DCL492UbrhWaLCfnVqp0wvUxiEDxG-3oPdpQyed78kIPGLgcR3yXOgu8fdthoLGd-4aZu_WXB3Nn5Js36ZSWU7DdtwL4IEQRbqMxPxVON0l3Y81bf-QRTSij29FF8_yTlBCfQYYZfghvrApiw"/>
+<span class="text-[10px] font-label-caps text-warm-grey mt-1">PREVIEW</span>
+</div>
+</div>
+</section>
+<!-- 6. ENTOURAGE -->
+<section class="bg-white p-8 rounded-xl dashboard-card border border-stone">
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-primary">groups</span>
+<h2 class="font-section-heading text-section-heading">Entourage</h2>
+</div>
+<div class="space-y-6">
+<div class="flex flex-col gap-2">
+<div class="flex justify-between items-end">
+<label class="block font-label-caps text-xs text-warm-grey">PRINCIPAL SPONSORS</label>
+<span class="text-[10px] font-label-caps text-primary cursor-pointer hover:underline">Add New Role</span>
+</div>
+<textarea class="w-full form-input-romantic p-4 font-body-main text-on-surface leading-relaxed" placeholder="Enter names separated by commas..." rows="4">Auntie Beatrice Thorne, Uncle Robert Thorne, Maria Clara Rossi, Giovanni Rossi</textarea>
+</div>
+<div class="flex flex-col gap-2">
+<label class="block font-label-caps text-xs text-warm-grey">GROOMSMEN &amp; BRIDESMAIDS</label>
+<textarea class="w-full form-input-romantic p-4 font-body-main text-on-surface leading-relaxed" placeholder="Enter names separated by commas..." rows="4">Julian Thorne (Best Man), Sarah Jenkins (Maid of Honor), Leo Rossi, Sophie Bennett, Thomas Moore</textarea>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- Footer sticky bar -->
+<footer class="fixed bottom-0 w-full z-50 bg-surface-container-low border-t border-stone shadow-sm">
+<div class="flex justify-between items-center px-gutter py-4 max-w-2xl mx-auto">
+<button class="text-warm-grey font-label-caps text-sm hover:text-primary transition-all px-4 py-2">
+                Reset to last saved
+            </button>
+<button class="bg-primary-container text-on-primary-container font-label-caps text-sm px-8 py-3 rounded-full shadow-sm hover:brightness-95 active:scale-95 transition-all focus:ring-2 focus:ring-primary">
+                Save Changes
+            </button>
+</div>
+</footer>
+<script>
+        // Micro-interactions for form changes
+        document.querySelectorAll('input, textarea').forEach(element => {
+            element.addEventListener('change', () => {
+                const saveBtn = document.querySelector('button.bg-primary-container');
+                saveBtn.classList.add('animate-pulse');
+                setTimeout(() => saveBtn.classList.remove('animate-pulse'), 1000);
+            });
+        });
+    </script>
+</body></html>

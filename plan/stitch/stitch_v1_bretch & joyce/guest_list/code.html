@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Bretch &amp; Joyce • Guest List Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-error": "#ffffff",
+                    "surface-container": "#eeeee9",
+                    "outline-variant": "#cfc6ac",
+                    "on-secondary-fixed": "#0f2000",
+                    "tertiary-fixed-dim": "#c9c6c1",
+                    "secondary-container": "#baf47a",
+                    "error-container": "#ffdad6",
+                    "error": "#ba1a1a",
+                    "secondary": "#3d6a00",
+                    "secondary-fixed": "#baf47a",
+                    "inverse-on-surface": "#f1f1ec",
+                    "surface-bright": "#fafaf5",
+                    "primary": "#6e5e00",
+                    "tertiary": "#605e5a",
+                    "secondary-fixed-dim": "#9fd762",
+                    "forest": "#4E8A20",
+                    "inverse-primary": "#e5c500",
+                    "surface-container-lowest": "#ffffff",
+                    "tertiary-fixed": "#e6e2dd",
+                    "surface-container-highest": "#e2e3de",
+                    "on-error-container": "#93000a",
+                    "on-background": "#1a1c19",
+                    "tertiary-container": "#ccc9c4",
+                    "on-secondary-container": "#427000",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary-fixed-variant": "#2d5000",
+                    "on-primary-container": "#625400",
+                    "surface": "#fafaf5",
+                    "on-primary-fixed-variant": "#534600",
+                    "stone": "#E2DED8",
+                    "primary-fixed-dim": "#e5c500",
+                    "on-secondary": "#ffffff",
+                    "surface-variant": "#e2e3de",
+                    "lemon": "#F0E44A",
+                    "on-surface": "#1a1c19",
+                    "primary-fixed": "#ffe257",
+                    "surface-container-high": "#e8e8e4",
+                    "outline": "#7e7760",
+                    "background": "#fafaf5",
+                    "on-primary": "#ffffff",
+                    "inverse-surface": "#2f312e",
+                    "on-tertiary-fixed-variant": "#484743",
+                    "on-surface-variant": "#4c4732",
+                    "on-tertiary-fixed": "#1c1c19",
+                    "on-tertiary-container": "#565451",
+                    "on-primary-fixed": "#211b00",
+                    "warm-grey": "#7A7670",
+                    "surface-tint": "#6e5e00",
+                    "sage": "#B5CC6E",
+                    "surface-dim": "#dadad6",
+                    "surface-container-low": "#f4f4ef",
+                    "primary-container": "#e8c800",
+                    "butter": "#F5F2C0"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "container-max-guest": "576px",
+                    "section-gap-desktop": "5rem",
+                    "gutter": "1.5rem",
+                    "section-gap-mobile": "3rem",
+                    "container-max-dashboard": "1024px"
+            },
+            "fontFamily": {
+                    "body-lg": ["Inter"],
+                    "hero-names": ["Cormorant Garamond"],
+                    "hero-names-mobile": ["Cormorant Garamond"],
+                    "section-heading": ["Cormorant Garamond"],
+                    "body-sm": ["Inter"],
+                    "label-caps": ["Inter"],
+                    "body-main": ["Inter"]
+            },
+            "fontSize": {
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "300"}],
+                    "hero-names": ["72px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "300"}],
+                    "hero-names-mobile": ["48px", {"lineHeight": "1.1", "fontWeight": "300"}],
+                    "section-heading": ["30px", {"lineHeight": "1.4", "fontWeight": "400"}],
+                    "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "label-caps": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.15em", "fontWeight": "400"}],
+                    "body-main": ["16px", {"lineHeight": "1.6", "fontWeight": "300"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .card-shadow {
+            box-shadow: 0px 4px 20px rgba(44, 43, 40, 0.05);
+        }
+        .touch-target {
+            min-width: 44px;
+            min-height: 44px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-main selection:bg-butter">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky bg-surface dark:bg-surface-dim border-b border-stone dark:border-outline-variant z-50">
+<div class="flex justify-between items-center px-gutter py-4 max-w-container-max-dashboard mx-auto">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="dashboard">dashboard</span>
+<h1 class="font-hero-names text-section-heading text-primary dark:text-primary-fixed-dim">Bretch &amp; Joyce • Dashboard</h1>
+</div>
+<button class="font-body-main text-body-main text-on-surface-variant hover:bg-butter dark:hover:bg-secondary-fixed-variant transition-colors px-4 py-2 rounded-lg">
+                Sign Out
+            </button>
+</div>
+</header>
+<main class="max-w-container-max-dashboard mx-auto px-gutter py-8 min-h-screen">
+<!-- Page Header -->
+<div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-10">
+<div>
+<h2 class="font-hero-names text-[40px] md:text-section-heading leading-tight mb-1">Guest List</h2>
+<p class="text-warm-grey font-body-sm">42 guests · 86 invited heads</p>
+</div>
+<div class="flex gap-3">
+<button class="flex items-center gap-2 px-6 py-3 border border-forest text-forest font-medium rounded-full hover:bg-surface-container transition-all touch-target">
+<span class="material-symbols-outlined text-[20px]" data-icon="upload_file">upload_file</span>
+<span class="font-body-sm">Import CSV</span>
+</button>
+<button class="flex items-center gap-2 px-6 py-3 bg-primary-container text-on-primary-container font-semibold rounded-full hover:shadow-lg transition-all touch-target">
+<span class="material-symbols-outlined text-[20px]" data-icon="person_add">person_add</span>
+<span class="font-body-sm">Add Guest</span>
+</button>
+</div>
+</div>
+<!-- Filter/Search Bar (Implicit Utility) -->
+<div class="mb-8 flex gap-4">
+<div class="relative flex-grow max-w-md">
+<span class="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-warm-grey" data-icon="search">search</span>
+<input class="w-full pl-12 pr-4 py-3 bg-white border border-stone rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all" placeholder="Search guest name..." type="text"/>
+</div>
+<button class="touch-target aspect-square flex items-center justify-center border border-stone rounded-xl bg-white text-on-surface-variant hover:bg-butter">
+<span class="material-symbols-outlined" data-icon="filter_list">filter_list</span>
+</button>
+</div>
+<!-- Guest Cards Grid (Mobile-First Rule) -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
+<!-- Guest Card 1 -->
+<div class="bg-white card-shadow rounded-xl p-5 border border-stone flex flex-col gap-4">
+<div class="flex justify-between items-start">
+<div class="flex flex-col gap-1">
+<span class="text-sm font-medium text-on-surface">Maria Santos</span>
+<div class="flex gap-2 items-center flex-wrap">
+<span class="px-2 py-0.5 bg-primary-container text-[11px] font-bold tracking-wider uppercase rounded text-on-primary-container">Principal Sponsor</span>
+<span class="text-[12px] text-warm-grey">2 pax</span>
+</div>
+</div>
+<span class="px-3 py-1 bg-primary-container/20 text-primary text-[12px] font-bold rounded-full">2/2 Confirmed</span>
+</div>
+<div class="bg-surface-container-low p-3 rounded-lg flex items-center justify-between gap-3">
+<span class="text-[12px] text-warm-grey truncate font-mono">invite.splitz/b&amp;j/maria-s...</span>
+<button class="text-forest hover:bg-white px-3 py-1.5 rounded-full border border-forest/30 text-[11px] font-bold uppercase transition-colors shrink-0">Copy</button>
+</div>
+<div class="flex justify-end gap-2 pt-2 border-t border-stone/50">
+<button class="touch-target flex items-center justify-center rounded-lg hover:bg-butter text-on-surface-variant transition-colors" title="Edit Guest">
+<span class="material-symbols-outlined" data-icon="edit">edit</span>
+</button>
+<button class="touch-target flex items-center justify-center rounded-lg hover:bg-error-container text-error transition-colors" title="Delete Guest">
+<span class="material-symbols-outlined" data-icon="delete">delete</span>
+</button>
+</div>
+</div>
+<!-- Guest Card 2 -->
+<div class="bg-white card-shadow rounded-xl p-5 border border-stone flex flex-col gap-4">
+<div class="flex justify-between items-start">
+<div class="flex flex-col gap-1">
+<span class="text-sm font-medium text-on-surface">Ricardo Dela Cruz</span>
+<div class="flex gap-2 items-center flex-wrap">
+<span class="px-2 py-0.5 bg-sage text-[11px] font-bold tracking-wider uppercase rounded text-on-secondary-fixed-variant">Secondary Sponsor</span>
+<span class="text-[12px] text-warm-grey">4 pax</span>
+</div>
+</div>
+<span class="px-3 py-1 bg-stone text-warm-grey text-[12px] font-bold rounded-full">Pending</span>
+</div>
+<div class="bg-surface-container-low p-3 rounded-lg flex items-center justify-between gap-3">
+<span class="text-[12px] text-warm-grey truncate font-mono">invite.splitz/b&amp;j/ricardo-d...</span>
+<button class="text-forest hover:bg-white px-3 py-1.5 rounded-full border border-forest/30 text-[11px] font-bold uppercase transition-colors shrink-0">Copy</button>
+</div>
+<div class="flex justify-end gap-2 pt-2 border-t border-stone/50">
+<button class="touch-target flex items-center justify-center rounded-lg hover:bg-butter text-on-surface-variant transition-colors" title="Edit Guest">
+<span class="material-symbols-outlined" data-icon="edit">edit</span>
+</button>
+<button class="touch-target flex items-center justify-center rounded-lg hover:bg-error-container text-error transition-colors" title="Delete Guest">
+<span class="material-symbols-outlined" data-icon="delete">delete</span>
+</button>
+</div>
+</div>
+<!-- Guest Card 3 -->
+<div class="bg-white card-shadow rounded-xl p-5 border border-stone flex flex-col gap-4">
+<div class="flex justify-between items-start">
+<div class="flex flex-col gap-1">
+<span class="text-sm font-medium text-on-surface">Isabella Montenegro</span>
+<div class="flex gap-2 items-center flex-wrap">
+<span class="px-2 py-0.5 bg-butter text-[11px] font-bold tracking-wider uppercase rounded text-forest">Entourage</span>
+<span class="text-[12px] text-warm-grey">1 pax</span>
+</div>
+</div>
+<span class="px-3 py-1 bg-primary-container/20 text-primary text-[12px] font-bold rounded-full">1/1 Confirmed</span>
+</div>
+<div class="bg-surface-container-low p-3 rounded-lg flex items-center justify-between gap-3">
+<span class="text-[12px] text-warm-grey truncate font-mono">invite.splitz/b&amp;j/isabella-...</span>
+<button class="text-forest hover:bg-white px-3 py-1.5 rounded-full border border-forest/30 text-[11px] font-bold uppercase transition-colors shrink-0">Copy</button>
+</div>
+<div class="flex justify-end gap-2 pt-2 border-t border-stone/50">
+<button class="touch-target flex items-center justify-center rounded-lg hover:bg-butter text-on-surface-variant transition-colors" title="Edit Guest">
+<span class="material-symbols-outlined" data-icon="edit">edit</span>
+</button>
+<button class="touch-target flex items-center justify-center rounded-lg hover:bg-error-container text-error transition-colors" title="Delete Guest">
+<span class="material-symbols-outlined" data-icon="delete">delete</span>
+</button>
+</div>
+</div>
+<!-- Guest Card 4 -->
+<div class="bg-white card-shadow rounded-xl p-5 border border-stone flex flex-col gap-4">
+<div class="flex justify-between items-start">
+<div class="flex flex-col gap-1">
+<span class="text-sm font-medium text-on-surface">Rafael Gomez</span>
+<div class="flex gap-2 items-center flex-wrap">
+<span class="px-2 py-0.5 bg-stone text-[11px] font-bold tracking-wider uppercase rounded text-on-tertiary-fixed-variant">Guest</span>
+<span class="text-[12px] text-warm-grey">2 pax</span>
+</div>
+</div>
+<span class="px-3 py-1 bg-error-container text-error text-[12px] font-bold rounded-full">Declined</span>
+</div>
+<div class="bg-surface-container-low p-3 rounded-lg flex items-center justify-between gap-3">
+<span class="text-[12px] text-warm-grey truncate font-mono">invite.splitz/b&amp;j/rafael-g...</span>
+<button class="text-forest hover:bg-white px-3 py-1.5 rounded-full border border-forest/30 text-[11px] font-bold uppercase transition-colors shrink-0">Copy</button>
+</div>
+<div class="flex justify-end gap-2 pt-2 border-t border-stone/50">
+<button class="touch-target flex items-center justify-center rounded-lg hover:bg-butter text-on-surface-variant transition-colors" title="Edit Guest">
+<span class="material-symbols-outlined" data-icon="edit">edit</span>
+</button>
+<button class="touch-target flex items-center justify-center rounded-lg hover:bg-error-container text-error transition-colors" title="Delete Guest">
+<span class="material-symbols-outlined" data-icon="delete">delete</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Load More Button -->
+<div class="mt-12 flex justify-center">
+<button class="px-8 py-3 bg-white border border-stone text-warm-grey rounded-full font-body-sm hover:bg-surface-container transition-colors touch-target">
+                Load More Guests
+            </button>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full py-8 mt-auto bg-surface dark:bg-surface-dim border-t border-stone dark:border-outline-variant">
+<div class="flex flex-col md:flex-row justify-between items-center px-gutter max-w-container-max-dashboard mx-auto gap-6">
+<div class="flex flex-col items-center md:items-start gap-2">
+<span class="font-label-caps text-label-caps text-warm-grey tracking-widest uppercase">Invite-Splitz</span>
+<p class="font-body-sm text-body-sm text-warm-grey">© 2024 Invite-Splitz. All rights reserved.</p>
+</div>
+<div class="flex gap-8">
+<a class="font-body-sm text-body-sm text-warm-grey hover:text-primary transition-colors cursor-pointer" href="#">Privacy Policy</a>
+<a class="font-body-sm text-body-sm text-warm-grey hover:text-primary transition-colors cursor-pointer" href="#">Terms of Service</a>
+</div>
+</div>
+</footer>
+<!-- FAB for quick add on mobile -->
+<button class="md:hidden fixed bottom-6 right-6 w-14 h-14 bg-primary-container text-on-primary-container rounded-full shadow-xl flex items-center justify-center hover:scale-105 active:scale-95 transition-all z-40">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+</button>
+<script>
+        // Micro-interaction for Copy button
+        document.querySelectorAll('button').forEach(btn => {
+            if (btn.innerText === 'COPY') {
+                btn.addEventListener('click', function() {
+                    const originalText = this.innerText;
+                    this.innerText = 'COPIED!';
+                    this.classList.add('bg-forest', 'text-white');
+                    setTimeout(() => {
+                        this.innerText = originalText;
+                        this.classList.remove('bg-forest', 'text-white');
+                    }, 2000);
+                });
+            }
+        });
+    </script>
+</body></html>

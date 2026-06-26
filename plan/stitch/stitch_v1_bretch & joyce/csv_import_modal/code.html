@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Import Guests - Mobile UI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;700&amp;family=Inter:wght@300;400;600&amp;family=Cormorant+Garamond:wght@300;400;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-variant": "#e2e3de",
+                        "surface-container-high": "#e8e8e4",
+                        "tertiary-container": "#ccc9c4",
+                        "on-secondary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "on-error": "#ffffff",
+                        "surface-container": "#eeeee9",
+                        "inverse-on-surface": "#f1f1ec",
+                        "on-surface": "#1a1c19",
+                        "on-tertiary-fixed-variant": "#484743",
+                        "on-secondary-fixed-variant": "#2d5000",
+                        "on-tertiary-container": "#565451",
+                        "error": "#ba1a1a",
+                        "outline": "#7e7760",
+                        "error-container": "#ffdad6",
+                        "secondary": "#3d6a00",
+                        "surface-container-highest": "#e2e3de",
+                        "inverse-primary": "#e5c500",
+                        "surface-container-low": "#f4f4ef",
+                        "inverse-surface": "#2f312e",
+                        "outline-variant": "#cfc6ac",
+                        "surface": "#fafaf5",
+                        "on-background": "#1a1c19",
+                        "secondary-fixed": "#baf47a",
+                        "surface-bright": "#fafaf5",
+                        "on-primary-container": "#625400",
+                        "background": "#fafaf5",
+                        "on-secondary-container": "#427000",
+                        "warm-grey": "#7A7670",
+                        "secondary-container": "#baf47a",
+                        "primary-fixed-dim": "#e5c500",
+                        "tertiary": "#605e5a",
+                        "tertiary-fixed-dim": "#c9c6c1",
+                        "forest": "#4E8A20",
+                        "primary": "#6e5e00",
+                        "secondary-fixed-dim": "#9fd762",
+                        "on-secondary-fixed": "#0f2000",
+                        "on-tertiary-fixed": "#1c1c19",
+                        "on-primary-fixed-variant": "#534600",
+                        "on-primary": "#ffffff",
+                        "on-primary-fixed": "#211b00",
+                        "on-surface-variant": "#4c4732",
+                        "butter": "#F5F2C0",
+                        "surface-dim": "#dadad6",
+                        "tertiary-fixed": "#e6e2dd",
+                        "sage": "#B5CC6E",
+                        "primary-container": "#e8c800",
+                        "surface-tint": "#6e5e00",
+                        "primary-fixed": "#ffe257",
+                        "stone": "#E2DED8",
+                        "on-tertiary": "#ffffff",
+                        "lemon": "#F0E44A"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "body-sm": ["Inter"],
+                        "label-caps": ["Inter"],
+                        "section-heading": ["Cormorant Garamond"],
+                        "body-lg": ["Inter"],
+                        "hero-names": ["Cormorant Garamond"],
+                        "body-main": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .step-transition {
+            transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+        }
+        .hidden-step {
+            display: none;
+        }
+        body {
+            overscroll-behavior: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background font-body-main text-on-background min-h-screen overflow-hidden">
+<!-- Background Layer: Simulated Guest List (SCREEN_4 Placeholder) -->
+<div class="relative w-full h-screen bg-surface-container overflow-hidden">
+<header class="flex items-center justify-between p-4 bg-white border-b border-surface-container">
+<h1 class="text-xl font-section-heading font-semibold text-on-surface">Guest List</h1>
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-on-surface-variant">search</span>
+<span class="material-symbols-outlined text-on-surface-variant">filter_list</span>
+</div>
+</header>
+<div class="p-4 space-y-4 opacity-40">
+<div class="p-4 bg-white rounded-xl flex justify-between items-center shadow-sm">
+<div>
+<p class="font-semibold">Sofia Rivera</p>
+<p class="text-sm text-on-surface-variant">Bridesmaid • 2 pax</p>
+</div>
+<span class="material-symbols-outlined text-warm-grey">chevron_right</span>
+</div>
+<div class="p-4 bg-white rounded-xl flex justify-between items-center shadow-sm">
+<div>
+<p class="font-semibold">Mateo G. Tan</p>
+<p class="text-sm text-on-surface-variant">Groomsman • 1 pax</p>
+</div>
+<span class="material-symbols-outlined text-warm-grey">chevron_right</span>
+</div>
+<div class="p-4 bg-white rounded-xl flex justify-between items-center shadow-sm">
+<div>
+<p class="font-semibold">Dr. Elena Cruz</p>
+<p class="text-sm text-on-surface-variant">Principal Sponsor • 2 pax</p>
+</div>
+<span class="material-symbols-outlined text-warm-grey">chevron_right</span>
+</div>
+</div>
+<!-- Dimmer Overlay -->
+<div class="absolute inset-0 bg-black/40 z-10 backdrop-blur-[2px]"></div>
+</div>
+<!-- Bottom Sheet Container -->
+<div class="fixed inset-x-0 bottom-0 z-20 flex flex-col items-center justify-end">
+<!-- Step 1: Upload (Shared Component Logic Applied) -->
+<div class="w-full bg-[#fcfbf8] rounded-t-[2rem] shadow-2xl transition-all duration-300 transform translate-y-0" id="step-1" style='font-family: "Public Sans", "Noto Sans", sans-serif;'>
+<div class="flex flex-col items-stretch">
+<!-- BottomSheetHandle -->
+<button class="flex h-5 w-full items-center justify-center pt-2">
+<div class="h-1.5 w-12 rounded-full bg-surface-variant"></div>
+</button>
+<div class="flex-1 px-6 pb-8">
+<h3 class="text-[#1d1a0c] tracking-tight text-2xl font-bold leading-tight pb-2 pt-5">Import Guests from CSV</h3>
+<p class="text-[#1d1a0c] text-base font-normal leading-normal pb-6 opacity-70">
+                        Upload a CSV file to bulk-add guests. Existing guests will not be overwritten.
+                    </p>
+<!-- Upload Zone -->
+<div class="flex flex-col mb-6">
+<div class="flex flex-col items-center gap-4 rounded-xl border-2 border-dashed border-outline-variant bg-surface-container-low px-6 py-12 active:bg-surface-container transition-colors cursor-pointer" onclick="goToStep(2)">
+<span class="material-symbols-outlined text-4xl text-primary" style="font-variation-settings: 'FILL' 0;">upload_file</span>
+<div class="flex flex-col items-center gap-1">
+<p class="text-[#1d1a0c] text-lg font-bold leading-tight text-center">Tap to select a CSV file</p>
+<p class="text-on-surface-variant text-sm font-mono leading-normal text-center bg-white/50 px-2 rounded">firstName, lastName, pax, role</p>
+</div>
+</div>
+</div>
+<!-- Actions -->
+<div class="flex gap-3">
+<button class="flex-1 h-12 rounded-xl text-[#1d1a0c] text-base font-bold tracking-wide border border-outline-variant">
+                            Cancel
+                        </button>
+<button class="flex-1 h-12 rounded-xl bg-primary-container text-on-primary-container opacity-50 cursor-not-allowed text-base font-bold tracking-wide" disabled="">
+                            Upload
+                        </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Step 2: Preview -->
+<div class="w-full bg-[#fcfbf8] rounded-t-[2rem] shadow-2xl transition-all duration-300 transform translate-y-full hidden" id="step-2">
+<div class="flex flex-col items-stretch">
+<button class="flex h-5 w-full items-center justify-center pt-2">
+<div class="h-1.5 w-12 rounded-full bg-surface-variant"></div>
+</button>
+<div class="flex-1 px-6 pb-8">
+<h3 class="text-[#1d1a0c] tracking-tight text-2xl font-bold leading-tight pb-2 pt-5">Review Import</h3>
+<p class="text-[#1d1a0c] text-base font-normal leading-normal pb-6">
+                        We found <span class="font-bold">12 guests</span> in your file. Please check if the details are correct.
+                    </p>
+<!-- Preview Table -->
+<div class="border border-outline-variant rounded-xl overflow-hidden mb-6">
+<table class="w-full text-left text-sm">
+<thead class="bg-surface-container-low text-on-surface-variant border-b border-outline-variant">
+<tr>
+<th class="px-4 py-2 font-semibold">Name</th>
+<th class="px-4 py-2 font-semibold">Role</th>
+<th class="px-4 py-2 font-semibold">Pax</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<tr>
+<td class="px-4 py-3 text-on-surface">Maria Santos</td>
+<td class="px-4 py-3 text-on-surface-variant">Principal Sponsor</td>
+<td class="px-4 py-3 text-on-surface text-center">2</td>
+</tr>
+<tr>
+<td class="px-4 py-3 text-on-surface">Ricardo Dela Cruz</td>
+<td class="px-4 py-3 text-on-surface-variant">Secondary Sponsor</td>
+<td class="px-4 py-3 text-on-surface text-center">4</td>
+</tr>
+<tr>
+<td class="px-4 py-3 text-on-surface italic opacity-50">...and 10 more</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Summary Info -->
+<div class="flex items-center gap-2 mb-8 text-secondary font-medium">
+<span class="material-symbols-outlined text-xl">check_circle</span>
+<span>12 guests ready to import</span>
+</div>
+<!-- Actions -->
+<div class="flex gap-3">
+<button class="flex-1 h-12 rounded-xl text-[#1d1a0c] text-base font-bold tracking-wide border border-outline-variant" onclick="goToStep(1)">
+                            Back
+                        </button>
+<button class="flex-[1.5] h-12 rounded-xl bg-primary-container text-on-primary-container text-base font-bold tracking-wide shadow-sm active:scale-[0.98] transition-transform" onclick="goToStep(3)">
+                            Import 12 Guests
+                        </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Step 3: Done -->
+<div class="w-full bg-[#fcfbf8] rounded-t-[2rem] shadow-2xl transition-all duration-300 transform translate-y-full hidden" id="step-3">
+<div class="flex flex-col items-stretch">
+<button class="flex h-5 w-full items-center justify-center pt-2">
+<div class="h-1.5 w-12 rounded-full bg-surface-variant"></div>
+</button>
+<div class="flex-1 px-6 py-12 flex flex-col items-center text-center">
+<div class="w-20 h-20 bg-secondary-container rounded-full flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-5xl text-secondary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<h3 class="text-[#1d1a0c] tracking-tight text-3xl font-bold leading-tight pb-2">Import Complete</h3>
+<p class="text-[#1d1a0c] text-lg font-normal leading-normal pb-10 opacity-70">
+                        12 guests added successfully to your wedding list.
+                    </p>
+<button class="w-full h-14 rounded-xl bg-primary-container text-on-primary-container text-lg font-bold tracking-wide shadow-md active:scale-95 transition-transform" onclick="closeModal()">
+                        Done
+                    </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Client-side navigation script -->
+<script>
+        function goToStep(stepNumber) {
+            const steps = [1, 2, 3];
+            steps.forEach(s => {
+                const stepEl = document.getElementById(`step-${s}`);
+                if (s === stepNumber) {
+                    stepEl.classList.remove('hidden');
+                    // Slight delay for transition to trigger
+                    setTimeout(() => {
+                        stepEl.style.transform = 'translateY(0)';
+                    }, 10);
+                } else {
+                    stepEl.style.transform = 'translateY(100%)';
+                    // Wait for transition before hiding
+                    setTimeout(() => {
+                        if (s !== stepNumber) stepEl.classList.add('hidden');
+                    }, 300);
+                }
+            });
+        }
+
+        function closeModal() {
+            // Animates the current active sheet down and refreshes/closes (simulated)
+            const activeStep = document.querySelector('div[id^="step-"]:not(.hidden)');
+            if (activeStep) {
+                activeStep.style.transform = 'translateY(100%)';
+                setTimeout(() => {
+                    location.reload(); // Reset the UI for demo purposes
+                }, 300);
+            }
+        }
+
+        // Initialize micro-interactions
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('touchstart', () => btn.classList.add('opacity-80'));
+            btn.addEventListener('touchend', () => btn.classList.remove('opacity-80'));
+        });
+    </script>
+</body></html>

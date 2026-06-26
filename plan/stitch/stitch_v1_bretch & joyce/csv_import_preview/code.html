@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Guest Import Preview</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&amp;family=Inter:wght@300;400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Custom scrollbar for a cleaner feel */
+        .preview-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+        .preview-scroll::-webkit-scrollbar-track {
+            background: #FAFAF5;
+        }
+        .preview-scroll::-webkit-scrollbar-thumb {
+            background: #E2DED8;
+            border-radius: 10px;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "butter": "#F5F2C0",
+                        "sage": "#B5CC6E",
+                        "on-error-container": "#93000a",
+                        "tertiary": "#605e5a",
+                        "outline-variant": "#cfc6ac",
+                        "tertiary-fixed": "#e6e2dd",
+                        "on-secondary-fixed": "#0f2000",
+                        "inverse-on-surface": "#f1f1ec",
+                        "primary-fixed": "#ffe257",
+                        "surface-container-high": "#e8e8e4",
+                        "primary-container": "#e8c800",
+                        "on-error": "#ffffff",
+                        "surface-tint": "#6e5e00",
+                        "secondary-container": "#baf47a",
+                        "primary": "#6e5e00",
+                        "secondary-fixed-dim": "#9fd762",
+                        "on-primary-fixed-variant": "#534600",
+                        "inverse-surface": "#2f312e",
+                        "on-surface-variant": "#4c4732",
+                        "outline": "#7e7760",
+                        "surface": "#fafaf5",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed-variant": "#484743",
+                        "surface-variant": "#e2e3de",
+                        "on-tertiary": "#ffffff",
+                        "surface-container": "#eeeee9",
+                        "on-surface": "#1a1c19",
+                        "background": "#fafaf5",
+                        "error": "#ba1a1a",
+                        "on-primary-container": "#625400",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary-container": "#565451",
+                        "tertiary-fixed-dim": "#c9c6c1",
+                        "surface-dim": "#dadad6",
+                        "secondary": "#3d6a00",
+                        "warm-grey": "#7A7670",
+                        "primary-fixed-dim": "#e5c500",
+                        "error-container": "#ffdad6",
+                        "secondary-fixed": "#baf47a",
+                        "on-primary": "#ffffff",
+                        "lemon": "#F0E44A",
+                        "inverse-primary": "#e5c500",
+                        "on-secondary-container": "#427000",
+                        "on-primary-fixed": "#211b00",
+                        "surface-container-low": "#f4f4ef",
+                        "surface-bright": "#fafaf5",
+                        "stone": "#E2DED8",
+                        "on-tertiary-fixed": "#1c1c19",
+                        "tertiary-container": "#ccc9c4",
+                        "on-background": "#1a1c19",
+                        "on-secondary-fixed-variant": "#2d5000",
+                        "surface-container-highest": "#e2e3de",
+                        "forest": "#4E8A20"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem",
+                        "2xl": "1rem"
+                    },
+                    "spacing": {
+                        "container-max-dashboard": "1024px",
+                        "section-gap-mobile": "3rem",
+                        "gutter": "1.5rem",
+                        "container-max-guest": "576px",
+                        "section-gap-desktop": "5rem"
+                    },
+                    "fontFamily": {
+                        "label-caps": ["Inter"],
+                        "body-main": ["Inter"],
+                        "section-heading": ["Cormorant Garamond"],
+                        "hero-names-mobile": ["Cormorant Garamond"],
+                        "body-lg": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "hero-names": ["Cormorant Garamond"]
+                    },
+                    "fontSize": {
+                        "label-caps": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.15em", "fontWeight": "400"}],
+                        "body-main": ["16px", {"lineHeight": "1.6", "fontWeight": "300"}],
+                        "section-heading": ["30px", {"lineHeight": "1.4", "fontWeight": "400"}],
+                        "hero-names-mobile": ["48px", {"lineHeight": "1.1", "fontWeight": "300"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "300"}],
+                        "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "hero-names": ["72px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "300"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background font-body-main text-on-surface overflow-hidden h-screen w-full flex flex-col justify-end">
+<!-- Mock Background Content (Simulated Dashboard) -->
+<div class="absolute inset-0 p-gutter pointer-events-none opacity-20">
+<header class="flex justify-between items-center mb-8">
+<h1 class="font-section-heading text-section-heading">Guest List</h1>
+<span class="material-symbols-outlined text-warm-grey">account_circle</span>
+</header>
+<div class="space-y-4">
+<div class="h-12 w-full bg-stone rounded-lg"></div>
+<div class="h-64 w-full bg-stone/50 rounded-lg"></div>
+<div class="h-12 w-full bg-stone rounded-lg"></div>
+</div>
+</div>
+<!-- Scrim/Overlay -->
+<div class="fixed inset-0 bg-black/40 z-40"></div>
+<!-- Bottom Sheet Container -->
+<main class="relative z-50 w-full max-w-container-max-guest mx-auto bg-surface-container-lowest rounded-t-2xl shadow-2xl flex flex-col max-h-[795px] transition-transform duration-300 transform translate-y-0" id="bottom-sheet">
+<!-- Drag Handle & Header -->
+<div class="flex flex-col items-center pt-3 pb-4 px-gutter border-b border-stone">
+<div class="w-12 h-1.5 bg-stone rounded-full mb-6"></div>
+<div class="w-full flex justify-between items-start">
+<div class="flex flex-col">
+<h2 class="font-section-heading text-section-heading text-on-surface">Review Import</h2>
+<p class="font-body-sm text-body-sm text-warm-grey">32 guests ready to import · 2 rows skipped (missing name)</p>
+</div>
+<button class="p-2 -mr-2 active:scale-95 transition-transform text-on-surface-variant">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+</div>
+<!-- Scrollable Content Area -->
+<div class="flex-1 overflow-y-auto preview-scroll px-gutter py-6 space-y-4">
+<!-- Table Preview -->
+<div class="space-y-2">
+<!-- Header Label -->
+<div class="flex justify-between items-center px-2 pb-2 border-b border-stone/50">
+<span class="font-label-caps text-label-caps text-warm-grey">CSV DATA PREVIEW</span>
+<span class="font-label-caps text-label-caps text-warm-grey">ROLE &amp; PAX</span>
+</div>
+<!-- Row 1 -->
+<div class="p-4 bg-surface rounded-xl border border-stone flex items-center justify-between hover:bg-butter transition-colors">
+<div class="flex flex-col">
+<span class="font-body-lg text-body-lg font-medium text-on-surface">Maria Santos</span>
+<span class="font-body-sm text-body-sm text-warm-grey italic">maria.santos@email.com</span>
+</div>
+<div class="flex flex-col items-end">
+<span class="px-3 py-1 rounded-full bg-primary-container text-on-primary-container text-[12px] font-bold tracking-tight">PRINCIPAL SPONSOR</span>
+<span class="font-body-sm text-body-sm text-warm-grey mt-1">2 pax</span>
+</div>
+</div>
+<!-- Row 2 -->
+<div class="p-4 bg-surface rounded-xl border border-stone flex items-center justify-between hover:bg-butter transition-colors">
+<div class="flex flex-col">
+<span class="font-body-lg text-body-lg font-medium text-on-surface">Ricardo Dela Cruz</span>
+<span class="font-body-sm text-body-sm text-warm-grey italic">r.delacruz@email.com</span>
+</div>
+<div class="flex flex-col items-end">
+<span class="px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container text-[12px] font-bold tracking-tight">SECONDARY SPONSOR</span>
+<span class="font-body-sm text-body-sm text-warm-grey mt-1">4 pax</span>
+</div>
+</div>
+<!-- Row 3 -->
+<div class="p-4 bg-surface rounded-xl border border-stone flex items-center justify-between hover:bg-butter transition-colors">
+<div class="flex flex-col">
+<span class="font-body-lg text-body-lg font-medium text-on-surface">Isabella Montenegro</span>
+<span class="font-body-sm text-body-sm text-warm-grey italic">bella.monte@email.com</span>
+</div>
+<div class="flex flex-col items-end">
+<span class="px-3 py-1 rounded-full bg-stone text-warm-grey text-[12px] font-bold tracking-tight">ENTOURAGE</span>
+<span class="font-body-sm text-body-sm text-warm-grey mt-1">1 pax</span>
+</div>
+</div>
+</div>
+<!-- Skipped Rows Collapsible -->
+<button class="w-full flex items-center justify-between py-3 px-4 rounded-xl border border-dashed border-stone text-warm-grey hover:bg-surface-container-high transition-colors group" onclick="toggleSkipped()">
+<span class="font-body-sm text-body-sm">Show 2 skipped rows</span>
+<span class="material-symbols-outlined transition-transform duration-300" id="chevron">expand_more</span>
+</button>
+<div class="hidden space-y-2 overflow-hidden animate-in fade-in slide-in-from-top-2" id="skipped-rows">
+<div class="p-4 bg-error-container/20 border border-error/20 rounded-xl flex items-center justify-between opacity-70">
+<div class="flex flex-col">
+<span class="font-body-lg text-body-lg text-error italic">[Missing Name]</span>
+<span class="font-body-sm text-body-sm text-warm-grey italic">row7@email.com</span>
+</div>
+<span class="font-body-sm text-body-sm text-error">Missing Field</span>
+</div>
+<div class="p-4 bg-error-container/20 border border-error/20 rounded-xl flex items-center justify-between opacity-70">
+<div class="flex flex-col">
+<span class="font-body-lg text-body-lg text-error italic">[Missing Name]</span>
+<span class="font-body-sm text-body-sm text-warm-grey italic">guest_99@email.com</span>
+</div>
+<span class="font-body-sm text-body-sm text-error">Missing Field</span>
+</div>
+</div>
+<!-- Spacing for scroll bottom -->
+<div class="h-12"></div>
+</div>
+<!-- Footer Actions -->
+<footer class="p-gutter border-t border-stone bg-surface-container-lowest flex flex-col gap-3">
+<button class="w-full h-12 bg-primary-container text-on-primary-container rounded-full font-label-caps text-label-caps font-bold hover:opacity-90 active:scale-[0.98] transition-all shadow-sm">
+                Import 32 Guests
+            </button>
+<button class="w-full h-12 bg-transparent border border-forest text-forest rounded-full font-label-caps text-label-caps font-bold hover:bg-forest/5 active:scale-[0.98] transition-all">
+                Back
+            </button>
+<!-- Safe area spacing for mobile home indicator -->
+<div class="h-2"></div>
+</footer>
+</main>
+<script>
+        function toggleSkipped() {
+            const content = document.getElementById('skipped-rows');
+            const chevron = document.getElementById('chevron');
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                chevron.style.transform = 'rotate(180deg)';
+            } else {
+                content.classList.add('hidden');
+                chevron.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        // Basic Micro-interaction for bottom sheet "drag" simulation
+        let startY = 0;
+        const sheet = document.getElementById('bottom-sheet');
+        
+        sheet.addEventListener('touchstart', (e) => {
+            startY = e.touches[0].clientY;
+        }, { passive: true });
+
+        sheet.addEventListener('touchmove', (e) => {
+            const currentY = e.touches[0].clientY;
+            const deltaY = currentY - start</script></body></html>

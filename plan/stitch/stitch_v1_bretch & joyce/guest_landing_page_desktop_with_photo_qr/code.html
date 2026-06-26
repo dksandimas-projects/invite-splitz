@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;700&amp;family=Noto+Sans:wght@300;400;700&amp;family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&amp;family=Inter:wght@300;400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline": "#7e7760",
+                        "error-container": "#ffdad6",
+                        "tertiary-fixed": "#e6e2dd",
+                        "on-tertiary-fixed": "#1c1c19",
+                        "tertiary": "#605e5a",
+                        "primary-fixed": "#ffe257",
+                        "surface-bright": "#fafaf5",
+                        "on-primary": "#ffffff",
+                        "primary-fixed-dim": "#e5c500",
+                        "error": "#ba1a1a",
+                        "inverse-on-surface": "#f1f1ec",
+                        "on-primary-fixed-variant": "#534600",
+                        "stone": "#E2DED8",
+                        "surface-tint": "#6e5e00",
+                        "warm-grey": "#7A7670",
+                        "on-primary-container": "#625400",
+                        "surface-variant": "#e2e3de",
+                        "outline-variant": "#cfc6ac",
+                        "on-secondary-fixed": "#0f2000",
+                        "secondary-fixed-dim": "#9fd762",
+                        "background": "#fafaf5",
+                        "inverse-surface": "#2f312e",
+                        "secondary-fixed": "#baf47a",
+                        "on-surface-variant": "#4c4732",
+                        "butter": "#F5F2C0",
+                        "forest": "#4E8A20",
+                        "secondary-container": "#baf47a",
+                        "on-secondary": "#ffffff",
+                        "primary": "#6e5e00",
+                        "on-tertiary": "#ffffff",
+                        "sage": "#B5CC6E",
+                        "primary-container": "#e8c800",
+                        "surface-container-lowest": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "on-secondary-container": "#427000",
+                        "surface": "#fafaf5",
+                        "surface-container-highest": "#e2e3de",
+                        "lemon": "#F0E44A",
+                        "on-error": "#ffffff",
+                        "secondary": "#3d6a00",
+                        "surface-container": "#eeeee9",
+                        "on-secondary-fixed-variant": "#2d5000",
+                        "on-surface": "#1a1c19",
+                        "inverse-primary": "#e5c500",
+                        "tertiary-container": "#ccc9c4",
+                        "tertiary-fixed-dim": "#c9c6c1",
+                        "on-tertiary-container": "#565451",
+                        "on-background": "#1a1c19",
+                        "surface-dim": "#dadad6",
+                        "on-primary-fixed": "#211b00",
+                        "on-tertiary-fixed-variant": "#484743",
+                        "surface-container-low": "#f4f4ef",
+                        "surface-container-high": "#e8e8e4"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "section-heading": ["Cormorant Garamond"],
+                        "label-caps": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "body-main": ["Inter"],
+                        "hero-names": ["Cormorant Garamond"],
+                    },
+                    "fontSize": {
+                        "section-heading": ["30px", {"lineHeight": "1.4", "fontWeight": "400"}],
+                        "label-caps": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.15em", "fontWeight": "400"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "300"}],
+                        "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "body-main": ["16px", {"lineHeight": "1.6", "fontWeight": "300"}],
+                        "hero-names": ["72px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "300"}],
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .botanical-frame-left {
+            position: absolute;
+            left: 0;
+            top: 20%;
+            height: 60vh;
+            opacity: 0.15;
+            pointer-events: none;
+        }
+        .botanical-frame-right {
+            position: absolute;
+            right: 0;
+            top: 20%;
+            height: 60vh;
+            opacity: 0.15;
+            pointer-events: none;
+            transform: scaleX(-1);
+        }
+        .hero-title-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 7rem;
+            line-height: 1;
+            font-weight: 300;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-main selection:bg-primary-container selection:text-on-primary-container">
+<!-- Shared TopAppBar (Destination Screen - Show Nav) -->
+<div class="relative flex h-auto w-full flex-col bg-[#fcfbf8] group/design-root overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#f4f2e6] px-10 py-3">
+<div class="flex items-center gap-4 text-[#1d1a0c]">
+<div class="size-4">
+<svg fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M44 11.2727C44 14.0109 39.8386 16.3957 33.69 17.6364C39.8386 18.877 44 21.2618 44 24C44 26.7382 39.8386 29.123 33.69 30.3636C39.8386 31.6043 44 33.9891 44 36.7273C44 40.7439 35.0457 44 24 44C12.9543 44 4 40.7439 4 36.7273C4 33.9891 8.16144 31.6043 14.31 30.3636C8.16144 29.123 4 26.7382 4 24C4 21.2618 8.16144 18.877 14.31 17.6364C8.16144 16.3957 4 14.0109 4 11.2727C4 7.25611 12.9543 4 24 4C35.0457 4 44 7.25611 44 11.2727Z" fill="currentColor"></path>
+</svg>
+</div>
+<h2 class="text-[#1d1a0c] text-lg font-bold leading-tight tracking-[-0.015em]">Wedding Website</h2>
+</div>
+<div class="flex flex-1 justify-end gap-8">
+<div class="flex items-center gap-9">
+<a class="text-[#1d1a0c] text-sm font-medium leading-normal" href="#">Our Story</a>
+<a class="text-[#1d1a0c] text-sm font-medium leading-normal" href="#">Events</a>
+<a class="text-[#1d1a0c] text-sm font-medium leading-normal" href="#">RSVP</a>
+<a class="text-[#1d1a0c] text-sm font-medium leading-normal" href="#">Registry</a>
+</div>
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded h-10 px-4 bg-[#e8c900] text-[#1d1a0c] text-sm font-bold leading-normal tracking-[0.015em]">
+<span class="truncate">Login</span>
+</button>
+</div>
+</header>
+</div>
+</div>
+<!-- Main Content Container -->
+<main class="relative overflow-hidden">
+<!-- Botanical Decorations -->
+<div class="botanical-frame-left hidden lg:block">
+<svg fill="none" height="800" viewbox="0 0 200 800" width="200" xmlns="http://www.w3.org/2000/svg">
+<path d="M20 780C20 780 150 600 50 400C-50 200 80 20 80 20" stroke="#4E8A20" stroke-dasharray="4 4" stroke-width="0.5"></path>
+<circle cx="80" cy="20" fill="#4E8A20" r="4"></circle>
+<circle cx="20" cy="780" fill="#4E8A20" r="4"></circle>
+<path d="M40 700Q100 680 120 620" stroke="#4E8A20" stroke-width="0.5"></path>
+<path d="M30 500Q80 480 90 420" stroke="#4E8A20" stroke-width="0.5"></path>
+</svg>
+</div>
+<div class="botanical-frame-right hidden lg:block">
+<svg fill="none" height="800" viewbox="0 0 200 800" width="200" xmlns="http://www.w3.org/2000/svg">
+<path d="M20 780C20 780 150 600 50 400C-50 200 80 20 80 20" stroke="#4E8A20" stroke-dasharray="4 4" stroke-width="0.5"></path>
+<circle cx="80" cy="20" fill="#4E8A20" r="4"></circle>
+<circle cx="20" cy="780" fill="#4E8A20" r="4"></circle>
+</svg>
+</div>
+<div class="max-w-xl mx-auto px-6">
+<!-- Hero Section -->
+<section class="min-h-screen flex flex-col items-center justify-center text-center space-y-12 py-20 relative">
+<div class="space-y-4 animate-fade-in">
+<span class="font-label-caps text-forest uppercase tracking-widest text-sm">Save the Date</span>
+<h1 class="hero-title-text flex flex-col text-on-surface">
+<span>Elena</span>
+<span class="italic font-light py-2 text-5xl">&amp;</span>
+<span>Julian</span>
+</h1>
+<div class="w-12 h-px bg-outline-variant mx-auto my-8"></div>
+<p class="font-body-lg text-warm-grey">September 24th, 2024 • Sonoma Valley, CA</p>
+</div>
+<div class="w-full aspect-[4/5] rounded-xl overflow-hidden shadow-2xl relative">
+<img class="w-full h-full object-cover" data-alt="A cinematic, soft-focus portrait of a couple, Elena and Julian, walking through a sun-drenched vineyard in Sonoma Valley at golden hour. The aesthetic is elegant and heirloom-quality, with warm natural lighting filtering through grapevine leaves. The color palette features soft creams, sage greens, and deep golds, creating a romantic and timeless atmosphere consistent with a luxury wedding landing page." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCJIMFoxfoewRUf0hW80nnBlG3fh4ePzaLWyYKj4bx2llqJ3SUmh0JEAimM3BSzh2tSwsrUu23NIFPdblmfU02uifC01cocRd6x_fE7j0uhA2w6bD4PjecNOkouTCkLZAI1CxL9ZUahBBCaM2Wcm_mnceZYeW7k8YzQMsecKK5q1AdYGjX38slWkKCrTl_IKHtoZIDugTfybWsiUqMcJ2E7Q9DS4bzWp9gV64CrjiNyxdBjT6Q_Sk_oBEd3_0JWjoQX1he7Tugyw_M"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent flex items-end p-10">
+<p class="text-white font-body-main text-left leading-relaxed">
+                            Together with their families, they request the honor of your presence as they celebrate their union.
+                        </p>
+</div>
+</div>
+<div class="flex flex-col sm:flex-row gap-4 w-full pt-8">
+<button class="flex-1 bg-primary-container hover:bg-lemon transition-colors text-on-primary-fixed font-bold py-4 px-8 rounded-lg tracking-wider text-sm uppercase">
+                        RSVP Now
+                    </button>
+<button class="flex-1 border border-outline hover:bg-surface-container-low transition-colors text-on-surface font-bold py-4 px-8 rounded-lg tracking-wider text-sm uppercase">
+                        View Schedule
+                    </button>
+</div>
+</section>
+<!-- Event Details -->
+<section class="py-20 border-t border-outline-variant">
+<div class="text-center mb-16">
+<h2 class="text-section-heading font-section-heading mb-4">The Celebration</h2>
+<p class="font-body-main text-warm-grey">Join us for a weekend of love and festivities</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+<!-- Ceremony -->
+<div class="space-y-6">
+<div class="aspect-video rounded-xl overflow-hidden grayscale hover:grayscale-0 transition-all duration-700">
+<img class="w-full h-full object-cover" data-alt="An ethereal wide shot of an outdoor wedding ceremony setup at St. Mary's Chapel in Sonoma. Rows of elegant wooden chairs are arranged on a lush green lawn, flanked by tall cypress trees. The lighting is crisp morning sun, casting long soft shadows. The overall mood is peaceful and sacred, using a natural color palette of deep greens and earthy browns to reflect a botanical heirloom style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD1H29zsJ8sGXJdpa9D9Fy0H7_U1SukxjMoOStHEQXHE0brema02FSD89bimk49ORb80OgS7ZWWt9Whf6CeWCR2hsZ2yPwhukZ6oTsu0xOXI1oJ4LVPYF0vSVp9dISP487AkmcjZGiA6p9_0liDNt3FOkaiUAmY3I54Re_w5ioSihFecgnN-A_8w5TFnUv0-UTeqSl1Anzh9Lo0PPh1OkZWCCSbsQ61gcp7sjmDzb0ivZmnJDy74ahu5k4Fgcg-412gkStOg1BTIdE"/>
+</div>
+<div class="space-y-2">
+<h3 class="text-xl font-section-heading text-forest">The Ceremony</h3>
+<p class="text-sm font-label-caps uppercase text-warm-grey">4:00 PM</p>
+<p class="font-body-main text-on-surface">St. Mary's Chapel</p>
+<p class="text-xs text-warm-grey italic leading-relaxed">123 Vineyard Lane, Sonoma, CA 95476. Transportation will be provided from the primary hotel partner.</p>
+</div>
+</div>
+<!-- Reception -->
+<div class="space-y-6">
+<div class="aspect-video rounded-xl overflow-hidden grayscale hover:grayscale-0 transition-all duration-700">
+<img class="w-full h-full object-cover" data-alt="A luxurious interior view of a grand ballroom decorated for a wedding reception. Long banquet tables are dressed in fine linen with gold-rimmed glassware and elaborate floral centerpieces featuring sunflowers and white lilies. Warm candlelight creates an intimate, glowing ambiance against the dark wood accents of the room. The visual style is sophisticated and warm, aligning with a luxury wedding theme." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqG53CaGEnMoSVwrSo00xIGpoljmaf5Tf5tgvjUzJXe1fFOxwlEqUn8ncQ1lctXM7NtWcZA8jMePnl9do7pEkeBojctYcDTbSyfYuAepKj02OXMiSjNokLziNnwalRfEs9g1Mukq-QCCwFRLm9zn22GVQCeCadZjqV2Utw1Q1XHAQGgbGpXbgP0UocM0tNPn9WnKIRt9ZPelEQgBDzjGv0lfrSe4-RhStnhD-j-XCPY7L5cqvujM7iBKo0y3Y1ZWbLbvVhmLgKO9w"/>
+</div>
+<div class="space-y-2">
+<h3 class="text-xl font-section-heading text-forest">The Reception</h3>
+<p class="text-sm font-label-caps uppercase text-warm-grey">6:30 PM</p>
+<p class="font-body-main text-on-surface">The Grand Ballroom</p>
+<p class="text-xs text-warm-grey italic leading-relaxed">Dinner, dancing, and toasts to follow immediately after the ceremony. Open bar and formal dining service.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Dress Code -->
+<section class="py-20 border-t border-outline-variant text-center">
+<h2 class="text-section-heading font-section-heading mb-6">Dress Code</h2>
+<p class="font-body-lg text-on-surface mb-10 italic">"California Cocktail Attire"</p>
+<div class="flex items-center justify-center gap-4 flex-wrap">
+<div class="flex flex-col items-center gap-2 group">
+<div class="w-12 h-12 rounded-full bg-forest border border-white shadow-sm transition-transform group-hover:scale-110"></div>
+<span class="text-[10px] font-label-caps text-warm-grey">FOREST</span>
+</div>
+<div class="flex flex-col items-center gap-2 group">
+<div class="w-12 h-12 rounded-full bg-primary-container border border-white shadow-sm transition-transform group-hover:scale-110"></div>
+<span class="text-[10px] font-label-caps text-warm-grey">SUNFLOWER</span>
+</div>
+<div class="flex flex-col items-center gap-2 group">
+<div class="w-12 h-12 rounded-full bg-sage border border-white shadow-sm transition-transform group-hover:scale-110"></div>
+<span class="text-[10px] font-label-caps text-warm-grey">SAGE</span>
+</div>
+<div class="flex flex-col items-center gap-2 group">
+<div class="w-12 h-12 rounded-full bg-stone border border-white shadow-sm transition-transform group-hover:scale-110"></div>
+<span class="text-[10px] font-label-caps text-warm-grey">STONE</span>
+</div>
+<div class="flex flex-col items-center gap-2 group">
+<div class="w-12 h-12 rounded-full bg-butter border border-white shadow-sm transition-transform group-hover:scale-110"></div>
+<span class="text-[10px] font-label-caps text-warm-grey">BUTTER</span>
+</div>
+</div>
+<p class="mt-12 text-sm text-warm-grey font-body-main max-w-sm mx-auto leading-relaxed">
+                    We invite you to wear colors inspired by the Sonoma landscape. Think earthy tones, deep greens, and warm yellows.
+                </p>
+</section><section class="py-20 border-t border-outline-variant text-center">
+<div class="text-center mb-12">
+<span class="font-label-caps text-forest uppercase tracking-widest text-sm">The Entourage</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+<div class="space-y-2">
+<p class="text-[10px] font-label-caps text-warm-grey uppercase tracking-widest">Officiant</p>
+<p class="font-section-heading text-lg text-[#2C2B28]">Rev. Father Thomas Miller</p>
+</div>
+<div class="space-y-2">
+<p class="text-[10px] font-label-caps text-warm-grey uppercase tracking-widest">Principal Sponsors</p>
+<div class="font-section-heading text-lg text-[#2C2B28] space-y-1">
+<p>Mr. &amp; Mrs. Roberto Santos</p>
+<p>Mr. &amp; Mrs. Antonio Dela Cruz</p>
+</div>
+</div>
+<div class="space-y-2">
+<p class="text-[10px] font-label-caps text-warm-grey uppercase tracking-widest">Best Man &amp; Maid of Honor</p>
+<div class="font-section-heading text-lg text-[#2C2B28] space-y-1">
+<p>Ricardo Dela Cruz</p>
+<p>Sofia Rivera</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Registry/Footer Teaser -->
+<section class="py-20 border-t border-outline-variant text-center">
+<div class="space-y-8">
+<div class="space-y-4">
+<h2 class="font-label-caps text-forest uppercase tracking-widest text-sm">Share Your Photos</h2>
+<p class="font-body-main text-warm-grey max-w-sm mx-auto">Scan the code below to upload and share your favorite moments from our celebration.</p>
+</div>
+<div class="bg-white p-6 rounded-sm shadow-sm max-w-[200px] mx-auto">
+<div class="aspect-square bg-surface-container-low flex items-center justify-center">
+<span class="material-symbols-outlined text-4xl text-outline-variant">qr_code_2</span>
+</div>
+</div>
+</div>
+</section><section class="py-20 text-center">
+<div class="p-12 bg-surface-container rounded-2xl space-y-8">
+<span class="material-symbols-outlined text-4xl text-forest" data-icon="card_giftcard"></span>
+<h2 class="text-section-heading font-section-heading">Gifts &amp; Registry</h2>
+<p class="font-body-main text-warm-grey">Your presence is the only gift we require. However, if you wish to honor us with a gift, we have curated a selection of items.</p>
+<button class="px-8 py-3 bg-on-surface text-surface rounded-lg font-bold text-sm tracking-widest uppercase hover:opacity-90 transition-opacity">
+                        View Registry
+                    </button>
+</div>
+</section>
+</div>
+<!-- Footer Decoration -->
+<div class="relative py-20 bg-surface-container-low border-t border-outline-variant">
+<!-- Botanical Decorations (Footer) -->
+<div class="absolute left-0 bottom-0 opacity-10 pointer-events-none transform rotate-180">
+<svg fill="none" height="400" viewbox="0 0 200 400" width="200" xmlns="http://www.w3.org/2000/svg">
+<path d="M20 380C20 380 150 200 50 100" stroke="#4E8A20" stroke-width="0.5"></path>
+</svg>
+</div>
+<div class="max-w-xl mx-auto px-6 text-center space-y-6">
+<h3 class="font-hero-names text-3xl">E + J</h3>
+<p class="text-sm font-label-caps text-forest">September 2024</p>
+<div class="flex justify-center gap-6 pt-4">
+<a class="text-warm-grey hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined" data-icon="mail"></span></a>
+<a class="text-warm-grey hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined" data-icon="share"></span></a>
+<a class="text-warm-grey hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined" data-icon="info"></span></a>
+</div>
+<p class="text-[10px] text-outline tracking-widest uppercase pt-10">Made with love for family &amp; friends</p>
+</div>
+</div>
+</main>
+<script>
+        // Simple Fade In Observer
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('opacity-100', 'translate-y-0');
+                    entry.target.classList.remove('opacity-0', 'translate-y-10');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('section').forEach(section => {
+            section.classList.add('transition-all', 'duration-1000', 'opacity-0', 'translate-y-10');
+            observer.observe(section);
+        });
+    </script>
+</body></html>

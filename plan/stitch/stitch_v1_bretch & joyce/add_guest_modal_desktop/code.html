@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Dashboard - Guest List</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-primary": "#ffffff",
+                    "primary-fixed": "#ffe257",
+                    "inverse-primary": "#e5c500",
+                    "surface": "#fafaf5",
+                    "surface-variant": "#e2e3de",
+                    "warm-grey": "#7A7670",
+                    "on-error": "#ffffff",
+                    "tertiary-fixed-dim": "#c9c6c1",
+                    "on-surface": "#1a1c19",
+                    "outline": "#7e7760",
+                    "on-secondary": "#ffffff",
+                    "secondary-fixed": "#baf47a",
+                    "secondary-fixed-dim": "#9fd762",
+                    "on-secondary-container": "#427000",
+                    "surface-dim": "#dadad6",
+                    "butter": "#F5F2C0",
+                    "inverse-on-surface": "#f1f1ec",
+                    "surface-container-high": "#e8e8e4",
+                    "surface-bright": "#fafaf5",
+                    "forest": "#4E8A20",
+                    "surface-container-low": "#f4f4ef",
+                    "on-tertiary-fixed": "#1c1c19",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-tint": "#6e5e00",
+                    "sage": "#B5CC6E",
+                    "on-primary-fixed": "#211b00",
+                    "primary-container": "#e8c800",
+                    "primary-fixed-dim": "#e5c500",
+                    "tertiary-fixed": "#e6e2dd",
+                    "secondary": "#3d6a00",
+                    "stone": "#E2DED8",
+                    "secondary-container": "#baf47a",
+                    "on-tertiary-container": "#565451",
+                    "on-secondary-fixed-variant": "#2d5000",
+                    "lemon": "#F0E44A",
+                    "primary": "#6e5e00",
+                    "on-background": "#1a1c19",
+                    "error-container": "#ffdad6",
+                    "on-surface-variant": "#4c4732",
+                    "on-primary-container": "#625400",
+                    "on-tertiary": "#ffffff",
+                    "error": "#ba1a1a",
+                    "on-tertiary-fixed-variant": "#484743",
+                    "on-secondary-fixed": "#0f2000",
+                    "surface-container-highest": "#e2e3de",
+                    "on-error-container": "#93000a",
+                    "outline-variant": "#cfc6ac",
+                    "background": "#fafaf5",
+                    "on-primary-fixed-variant": "#534600",
+                    "surface-container": "#eeeee9",
+                    "tertiary": "#605e5a",
+                    "tertiary-container": "#ccc9c4",
+                    "inverse-surface": "#2f312e"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "section-gap-desktop": "5rem",
+                    "container-max-guest": "576px",
+                    "gutter": "1.5rem",
+                    "container-max-dashboard": "1024px",
+                    "section-gap-mobile": "3rem"
+            },
+            "fontFamily": {
+                    "body-main": ["Inter"],
+                    "label-caps": ["Inter"],
+                    "hero-names": ["Cormorant Garamond"],
+                    "body-sm": ["Inter"],
+                    "section-heading": ["Cormorant Garamond"],
+                    "body-lg": ["Inter"],
+                    "hero-names-mobile": ["Cormorant Garamond"]
+            },
+            "fontSize": {
+                    "body-main": ["16px", {"lineHeight": "1.6", "fontWeight": "300"}],
+                    "label-caps": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.15em", "fontWeight": "400"}],
+                    "hero-names": ["72px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "300"}],
+                    "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "section-heading": ["30px", {"lineHeight": "1.4", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "300"}],
+                    "hero-names-mobile": ["48px", {"lineHeight": "1.1", "fontWeight": "300"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .modal-overlay {
+            backdrop-filter: blur(2px);
+        }
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%234E8A20'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 1rem;
+        }
+    </style>
+</head>
+<body class="bg-surface font-body-main text-on-surface min-h-screen">
+<!-- Sidebar Navigation (Desktop) -->
+<aside class="fixed left-0 top-0 h-full z-40 h-screen w-64 hidden md:flex flex-col bg-surface-container-low border-r border-stone">
+<div class="px-gutter py-8">
+<h1 class="font-section-heading text-section-heading text-primary">Dashboard</h1>
+</div>
+<nav class="flex-1 px-4 space-y-1">
+<a class="flex items-center gap-3 bg-secondary-container text-on-secondary-container rounded-full px-4 py-3 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-body-main text-body-main">Guest List</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface-variant px-4 py-3 hover:bg-butter rounded-full transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="table_bar">table_bar</span>
+<span class="font-body-main text-body-main">Tables</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface-variant px-4 py-3 hover:bg-butter rounded-full transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="mail">mail</span>
+<span class="font-body-main text-body-main">Invitations</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface-variant px-4 py-3 hover:bg-butter rounded-full transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-body-main text-body-main">Settings</span>
+</a>
+</nav>
+</aside>
+<!-- Main Content Area (Background View) -->
+<main class="md:ml-64 min-h-screen p-8 opacity-40 transition-opacity duration-500">
+<header class="flex items-center justify-between mb-10 w-full max-w-container-max-dashboard mx-auto">
+<h2 class="font-section-heading text-section-heading text-primary">Guest List</h2>
+<button class="bg-primary-container text-on-primary-container px-6 py-3 rounded-full font-label-caps text-label-caps hover:scale-105 active:scale-95 transition-all">
+                Add Guest
+            </button>
+</header>
+<div class="max-w-container-max-dashboard mx-auto bg-surface-container-lowest rounded-xl shadow-[0_4px_20px_rgba(44,43,40,0.05)] overflow-hidden border border-stone">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low border-b border-stone">
+<th class="px-6 py-4 font-label-caps text-label-caps text-warm-grey">Name</th>
+<th class="px-6 py-4 font-label-caps text-label-caps text-warm-grey">Role</th>
+<th class="px-6 py-4 font-label-caps text-label-caps text-warm-grey">Seats</th>
+<th class="px-6 py-4 font-label-caps text-label-caps text-warm-grey">Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-stone">
+<tr class="hover:bg-butter transition-colors">
+<td class="px-6 py-4 font-body-main text-on-surface">Eleanor Vance</td>
+<td class="px-6 py-4">
+<span class="bg-primary-container/20 text-on-primary-container text-[12px] px-2 py-1 rounded-full uppercase tracking-wider font-semibold">Principal Sponsor</span>
+</td>
+<td class="px-6 py-4">2</td>
+<td class="px-6 py-4">
+<span class="inline-block w-2 h-2 rounded-full bg-forest mr-2"></span>Attending
+                        </td>
+</tr>
+<tr class="hover:bg-butter transition-colors">
+<td class="px-6 py-4 font-body-main text-on-surface">Theodora Crain</td>
+<td class="px-6 py-4">
+<span class="bg-secondary-container/30 text-on-secondary-container text-[12px] px-2 py-1 rounded-full uppercase tracking-wider font-semibold">Entourage</span>
+</td>
+<td class="px-6 py-4">1</td>
+<td class="px-6 py-4">
+<span class="inline-block w-2 h-2 rounded-full bg-stone mr-2"></span>Pending
+                        </td>
+</tr>
+<tr class="hover:bg-butter transition-colors">
+<td class="px-6 py-4 font-body-main text-on-surface">Luke Sanderson</td>
+<td class="px-6 py-4">
+<span class="bg-stone text-warm-grey text-[12px] px-2 py-1 rounded-full uppercase tracking-wider font-semibold">Guest</span>
+</td>
+<td class="px-6 py-4">2</td>
+<td class="px-6 py-4">
+<span class="inline-block w-2 h-2 rounded-full bg-forest mr-2"></span>Attending
+                        </td>
+</tr>
+</tbody>
+</table>
+</div>
+</main>
+<!-- Modal Overlay -->
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-on-surface/40 modal-overlay">
+<!-- Modal Card -->
+<div class="bg-surface-container-lowest w-full max-w-md rounded-xl shadow-[0_10px_40px_rgba(44,43,40,0.15)] border border-stone overflow-hidden animate-in fade-in zoom-in duration-300">
+<!-- Modal Header -->
+<div class="flex items-center justify-between px-8 py-6 border-b border-stone">
+<h3 class="font-section-heading text-section-heading text-primary">Add Guest</h3>
+<button class="text-warm-grey hover:text-primary transition-colors active:scale-90" onclick="window.location.reload()">
+<span class="material-symbols-outlined" data-icon="close">close</span>
+</button>
+</div>
+<!-- Modal Content (Form) -->
+<form class="p-8 space-y-6">
+<div class="grid grid-cols-2 gap-4">
+<div class="space-y-2">
+<label class="block font-label-caps text-[12px] text-warm-grey uppercase tracking-[0.2em]">First Name</label>
+<input class="w-full bg-surface border border-stone rounded-lg px-4 py-3 font-body-main text-body-main focus:ring-1 focus:ring-primary-container focus:border-primary-container outline-none transition-all placeholder:text-stone" placeholder="e.g. Julian" type="text"/>
+</div>
+<div class="space-y-2">
+<label class="block font-label-caps text-[12px] text-warm-grey uppercase tracking-[0.2em]">Last Name</label>
+<input class="w-full bg-surface border border-stone rounded-lg px-4 py-3 font-body-main text-body-main focus:ring-1 focus:ring-primary-container focus:border-primary-container outline-none transition-all placeholder:text-stone" placeholder="e.g. Marclay" type="text"/>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="space-y-2">
+<label class="block font-label-caps text-[12px] text-warm-grey uppercase tracking-[0.2em]">Seats (pax)</label>
+<input class="w-full bg-surface border border-stone rounded-lg px-4 py-3 font-body-main text-body-main focus:ring-1 focus:ring-primary-container focus:border-primary-container outline-none transition-all" min="1" type="number" value="1"/>
+</div>
+<div class="space-y-2">
+<label class="block font-label-caps text-[12px] text-warm-grey uppercase tracking-[0.2em]">Role</label>
+<select class="w-full bg-surface border border-stone rounded-lg px-4 py-3 font-body-main text-body-main focus:ring-1 focus:ring-primary-container focus:border-primary-container outline-none transition-all appearance-none">
+<option value="guest">Guest</option>
+<option value="entourage">Entourage</option>
+<option value="sponsor">Principal Sponsor</option>
+<option value="family">Family</option>
+</select>
+</div>
+</div>
+<div class="pt-4 flex flex-col gap-3">
+<button class="w-full bg-primary-container text-on-primary-container h-12 rounded-full font-label-caps text-label-caps hover:shadow-lg hover:brightness-105 active:scale-[0.98] transition-all" type="submit">
+                        Save Guest
+                    </button>
+<button class="w-full border border-stone text-warm-grey h-12 rounded-full font-label-caps text-label-caps hover:bg-surface-container-low transition-all" onclick="window.location.reload()" type="button">
+                        Cancel
+                    </button>
+</div>
+</form>
+<!-- Bottom Accent Decoration -->
+<div class="h-1 w-full bg-gradient-to-r from-butter via-primary-container to-butter opacity-50"></div>
+</div>
+</div>
+<!-- Small Bottom Decorative Sprig (Optional subtle brand touch) -->
+<div class="fixed bottom-4 right-4 opacity-20 pointer-events-none hidden md:block">
+<svg class="text-forest" fill="none" height="120" viewbox="0 0 100 100" width="120" xmlns="http://www.w3.org/2000/svg">
+<path d="M50 90C50 90 45 70 30 60C15 50 10 30 10 30M50 90C50 90 55 70 70 60C85 50 90 30 90 30M50 90V20" stroke="currentColor" stroke-linecap="round" stroke-width="0.5"></path>
+<circle cx="10" cy="30" fill="currentColor" r="1.5"></circle>
+<circle cx="90" cy="30" fill="currentColor" r="1.5"></circle>
+<circle cx="50" cy="20" fill="currentColor" r="1.5"></circle>
+</svg>
+</div>
+<script>
+        // Simple micro-interaction for form focus
+        const inputs = document.querySelectorAll('input, select');
+        inputs.forEach(input => {
+            input.addEventListener('focus', () => {
+                input.parentElement.querySelector('label').classList.add('text-primary');
+            });
+            input.addEventListener('blur', () => {
+                input</script></body></html>

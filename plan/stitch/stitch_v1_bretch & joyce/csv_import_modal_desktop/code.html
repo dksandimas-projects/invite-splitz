@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Import Guests - Botanical Heirloom</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Cormorant+Garamond:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-container": "#ccc9c4",
+                        "surface-container-highest": "#e2e3de",
+                        "sage": "#B5CC6E",
+                        "inverse-surface": "#2f312e",
+                        "primary": "#6e5e00",
+                        "on-background": "#1a1c19",
+                        "inverse-on-surface": "#f1f1ec",
+                        "tertiary-fixed-dim": "#c9c6c1",
+                        "on-secondary-container": "#427000",
+                        "primary-container": "#e8c800",
+                        "on-error": "#ffffff",
+                        "surface-container-high": "#e8e8e4",
+                        "surface-container": "#eeeee9",
+                        "on-surface": "#1a1c19",
+                        "on-secondary-fixed": "#0f2000",
+                        "error-container": "#ffdad6",
+                        "secondary-fixed-dim": "#9fd762",
+                        "surface-container-lowest": "#ffffff",
+                        "surface": "#fafaf5",
+                        "inverse-primary": "#e5c500",
+                        "surface-bright": "#fafaf5",
+                        "tertiary": "#605e5a",
+                        "on-primary-fixed": "#211b00",
+                        "on-tertiary": "#ffffff",
+                        "surface-tint": "#6e5e00",
+                        "secondary": "#3d6a00",
+                        "background": "#fafaf5",
+                        "on-tertiary-fixed": "#1c1c19",
+                        "on-secondary-fixed-variant": "#2d5000",
+                        "on-tertiary-container": "#565451",
+                        "on-primary-fixed-variant": "#534600",
+                        "surface-variant": "#e2e3de",
+                        "secondary-fixed": "#baf47a",
+                        "forest": "#4E8A20",
+                        "on-error-container": "#93000a",
+                        "primary-fixed-dim": "#e5c500",
+                        "outline-variant": "#cfc6ac",
+                        "error": "#ba1a1a",
+                        "on-secondary": "#ffffff",
+                        "stone": "#E2DED8",
+                        "tertiary-fixed": "#e6e2dd",
+                        "butter": "#F5F2C0",
+                        "on-tertiary-fixed-variant": "#484743",
+                        "on-primary": "#ffffff",
+                        "on-surface-variant": "#4c4732",
+                        "warm-grey": "#7A7670",
+                        "surface-container-low": "#f4f4ef",
+                        "outline": "#7e7760",
+                        "surface-dim": "#dadad6",
+                        "primary-fixed": "#ffe257",
+                        "on-primary-container": "#625400",
+                        "secondary-container": "#baf47a",
+                        "lemon": "#F0E44A"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "section-gap-mobile": "3rem",
+                        "gutter": "1.5rem",
+                        "container-max-guest": "576px",
+                        "container-max-dashboard": "1024px",
+                        "section-gap-desktop": "5rem"
+                    },
+                    "fontFamily": {
+                        "label-caps": ["Inter"],
+                        "body-main": ["Inter"],
+                        "hero-names": ["Cormorant Garamond"],
+                        "body-sm": ["Inter"],
+                        "hero-names-mobile": ["Cormorant Garamond"],
+                        "body-lg": ["Inter"],
+                        "section-heading": ["Cormorant Garamond"]
+                    },
+                    "fontSize": {
+                        "label-caps": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.15em", "fontWeight": "400"}],
+                        "body-main": ["16px", {"lineHeight": "1.6", "fontWeight": "300"}],
+                        "hero-names": ["72px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "300"}],
+                        "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "hero-names-mobile": ["48px", {"lineHeight": "1.1", "fontWeight": "300"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "300"}],
+                        "section-heading": ["30px", {"lineHeight": "1.4", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .blur-backdrop {
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+        .code-block {
+            background-color: #f4f4ef;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body-main selection:bg-butter">
+<!-- Background Content (Blurred Guest List SCREEN_17) -->
+<div class="fixed inset-0 w-full h-full overflow-hidden filter blur-sm pointer-events-none opacity-60">
+<!-- Dashboard Top Bar Mockup -->
+<header class="bg-surface border-b border-stone flex items-center justify-between px-gutter py-4 w-full">
+<h1 class="font-section-heading text-section-heading text-primary">Guest List</h1>
+<div class="flex gap-4">
+<div class="w-8 h-8 rounded-full bg-stone"></div>
+<div class="w-24 h-8 rounded bg-stone"></div>
+</div>
+</header>
+<!-- Sidebar Mockup -->
+<div class="fixed left-0 top-0 h-full w-64 border-r border-stone bg-surface-container-low hidden md:block">
+<div class="p-8">
+<div class="w-32 h-6 bg-primary mb-12"></div>
+<div class="space-y-6">
+<div class="w-full h-10 bg-secondary-container rounded-full"></div>
+<div class="w-full h-10 bg-stone/20 rounded-full"></div>
+<div class="w-full h-10 bg-stone/20 rounded-full"></div>
+</div>
+</div>
+</div>
+<!-- Content Area Mockup -->
+<main class="ml-64 p-gutter pt-8">
+<div class="max-w-container-max-dashboard mx-auto">
+<div class="flex justify-between items-center mb-8">
+<div class="w-48 h-10 bg-stone"></div>
+<div class="w-32 h-12 bg-primary-container rounded-full"></div>
+</div>
+<!-- Table Mockup -->
+<div class="bg-surface-container-lowest border border-stone rounded-xl p-6">
+<div class="grid grid-cols-5 gap-4 border-b border-stone pb-4 mb-4">
+<div class="h-4 bg-stone w-24"></div>
+<div class="h-4 bg-stone w-24"></div>
+<div class="h-4 bg-stone w-16"></div>
+<div class="h-4 bg-stone w-20"></div>
+<div class="h-4 bg-stone w-12"></div>
+</div>
+<div class="space-y-4">
+<div class="grid grid-cols-5 gap-4 py-2"><div class="h-4 bg-stone/30 w-32"></div><div class="h-4 bg-stone/30 w-24"></div><div class="h-4 bg-stone/30 w-12"></div><div class="h-4 bg-stone/30 w-20"></div><div class="h-4 bg-stone/30 w-8"></div></div>
+<div class="grid grid-cols-5 gap-4 py-2"><div class="h-4 bg-stone/30 w-28"></div><div class="h-4 bg-stone/30 w-20"></div><div class="h-4 bg-stone/30 w-12"></div><div class="h-4 bg-stone/30 w-24"></div><div class="h-4 bg-stone/30 w-8"></div></div>
+<div class="grid grid-cols-5 gap-4 py-2"><div class="h-4 bg-stone/30 w-40"></div><div class="h-4 bg-stone/30 w-24"></div><div class="h-4 bg-stone/30 w-12"></div><div class="h-4 bg-stone/30 w-16"></div><div class="h-4 bg-stone/30 w-8"></div></div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Modal Overlay -->
+<div class="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-on-background/20 blur-backdrop">
+<!-- Modal Card -->
+<div class="bg-white rounded-xl shadow-[0px_4px_20px_rgba(44,43,40,0.05)] w-full max-w-lg p-8 transform transition-all duration-300 scale-100 border border-stone">
+<!-- Header -->
+<div class="flex items-center justify-between mb-6">
+<h2 class="font-section-heading text-section-heading text-on-surface">Import Guests from CSV</h2>
+<button class="p-2 hover:bg-butter rounded-full transition-colors active:scale-90">
+<span class="material-symbols-outlined text-warm-grey">close</span>
+</button>
+</div>
+<!-- Body -->
+<div class="space-y-6">
+<p class="text-body-sm text-warm-grey">
+                    Upload a CSV file to bulk-add guests. Existing guests will not be overwritten.
+                </p>
+<!-- Expected Columns -->
+<div class="space-y-2">
+<span class="text-label-caps text-xs text-warm-grey uppercase tracking-wider">Expected Format:</span>
+<div class="code-block p-3 rounded text-[13px] text-on-surface-variant border border-outline-variant/30 select-all">
+                        firstName | lastName | pax | role
+                    </div>
+</div>
+<!-- Drop Zone -->
+<div class="relative group cursor-pointer border-2 border-dashed border-stone rounded-xl p-10 flex flex-col items-center justify-center space-y-4 hover:border-sage hover:bg-surface-container-low transition-all duration-200" id="drop-zone">
+<div class="w-16 h-16 rounded-full bg-surface flex items-center justify-center group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-warm-grey text-4xl" data-icon="upload">upload</span>
+</div>
+<div class="text-center">
+<p class="font-medium text-on-surface">Drop your CSV here</p>
+<p class="text-body-sm text-warm-grey">or click to browse from your computer</p>
+</div>
+<input accept=".csv" class="absolute inset-0 opacity-0 cursor-pointer" id="file-input" type="file"/>
+</div>
+<!-- Template Download Link -->
+<div class="flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sage text-lg" data-icon="download">download</span>
+<a class="text-body-sm text-secondary hover:underline font-medium" href="#">Download sample CSV template</a>
+</div>
+</div>
+<!-- Footer -->
+<div class="flex items-center justify-end gap-4 mt-8 pt-6 border-t border-stone">
+<button class="px-6 py-2.5 rounded-full border border-stone text-on-surface font-medium text-sm hover:bg-surface transition-all active:scale-95">
+                    Cancel
+                </button>
+<button class="px-8 py-2.5 rounded-full bg-primary-container text-on-primary-container font-medium text-sm hover:shadow-md transition-all active:scale-95 flex items-center gap-2">
+                    Upload
+                    <span class="material-symbols-outlined text-lg" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Micro-interaction Script -->
+<script>
+        const dropZone = document.getElementById('drop-zone');
+        const fileInput = document.getElementById('file-input');
+
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('border-sage', 'bg-surface-container-low');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('border-sage', 'bg-surface-container-low');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('border-sage', 'bg-surface-container-low');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleFileUpload(files[0]);
+            }
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleFileUpload(e.target.files[0]);
+            }
+        });
+
+        function handleFileUpload(file) {
+            if (file.name.endsWith('.csv')) {
+                const textContainer = dropZone.querySelector('.text-center p:first-child');
+                textContainer.innerText = `Selected: ${file.name}`;
+                textContainer.classList.add('text-secondary');
+            } else {
+                alert('Please upload a valid CSV file.');
+            }
+        }
+    </script>
+</body></html>

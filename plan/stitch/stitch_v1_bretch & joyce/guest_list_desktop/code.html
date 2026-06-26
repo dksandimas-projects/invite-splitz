@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Bretch &amp; Joyce • Guest List Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-container": "#ccc9c4",
+                        "on-primary-fixed": "#211b00",
+                        "on-background": "#1a1c19",
+                        "on-error": "#ffffff",
+                        "tertiary": "#605e5a",
+                        "outline": "#7e7760",
+                        "inverse-on-surface": "#f1f1ec",
+                        "secondary-container": "#baf47a",
+                        "inverse-primary": "#e5c500",
+                        "secondary-fixed": "#baf47a",
+                        "on-secondary-fixed": "#0f2000",
+                        "primary-container": "#e8c800",
+                        "surface-tint": "#6e5e00",
+                        "on-secondary-fixed-variant": "#2d5000",
+                        "error-container": "#ffdad6",
+                        "surface-container-lowest": "#ffffff",
+                        "surface": "#fafaf5",
+                        "surface-container-high": "#e8e8e4",
+                        "on-tertiary-container": "#565451",
+                        "on-primary-fixed-variant": "#534600",
+                        "forest": "#4E8A20",
+                        "on-tertiary-fixed-variant": "#484743",
+                        "lemon": "#F0E44A",
+                        "background": "#fafaf5",
+                        "sage": "#B5CC6E",
+                        "on-surface": "#1a1c19",
+                        "surface-bright": "#fafaf5",
+                        "tertiary-fixed-dim": "#c9c6c1",
+                        "on-surface-variant": "#4c4732",
+                        "primary": "#6e5e00",
+                        "stone": "#E2DED8",
+                        "on-secondary-container": "#427000",
+                        "primary-fixed-dim": "#e5c500",
+                        "on-tertiary-fixed": "#1c1c19",
+                        "on-tertiary": "#ffffff",
+                        "inverse-surface": "#2f312e",
+                        "on-primary": "#ffffff",
+                        "surface-variant": "#e2e3de",
+                        "warm-grey": "#7A7670",
+                        "secondary": "#3d6a00",
+                        "primary-fixed": "#ffe257",
+                        "butter": "#F5F2C0",
+                        "outline-variant": "#cfc6ac",
+                        "tertiary-fixed": "#e6e2dd",
+                        "surface-container": "#eeeee9",
+                        "on-error-container": "#93000a",
+                        "surface-container-highest": "#e2e3de",
+                        "error": "#ba1a1a",
+                        "on-secondary": "#ffffff",
+                        "surface-dim": "#dadad6",
+                        "secondary-fixed-dim": "#9fd762",
+                        "surface-container-low": "#f4f4ef",
+                        "on-primary-container": "#625400"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "section-gap-desktop": "5rem",
+                        "gutter": "1.5rem",
+                        "container-max-dashboard": "1024px",
+                        "container-max-guest": "576px",
+                        "section-gap-mobile": "3rem"
+                    },
+                    "fontFamily": {
+                        "body-main": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "hero-names": ["Cormorant Garamond"],
+                        "label-caps": ["Inter"],
+                        "section-heading": ["Cormorant Garamond"],
+                        "hero-names-mobile": ["Cormorant Garamond"],
+                        "body-sm": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-main": ["16px", { "lineHeight": "1.6", "fontWeight": "300" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "300" }],
+                        "hero-names": ["72px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "300" }],
+                        "label-caps": ["14px", { "lineHeight": "1.2", "letterSpacing": "0.15em", "fontWeight": "400" }],
+                        "section-heading": ["30px", { "lineHeight": "1.4", "fontWeight": "400" }],
+                        "hero-names-mobile": ["48px", { "lineHeight": "1.1", "fontWeight": "300" }],
+                        "body-sm": ["14px", { "lineHeight": "1.5", "fontWeight": "400" }]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .elevation-soft {
+            box-shadow: 0px 4px 20px rgba(44, 43, 40, 0.05);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1ec;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #e2ded8;
+        }
+    </style>
+</head>
+<body class="bg-surface font-body-main text-on-surface antialiased min-h-screen flex flex-col">
+<!-- Top Navigation Anchor -->
+<header class="w-full top-0 sticky bg-surface border-b border-stone z-50">
+<div class="flex justify-between items-center px-gutter py-4 max-w-container-max-dashboard mx-auto">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="dashboard">dashboard</span>
+<h1 class="font-hero-names text-section-heading text-primary">Bretch &amp; Joyce • Dashboard</h1>
+</div>
+<nav class="hidden md:flex gap-8">
+<a class="font-body-main text-body-main text-on-surface-variant hover:bg-butter transition-colors px-2 py-1" href="#">Overview</a>
+<a class="font-body-main text-body-main text-primary font-bold border-b-2 border-primary px-2 py-1" href="#">Guest List</a>
+<a class="font-body-main text-body-main text-on-surface-variant hover:bg-butter transition-colors px-2 py-1" href="#">Schedule</a>
+<a class="font-body-main text-body-main text-on-surface-variant hover:bg-butter transition-colors px-2 py-1" href="#">Budget</a>
+</nav>
+<button class="font-body-main text-body-main text-primary hover:bg-butter transition-colors px-4 py-2 opacity-80 transition-opacity">Sign Out</button>
+</div>
+</header>
+<main class="flex-grow w-full max-w-5xl mx-auto px-gutter py-12">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 gap-6">
+<div>
+<h2 class="font-section-heading text-[36px] text-[#2C2B28]">Guest List</h2>
+<p class="font-body-sm text-body-sm text-warm-grey">42 guests · 86 invited heads</p>
+</div>
+<div class="flex gap-3">
+<button class="px-6 py-2.5 rounded-full border border-forest text-forest hover:bg-forest hover:text-white transition-all text-sm font-medium">
+                    Import CSV
+                </button>
+<button class="px-6 py-2.5 rounded-full bg-primary-container text-on-primary-container hover:bg-lemon transition-all text-sm font-medium flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="add">add</span>
+                    Add Guest
+                </button>
+</div>
+</div>
+<!-- Desktop Table Container -->
+<div class="bg-white rounded-xl elevation-soft border border-stone overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead class="bg-background">
+<tr>
+<th class="px-6 py-4 font-label-caps text-[11px] tracking-[0.2em] text-warm-grey uppercase border-b border-stone">Name</th>
+<th class="px-6 py-4 font-label-caps text-[11px] tracking-[0.2em] text-warm-grey uppercase border-b border-stone">Role</th>
+<th class="px-6 py-4 font-label-caps text-[11px] tracking-[0.2em] text-warm-grey uppercase border-b border-stone text-center">Pax</th>
+<th class="px-6 py-4 font-label-caps text-[11px] tracking-[0.2em] text-warm-grey uppercase border-b border-stone">Invite Link</th>
+<th class="px-6 py-4 font-label-caps text-[11px] tracking-[0.2em] text-warm-grey uppercase border-b border-stone">RSVP</th>
+<th class="px-6 py-4 font-label-caps text-[11px] tracking-[0.2em] text-warm-grey uppercase border-b border-stone text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-stone">
+<!-- Row 1 -->
+<tr class="hover:bg-butter transition-colors group">
+<td class="px-6 py-5">
+<span class="font-medium text-sm text-[#2C2B28]">Alistair Bretch</span>
+</td>
+<td class="px-6 py-5">
+<span class="inline-flex items-center px-3 py-1 rounded-full bg-primary-container text-[11px] font-semibold text-on-primary-container">PRINCIPAL SPONSOR</span>
+</td>
+<td class="px-6 py-5 text-center">
+<span class="text-sm text-warm-grey">2</span>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2 group/link">
+<span class="text-xs text-warm-grey max-w-[120px] truncate">invite-splitz.com/v/ab123...</span>
+<button class="p-1 rounded hover:bg-stone transition-colors" title="Copy Link">
+<span class="material-symbols-outlined text-sm text-primary" data-icon="content_copy">content_copy</span>
+</button>
+</div>
+</td>
+<td class="px-6 py-5">
+<span class="inline-flex items-center px-3 py-1 rounded-full bg-primary-container text-[11px] font-semibold text-on-primary-container">2/2 CONFIRMED</span>
+</td>
+<td class="px-6 py-5 text-right">
+<div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 hover:bg-stone rounded-full transition-colors"><span class="material-symbols-outlined text-lg text-warm-grey" data-icon="edit">edit</span></button>
+<button class="p-2 hover:bg-error-container hover:text-error rounded-full transition-colors"><span class="material-symbols-outlined text-lg" data-icon="delete">delete</span></button>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-butter transition-colors group">
+<td class="px-6 py-5">
+<span class="font-medium text-sm text-[#2C2B28]">Elara Joyce</span>
+</td>
+<td class="px-6 py-5">
+<span class="inline-flex items-center px-3 py-1 rounded-full bg-sage text-[11px] font-semibold text-white">SECONDARY</span>
+</td>
+<td class="px-6 py-5 text-center">
+<span class="text-sm text-warm-grey">1</span>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2 group/link">
+<span class="text-xs text-warm-grey max-w-[120px] truncate">invite-splitz.com/v/ej456...</span>
+<button class="p-1 rounded hover:bg-stone transition-colors"><span class="material-symbols-outlined text-sm text-primary" data-icon="content_copy">content_copy</span></button>
+</div>
+</td>
+<td class="px-6 py-5">
+<span class="inline-flex items-center px-3 py-1 rounded-full bg-stone text-[11px] font-semibold text-warm-grey">PENDING</span>
+</td>
+<td class="px-6 py-5 text-right">
+<div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 hover:bg-stone rounded-full transition-colors"><span class="material-symbols-outlined text-lg text-warm-grey" data-icon="edit">edit</span></button>
+<button class="p-2 hover:bg-error-container hover:text-error rounded-full transition-colors"><span class="material-symbols-outlined text-lg" data-icon="delete">delete</span></button>
+</div>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-butter transition-colors group">
+<td class="px-6 py-5">
+<span class="font-medium text-sm text-[#2C2B28]">Marcus Sterling</span>
+</td>
+<td class="px-6 py-5">
+<span class="inline-flex items-center px-3 py-1 rounded-full bg-butter text-[11px] font-semibold text-primary">ENTOURAGE</span>
+</td>
+<td class="px-6 py-5 text-center">
+<span class="text-sm text-warm-grey">4</span>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2 group/link">
+<span class="text-xs text-warm-grey max-w-[120px] truncate">invite-splitz.com/v/ms789...</span>
+<button class="p-1 rounded hover:bg-stone transition-colors"><span class="material-symbols-outlined text-sm text-primary" data-icon="content_copy">content_copy</span></button>
+</div>
+</td>
+<td class="px-6 py-5">
+<span class="inline-flex items-center px-3 py-1 rounded-full bg-primary-container text-[11px] font-semibold text-on-primary-container">4/4 CONFIRMED</span>
+</td>
+<td class="px-6 py-5 text-right">
+<div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 hover:bg-stone rounded-full transition-colors"><span class="material-symbols-outlined text-lg text-warm-grey" data-icon="edit">edit</span></button>
+<button class="p-2 hover:bg-error-container hover:text-error rounded-full transition-colors"><span class="material-symbols-outlined text-lg" data-icon="delete">delete</span></button>
+</div>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-butter transition-colors group">
+<td class="px-6 py-5">
+<span class="font-medium text-sm text-[#2C2B28]">Julianna Vane</span>
+</td>
+<td class="px-6 py-5">
+<span class="inline-flex items-center px-3 py-1 rounded-full bg-stone text-[11px] font-semibold text-warm-grey uppercase tracking-wider">GUEST</span>
+</td>
+<td class="px-6 py-5 text-center">
+<span class="text-sm text-warm-grey">2</span>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2 group/link">
+<span class="text-xs text-warm-grey max-w-[120px] truncate">invite-splitz.com/v/jv012...</span>
+<button class="p-1 rounded hover:bg-stone transition-colors"><span class="material-symbols-outlined text-sm text-primary" data-icon="content_copy">content_copy</span></button>
+</div>
+</td>
+<td class="px-6 py-5">
+<span class="inline-flex items-center px-3 py-1 rounded-full border border-stone text-[11px] font-semibold text-warm-grey">DECLINED</span>
+</td>
+<td class="px-6 py-5 text-right">
+<div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 hover:bg-stone rounded-full transition-colors"><span class="material-symbols-outlined text-lg text-warm-grey" data-icon="edit">edit</span></button>
+<button class="p-2 hover:bg-error-container hover:text-error rounded-full transition-colors"><span class="material-symbols-outlined text-lg" data-icon="delete">delete</span></button>
+</div>
+</td>
+</tr>
+<!-- Row 5 -->
+<tr class="hover:bg-butter transition-colors group">
+<td class="px-6 py-5">
+<span class="font-medium text-sm text-[#2C2B28]">Robert Thorne</span>
+</td>
+<td class="px-6 py-5">
+<span class="inline-flex items-center px-3 py-1 rounded-full bg-primary-container text-[11px] font-semibold text-on-primary-container">PRINCIPAL SPONSOR</span>
+</td>
+<td class="px-6 py-5 text-center">
+<span class="text-sm text-warm-grey">2</span>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2 group/link">
+<span class="text-xs text-warm-grey max-w-[120px] truncate">invite-splitz.com/v/rt345...</span>
+<button class="p-1 rounded hover:bg-stone transition-colors"><span class="material-symbols-outlined text-sm text-primary" data-icon="content_copy">content_copy</span></button>
+</div>
+</td>
+<td class="px-6 py-5">
+<span class="inline-flex items-center px-3 py-1 rounded-full bg-stone text-[11px] font-semibold text-warm-grey">PENDING</span>
+</td>
+<td class="px-6 py-5 text-right">
+<div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 hover:bg-stone rounded-full transition-colors"><span class="material-symbols-outlined text-lg text-warm-grey" data-icon="edit">edit</span></button>
+<button class="p-2 hover:bg-error-container hover:text-error rounded-full transition-colors"><span class="material-symbols-outlined text-lg" data-icon="delete">delete</span></button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination-ish Footer -->
+<div class="px-6 py-4 bg-background flex items-center justify-between border-t border-stone">
+<span class="text-xs text-warm-grey">Showing 1 to 5 of 42 guests</span>
+<div class="flex gap-2">
+<button class="p-2 rounded hover:bg-stone disabled:opacity-30" disabled="">
+<span class="material-symbols-outlined text-sm" data-icon="chevron_left">chevron_left</span>
+</button>
+<button class="p-2 rounded hover:bg-stone">
+<span class="material-symbols-outlined text-sm" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Botanical Accent -->
+<div class="mt-16 flex flex-col items-center opacity-40">
+<div class="w-16 h-px bg-primary mb-4"></div>
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="eco">eco</span>
+</div>
+</main>
+<!-- Footer Anchor -->
+<footer class="w-full py-8 mt-auto border-t border-stone bg-surface">
+<div class="flex flex-col md:flex-row justify-between items-center px-gutter max-w-container-max-dashboard mx-auto gap-4">
+<span class="font-label-caps text-label-caps text-warm-grey uppercase tracking-widest">© 2024 Invite-Splitz. All rights reserved.</span>
+<div class="flex gap-8">
+<a class="font-body-sm text-body-sm text-warm-grey hover:text-primary transition-colors cursor-pointer" href="#">Privacy Policy</a>
+<a class="font-body-sm text-body-sm text-warm-grey hover:text-primary transition-colors cursor-pointer" href="#">Terms of Service</a>
+</div>
+</div>
+</footer>
+<!-- Micro-interaction for feedback -->
+<script>
+        document.querySelectorAll('[data-icon="content_copy"]').forEach(btn => {
+            btn.closest('button').addEventListener('click', function() {
+                const icon = this.querySelector('span');
+                const originalIcon = icon.innerText;
+                icon.innerText = 'check';
+                icon.classList.add('text-forest');
+                
+                setTimeout(() => {
+                    icon.innerText = originalIcon;
+                    icon.classList.remove('text-forest');
+                }, 2000);
+            });
+        });
+
+        // Simple row selection highlighting logic (optional visual flair)
+        document.querySelectorAll('tbody tr').forEach(row => {
+            row.addEventListener('click', (e) => {
+                if (e.target.closest('button')) return;
+                document.querySelectorAll('tbody tr').forEach(r => r.classList.remove('bg-butter/50'));
+                row.classList.add('bg-butter/50');
+            });
+        });
+    </script>
+</body></html>

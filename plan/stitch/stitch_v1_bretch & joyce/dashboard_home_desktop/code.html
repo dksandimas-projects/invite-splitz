@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Bretch & Joyce • Dashboard</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Inter:wght@300;400;600;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Shared Components Tailwind Config -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-tint": "#6e5e00",
+                    "surface-container-low": "#f4f4ef",
+                    "outline": "#7e7760",
+                    "surface-container": "#eeeee9",
+                    "forest": "#4E8A20",
+                    "on-error-container": "#93000a",
+                    "on-secondary-container": "#427000",
+                    "on-tertiary": "#ffffff",
+                    "surface": "#fafaf5",
+                    "lemon": "#F0E44A",
+                    "inverse-on-surface": "#f1f1ec",
+                    "on-secondary-fixed-variant": "#2d5000",
+                    "stone": "#E2DED8",
+                    "on-secondary": "#ffffff",
+                    "tertiary-fixed-dim": "#c9c6c1",
+                    "on-surface": "#1a1c19",
+                    "error-container": "#ffdad6",
+                    "primary-fixed-dim": "#e5c500",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary": "#3d6a00",
+                    "on-secondary-fixed": "#0f2000",
+                    "on-primary-fixed": "#211b00",
+                    "tertiary-fixed": "#e6e2dd",
+                    "sage": "#B5CC6E",
+                    "primary-fixed": "#ffe257",
+                    "on-primary-fixed-variant": "#534600",
+                    "secondary-fixed-dim": "#9fd762",
+                    "primary-container": "#e8c800",
+                    "outline-variant": "#cfc6ac",
+                    "background": "#fafaf5",
+                    "on-surface-variant": "#4c4732",
+                    "on-primary-container": "#625400",
+                    "warm-grey": "#7A7670",
+                    "butter": "#F5F2C0",
+                    "on-error": "#ffffff",
+                    "tertiary": "#605e5a",
+                    "surface-dim": "#dadad6",
+                    "inverse-primary": "#e5c500",
+                    "inverse-surface": "#2f312e",
+                    "surface-container-highest": "#e2e3de",
+                    "surface-container-high": "#e8e8e4",
+                    "on-tertiary-container": "#565451",
+                    "secondary-fixed": "#baf47a",
+                    "surface-bright": "#fafaf5",
+                    "on-tertiary-fixed-variant": "#484743",
+                    "secondary-container": "#baf47a",
+                    "on-primary": "#ffffff",
+                    "error": "#ba1a1a",
+                    "on-tertiary-fixed": "#1c1c19",
+                    "primary": "#6e5e00",
+                    "surface-variant": "#e2e3de",
+                    "on-background": "#1a1c19",
+                    "tertiary-container": "#ccc9c4"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "section-gap-desktop": "5rem",
+                    "gutter": "1.5rem",
+                    "container-max-dashboard": "1024px",
+                    "container-max-guest": "576px",
+                    "section-gap-mobile": "3rem"
+            },
+            "fontFamily": {
+                    "body-sm": ["Inter"],
+                    "section-heading": ["Cormorant Garamond"],
+                    "body-main": ["Inter"],
+                    "hero-names-mobile": ["Cormorant Garamond"],
+                    "label-caps": ["Inter"],
+                    "hero-names": ["Cormorant Garamond"],
+                    "body-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "section-heading": ["30px", {"lineHeight": "1.4", "fontWeight": "400"}],
+                    "body-main": ["16px", {"lineHeight": "1.6", "fontWeight": "300"}],
+                    "hero-names-mobile": ["48px", {"lineHeight": "1.1", "fontWeight": "300"}],
+                    "label-caps": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.15em", "fontWeight": "400"}],
+                    "hero-names": ["72px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "300"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "300"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .botanical-bg {
+            background-color: #fafaf5;
+            background-image: url("https://www.transparenttextures.com/patterns/paper-fibers.png");
+        }
+        .card-shadow {
+            box-shadow: 0px 4px 20px rgba(44, 43, 40, 0.05);
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="botanical-bg min-h-screen flex flex-col font-body-main text-on-surface antialiased">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky z-50 bg-surface border-b border-stone">
+<div class="flex justify-between items-center px-gutter py-4 max-w-container-max-dashboard mx-auto">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="dashboard">dashboard</span>
+<h1 class="font-hero-names text-[24px] text-primary">Bretch & Joyce • Dashboard</h1>
+</div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-primary font-bold border-b-2 border-primary py-1 font-label-caps text-label-caps" href="#">Overview</a>
+<a class="text-on-surface-variant hover:bg-butter transition-colors px-2 py-1 font-label-caps text-label-caps" href="#">Guests</a>
+<a class="text-on-surface-variant hover:bg-butter transition-colors px-2 py-1 font-label-caps text-label-caps" href="#">Events</a>
+<a class="text-on-surface-variant hover:bg-butter transition-colors px-2 py-1 font-label-caps text-label-caps" href="#">Settings</a>
+</nav>
+<button class="font-body-main text-body-main text-primary hover:bg-butter px-4 py-2 transition-colors active:opacity-80">
+                Sign Out
+            </button>
+</div>
+</header>
+<main class="flex-grow w-full max-w-container-max-dashboard mx-auto px-gutter py-12">
+<div class="max-w-4xl mx-auto space-y-10 animate-fade-in">
+<!-- Welcome Header -->
+<section class="space-y-2">
+<p class="font-label-caps text-label-caps text-forest uppercase tracking-widest">Wedding Registry & RSVP</p>
+<h2 class="font-section-heading text-section-heading text-on-surface">Welcome back, Joyce</h2>
+</section>
+<!-- Guest Overview Stats -->
+<section class="bg-surface-container-lowest border border-stone card-shadow rounded-xl p-8">
+<div class="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-4 divide-x-0 md:divide-x divide-stone">
+<div class="text-center px-4 space-y-1">
+<span class="block font-hero-names text-[48px] text-primary">142</span>
+<span class="block font-label-caps text-[12px] text-warm-grey uppercase tracking-widest">Confirmed</span>
+</div>
+<div class="text-center px-4 space-y-1">
+<span class="block font-hero-names text-[48px] text-on-surface-variant">12</span>
+<span class="block font-label-caps text-[12px] text-warm-grey uppercase tracking-widest">Declined</span>
+</div>
+<div class="text-center px-4 space-y-1">
+<span class="block font-hero-names text-[48px] text-primary-container">46</span>
+<span class="block font-label-caps text-[12px] text-warm-grey uppercase tracking-widest">Pending</span>
+</div>
+<div class="text-center px-4 space-y-1">
+<span class="block font-hero-names text-[48px] text-on-surface">200</span>
+<span class="block font-label-caps text-[12px] text-warm-grey uppercase tracking-widest">Total Invited</span>
+</div>
+</div>
+</section>
+<!-- Quick Actions -->
+<section class="flex flex-col sm:flex-row gap-4">
+<button class="bg-primary-container text-on-primary-container px-8 py-3 rounded-full font-label-caps text-label-caps flex items-center justify-center gap-2 hover:opacity-90 transition-all card-shadow">
+<span class="material-symbols-outlined text-[18px]" data-icon="group">group</span>
+                    Manage Guests
+                </button>
+<button class="border border-forest text-forest px-8 py-3 rounded-full font-label-caps text-label-caps flex items-center justify-center gap-2 hover:bg-surface-container-low transition-all">
+<span class="material-symbols-outlined text-[18px]" data-icon="upload_file">upload_file</span>
+                    Import CSV
+                </button>
+</section>
+<!-- Recent Activity -->
+<section class="space-y-6">
+<div class="flex items-center justify-between border-b border-stone pb-4">
+<h3 class="font-section-heading text-[24px] text-on-surface">Recent Responses</h3>
+<a class="text-primary font-label-caps text-label-caps hover:underline" href="#">View All</a>
+</div>
+<div class="space-y-1">
+<!-- Activity Item 1 -->
+<div class="flex items-center justify-between p-6 bg-surface-container-lowest border border-transparent hover:border-outline-variant hover:bg-butter transition-all group rounded-xl">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-sage flex items-center justify-center text-white font-hero-names text-xl">MA</div>
+<div>
+<h4 class="font-body-lg text-body-lg text-on-surface font-semibold">Marcus Aurelius</h4>
+<p class="font-body-sm text-body-sm text-warm-grey">Menu Choice: Braised Short Ribs</p>
+</div>
+</div>
+<div class="text-right">
+<span class="inline-block px-3 py-1 rounded-full bg-primary-container text-on-primary-container font-label-caps text-[10px] uppercase tracking-wider mb-2">Attending</span>
+<p class="font-body-sm text-body-sm text-warm-grey">2 hours ago</p>
+</div>
+</div>
+<!-- Activity Item 2 -->
+<div class="flex items-center justify-between p-6 bg-surface-container-lowest border border-transparent hover:border-outline-variant hover:bg-butter transition-all group rounded-xl">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-stone flex items-center justify-center text-warm-grey font-hero-names text-xl">EJ</div>
+<div>
+<h4 class="font-body-lg text-body-lg text-on-surface font-semibold">Eleanor Jenkins</h4>
+<p class="font-body-sm text-body-sm text-warm-grey">Regrets: Prior engagement</p>
+</div>
+</div>
+<div class="text-right">
+<span class="inline-block px-3 py-1 rounded-full bg-stone text-warm-grey font-label-caps text-[10px] uppercase tracking-wider mb-2">Declined</span>
+<p class="font-body-sm text-body-sm text-warm-grey">5 hours ago</p>
+</div>
+</div>
+<!-- Activity Item 3 -->
+<div class="flex items-center justify-between p-6 bg-surface-container-lowest border border-transparent hover:border-outline-variant hover:bg-butter transition-all group rounded-xl">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-sage flex items-center justify-center text-white font-hero-names text-xl">TL</div>
+<div>
+<h4 class="font-body-lg text-body-lg text-on-surface font-semibold">Theodore Lawson</h4>
+<p class="font-body-sm text-body-sm text-warm-grey">Menu Choice: Pan-Seared Salmon</p>
+</div>
+</div>
+<div class="text-right">
+<span class="inline-block px-3 py-1 rounded-full bg-primary-container text-on-primary-container font-label-caps text-[10px] uppercase tracking-wider mb-2">Attending</span>
+<p class="font-body-sm text-body-sm text-warm-grey">Yesterday</p>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full py-8 mt-auto bg-surface border-t border-stone">
+<div class="flex flex-col md:flex-row justify-between items-center px-gutter max-w-container-max-dashboard mx-auto gap-4">
+<p class="font-label-caps text-[12px] text-warm-grey uppercase tracking-widest">© 2024 Invite-Splitz. All rights reserved.</p>
+<div class="flex gap-8">
+<a class="font-body-sm text-body-sm text-warm-grey hover:text-primary transition-colors cursor-pointer" href="#">Privacy Policy</a>
+<a class="font-body-sm text-body-sm text-warm-grey hover:text-primary transition-colors cursor-pointer" href="#">Terms of Service</a>
+</div>
+</div>
+</footer>
+<!-- Subtle Texture Overlay -->
+<div class="fixed inset-0 pointer-events-none opacity-[0.03] mix-blend-multiply z-[9999]" style="background-image: url('https://www.transparenttextures.com/patterns/natural-paper.png');"></div>
+<script>
+        // Micro-interactions for button press
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('mousedown', () => {
+                button.style.transform = 'scale(0.98)';
+            });
+            button.addEventListener('mouseup', () => {
+                button.style.transform = 'scale(1)';
+            });
+            button.addEventListener('mouseleave', () => {
+                button.style.transform = 'scale(1)';
+            });
+        });
+
+        // Simple dashboard notification mock
+        setTimeout(() => {
+            console.log("Dashboard state refreshed.");
+        }, 1000);
+    </script>
+</body></html>

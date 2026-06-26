@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Bretch &amp; Joyce • Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-error-container": "#93000a",
+                    "tertiary-container": "#ccc9c4",
+                    "error-container": "#ffdad6",
+                    "on-surface": "#1a1c19",
+                    "surface-bright": "#fafaf5",
+                    "secondary-fixed": "#baf47a",
+                    "inverse-on-surface": "#f1f1ec",
+                    "tertiary-fixed": "#e6e2dd",
+                    "on-primary-fixed": "#211b00",
+                    "on-primary-fixed-variant": "#534600",
+                    "tertiary-fixed-dim": "#c9c6c1",
+                    "surface-container-high": "#e8e8e4",
+                    "primary-fixed-dim": "#e5c500",
+                    "primary": "#6e5e00",
+                    "on-tertiary": "#ffffff",
+                    "lemon": "#F0E44A",
+                    "primary-container": "#e8c800",
+                    "error": "#ba1a1a",
+                    "warm-grey": "#7A7670",
+                    "butter": "#F5F2C0",
+                    "on-surface-variant": "#4c4732",
+                    "on-secondary-fixed-variant": "#2d5000",
+                    "on-primary-container": "#625400",
+                    "on-background": "#1a1c19",
+                    "sage": "#B5CC6E",
+                    "secondary-fixed-dim": "#9fd762",
+                    "on-secondary": "#ffffff",
+                    "on-secondary-container": "#427000",
+                    "stone": "#E2DED8",
+                    "on-tertiary-container": "#565451",
+                    "primary-fixed": "#ffe257",
+                    "on-error": "#ffffff",
+                    "tertiary": "#605e5a",
+                    "secondary-container": "#baf47a",
+                    "on-secondary-fixed": "#0f2000",
+                    "surface-container-lowest": "#ffffff",
+                    "forest": "#4E8A20",
+                    "surface-dim": "#dadad6",
+                    "surface-container-low": "#f4f4ef",
+                    "on-tertiary-fixed-variant": "#484743",
+                    "outline-variant": "#cfc6ac",
+                    "on-primary": "#ffffff",
+                    "surface-tint": "#6e5e00",
+                    "surface-container": "#eeeee9",
+                    "inverse-primary": "#e5c500",
+                    "on-tertiary-fixed": "#1c1c19",
+                    "inverse-surface": "#2f312e",
+                    "surface-container-highest": "#e2e3de",
+                    "surface-variant": "#e2e3de",
+                    "outline": "#7e7760",
+                    "surface": "#fafaf5",
+                    "background": "#fafaf5",
+                    "secondary": "#3d6a00"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "gutter": "1.5rem",
+                    "container-max-dashboard": "1024px",
+                    "container-max-guest": "576px",
+                    "section-gap-desktop": "5rem",
+                    "section-gap-mobile": "3rem"
+            },
+            "fontFamily": {
+                    "hero-names-mobile": ["Cormorant Garamond"],
+                    "body-main": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "section-heading": ["Cormorant Garamond"],
+                    "hero-names": ["Cormorant Garamond"],
+                    "label-caps": ["Inter"],
+                    "body-sm": ["Inter"]
+            },
+            "fontSize": {
+                    "hero-names-mobile": ["48px", {"lineHeight": "1.1", "fontWeight": "300"}],
+                    "body-main": ["16px", {"lineHeight": "1.6", "fontWeight": "300"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "300"}],
+                    "section-heading": ["30px", {"lineHeight": "1.4", "fontWeight": "400"}],
+                    "hero-names": ["72px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "300"}],
+                    "label-caps": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.15em", "fontWeight": "400"}],
+                    "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .card-shadow {
+            box-shadow: 0px 4px 20px rgba(44, 43, 40, 0.05);
+        }
+        .botanical-accent {
+            opacity: 0.15;
+            pointer-events: none;
+            user-select: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background min-h-screen flex flex-col font-body-main text-on-surface">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky bg-surface border-b border-stone z-50">
+<div class="flex justify-between items-center px-gutter py-4 max-w-container-max-dashboard mx-auto">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="dashboard">dashboard</span>
+<h1 class="font-hero-names text-section-heading text-primary">Bretch &amp; Joyce • Dashboard</h1>
+</div>
+<button class="font-body-main text-body-main text-on-surface-variant hover:bg-butter transition-colors px-4 py-2 rounded-lg cursor-pointer">
+                Sign Out
+            </button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow w-full max-w-container-max-guest mx-auto px-gutter py-12 space-y-12 relative overflow-hidden">
+<!-- Subtle Botanical SVG Background Decoration -->
+<div class="absolute -top-20 -left-20 botanical-accent hidden md:block">
+<svg fill="none" height="300" viewbox="0 0 200 200" width="300" xmlns="http://www.w3.org/2000/svg">
+<path d="M40 160C40 160 60 100 120 80C140 73.3333 160 80 160 80" stroke="#4E8A20" stroke-width="0.5"></path>
+<circle cx="165" cy="75" fill="#4E8A20" r="3"></circle>
+<circle cx="120" cy="80" fill="#4E8A20" r="2"></circle>
+<circle cx="80" cy="110" fill="#4E8A20" r="2"></circle>
+</svg>
+</div>
+<!-- RSVP Summary Card -->
+<section class="space-y-6">
+<div class="flex items-center justify-between">
+<h2 class="font-section-heading text-section-heading text-on-surface">Guest Overview</h2>
+<span class="text-label-caps font-label-caps text-warm-grey">Real-time Stats</span>
+</div>
+<div class="bg-surface-container-lowest rounded-xl border border-stone card-shadow p-8">
+<div class="grid grid-cols-2 gap-8 text-center">
+<!-- Confirmed -->
+<div class="flex flex-col items-center">
+<span class="font-hero-names text-[48px] leading-none text-primary-container">124</span>
+<span class="font-label-caps text-label-caps text-warm-grey mt-2">Confirmed</span>
+</div>
+<!-- Declined -->
+<div class="flex flex-col items-center">
+<span class="font-hero-names text-[48px] leading-none text-warm-grey">18</span>
+<span class="font-label-caps text-label-caps text-warm-grey mt-2">Declined</span>
+</div>
+<!-- Pending -->
+<div class="flex flex-col items-center">
+<span class="font-hero-names text-[48px] leading-none text-sage">42</span>
+<span class="font-label-caps text-label-caps text-warm-grey mt-2">Pending</span>
+</div>
+<!-- Total Invited -->
+<div class="flex flex-col items-center">
+<span class="font-hero-names text-[48px] leading-none text-on-background">184</span>
+<span class="font-label-caps text-label-caps text-warm-grey mt-2">Total Invited</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Quick Actions -->
+<section class="space-y-4">
+<h3 class="text-label-caps font-label-caps text-warm-grey border-b border-stone pb-2">Quick Actions</h3>
+<div class="flex flex-col gap-3">
+<button class="h-[48px] bg-primary-container text-on-background font-body-main font-semibold rounded-full flex items-center justify-center gap-2 hover:bg-lemon transition-all active:opacity-80">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+                    Manage Guests
+                </button>
+<button class="h-[48px] border border-forest text-forest font-body-main font-medium rounded-full flex items-center justify-center gap-2 hover:bg-surface-container-high transition-all active:opacity-80">
+<span class="material-symbols-outlined" data-icon="upload_file">upload_file</span>
+                    Import CSV
+                </button>
+</div>
+</section>
+<!-- Recent Activity -->
+<section class="space-y-4">
+<div class="flex items-center justify-between">
+<h3 class="text-label-caps font-label-caps text-warm-grey border-b border-stone pb-2 flex-grow">Recent Activity</h3>
+</div>
+<div class="space-y-1">
+<!-- Activity Item 1 -->
+<div class="flex items-center justify-between py-4 border-b border-stone/50 hover:bg-butter/30 transition-colors px-2 -mx-2 rounded-lg cursor-pointer">
+<div class="flex flex-col">
+<span class="font-body-main text-on-surface font-medium">Marc-Antoine Rossi</span>
+<span class="text-body-sm text-warm-grey">Attending • Chicken Fillet</span>
+</div>
+<span class="text-body-sm text-warm-grey italic">2 mins ago</span>
+</div>
+<!-- Activity Item 2 -->
+<div class="flex items-center justify-between py-4 border-b border-stone/50 hover:bg-butter/30 transition-colors px-2 -mx-2 rounded-lg cursor-pointer">
+<div class="flex flex-col">
+<span class="font-body-main text-on-surface font-medium">Clara Mendez</span>
+<span class="text-body-sm text-warm-grey">Attending • Vegetarian</span>
+</div>
+<span class="text-body-sm text-warm-grey italic">14 mins ago</span>
+</div>
+<!-- Activity Item 3 -->
+<div class="flex items-center justify-between py-4 border-b border-stone/50 hover:bg-butter/30 transition-colors px-2 -mx-2 rounded-lg cursor-pointer">
+<div class="flex flex-col">
+<span class="font-body-main text-on-surface font-medium">Julian Thorne</span>
+<span class="text-body-sm text-warm-grey">Declined • Scheduling conflict</span>
+</div>
+<span class="text-body-sm text-warm-grey italic">1 hour ago</span>
+</div>
+<!-- Activity Item 4 -->
+<div class="flex items-center justify-between py-4 border-b border-stone/50 hover:bg-butter/30 transition-colors px-2 -mx-2 rounded-lg cursor-pointer">
+<div class="flex flex-col">
+<span class="font-body-main text-on-surface font-medium">Sophie &amp; Liam Parker</span>
+<span class="text-body-sm text-warm-grey">Attending • Plus One</span>
+</div>
+<span class="text-body-sm text-warm-grey italic">3 hours ago</span>
+</div>
+<!-- Activity Item 5 -->
+<div class="flex items-center justify-between py-4 hover:bg-butter/30 transition-colors px-2 -mx-2 rounded-lg cursor-pointer">
+<div class="flex flex-col">
+<span class="font-body-main text-on-surface font-medium">Elena Vance</span>
+<span class="text-body-sm text-warm-grey">Attending • Sea Bass</span>
+</div>
+<span class="text-body-sm text-warm-grey italic">5 hours ago</span>
+</div>
+</div>
+<button class="w-full py-3 text-body-sm text-primary font-medium text-center hover:underline cursor-pointer">
+                View All Responses
+            </button>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full py-8 mt-auto bg-surface border-t border-stone">
+<div class="flex flex-col md:flex-row justify-between items-center px-gutter max-w-container-max-dashboard mx-auto gap-4">
+<span class="font-label-caps text-label-caps text-warm-grey">© 2024 Invite-Splitz. All rights reserved.</span>
+<div class="flex gap-6">
+<a class="font-body-sm text-body-sm text-warm-grey hover:text-primary transition-colors cursor-pointer" href="#">Privacy Policy</a>
+<a class="font-body-sm text-body-sm text-warm-grey hover:text-primary transition-colors cursor-pointer" href="#">Terms of Service</a>
+</div>
+</div>
+</footer>
+<script>
+        // Simple Micro-interaction for Stat Numbers
+        document.addEventListener('DOMContentLoaded', () => {
+            const statNumbers = document.querySelectorAll('.font-hero-names');
+            statNumbers.forEach(num => {
+                num.addEventListener('mouseenter', () => {
+                    num.classList.add('scale-105', 'transition-transform', 'duration-300');
+                });
+                num.addEventListener('mouseleave', () => {
+                    num.classList.remove('scale-105');
+                });
+            });
+        });
+    </script>
+</body></html>
