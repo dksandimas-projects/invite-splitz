@@ -105,6 +105,7 @@ export function GuestForm({
           </Button>
           <Button
             type="submit"
+            form="guest-form"
             variant="primary"
             size="sm"
             loading={submitting || busy}
@@ -116,7 +117,7 @@ export function GuestForm({
         </>
       }
     >
-      <form className="space-y-4" onSubmit={handleSubmit}>
+      <form id="guest-form" className="space-y-4" onSubmit={handleSubmit}>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <FormField label="First Name" required htmlFor="firstName">
             <Input

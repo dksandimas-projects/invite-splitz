@@ -14,6 +14,7 @@ interface ButtonProps {
   disabled?: boolean;
   onClick?: () => void;
   type?: "button" | "submit";
+  form?: string;
   children: React.ReactNode;
   className?: string;
   ariaLabel?: string;
@@ -42,6 +43,7 @@ export function Button({
   disabled = false,
   onClick,
   type = "button",
+  form,
   children,
   className = "",
   ariaLabel,
@@ -50,6 +52,7 @@ export function Button({
   return (
     <button
       type={type}
+      form={form}
       onClick={onClick}
       disabled={isDisabled}
       aria-label={ariaLabel}
