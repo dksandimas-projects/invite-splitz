@@ -52,6 +52,7 @@ export interface SerializedGuest {
   lastName: string;
   pax: number;
   role: Guest["role"];
+  subRole?: string;
   rsvpCount: number | null;
   rsvpSubmittedAt: string | null;
   createdAt: string | null;
@@ -66,6 +67,7 @@ export function serializeGuest(guest: Guest): SerializedGuest {
     lastName: guest.lastName,
     pax: guest.pax,
     role: guest.role,
+    subRole: guest.subRole,
     rsvpCount: guest.rsvpCount,
     rsvpSubmittedAt: toISO(guest.rsvpSubmittedAt),
     createdAt: toISO(guest.createdAt),

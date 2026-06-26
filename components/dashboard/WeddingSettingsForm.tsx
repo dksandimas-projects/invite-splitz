@@ -8,7 +8,6 @@ import { Input } from "@/components/shared/Input";
 import { Button } from "@/components/shared/Button";
 import { FormFooter } from "@/components/shared/FormFooter";
 import { PaletteEditor } from "./PaletteEditor";
-import { EntourageEditor } from "./EntourageEditor";
 import { useToast } from "@/components/shared/ToastProvider";
 import { weddingConfig as fallbackConfig } from "@/lib/config";
 import {
@@ -355,10 +354,38 @@ export function WeddingSettingsForm({
         </SectionCard>
 
         <SectionCard heading="Entourage">
-          <EntourageEditor
-            value={draft.entourage}
-            onChange={(entourage) => update("entourage", entourage)}
-          />
+          <p className="text-sm text-warm-grey mb-4">
+            The entourage list is generated automatically based on your guest list roles. To add members, edit names, or assign roles, manage them in the{" "}
+            <a
+              href={`/dashboard/${process.env.NEXT_PUBLIC_WEDDING_ID || "bretch-joyce"}/guests`}
+              className="text-forest font-semibold hover:underline"
+            >
+              Guests
+            </a>{" "}
+            tab.
+          </p>
+          {draft.entourage.length === 0 ? (
+            <div className="border border-dashed border-stone rounded-md p-6 text-center text-warm-grey text-sm">
+              No entourage groups yet. Assign roles to guests to populate the entourage list.
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {draft.entourage.map((group, idx) => (
+                <div key={idx} className="bg-stone-light/30 rounded-md p-4">
+                  <h4 className="font-serif font-medium text-forest text-base mb-2">
+                    {group.role}
+                  </h4>
+                  <ul className="list-disc pl-5 space-y-1">
+                    {group.members.map((member, mIdx) => (
+                      <li key={mIdx} className="text-sm text-charcoal font-light">
+                        {member}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          )}
         </SectionCard>
       </div>
 

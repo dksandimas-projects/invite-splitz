@@ -92,10 +92,17 @@ export function GuestTable({
                     {fullName}
                   </td>
                   <td className="px-6 py-4">
-                    <Badge
-                      variant={roleToBadgeVariant(guest.role)}
-                      label={roleToLabel(guest.role)}
-                    />
+                    <div className="flex flex-col items-start gap-1">
+                      <Badge
+                        variant={roleToBadgeVariant(guest.role)}
+                        label={roleToLabel(guest.role)}
+                      />
+                      {guest.subRole ? (
+                        <span className="text-[11px] text-warm-grey italic font-normal">
+                          {guest.subRole}
+                        </span>
+                      ) : null}
+                    </div>
                   </td>
                   <td className="px-6 py-4 text-center text-sm text-warm-grey">
                     {guest.pax}

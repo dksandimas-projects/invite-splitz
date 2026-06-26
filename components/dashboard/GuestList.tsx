@@ -126,6 +126,7 @@ export function GuestList({
     lastName: string;
     pax: number;
     role: GuestRole;
+    subRole: string;
   }) => {
     setBusy(true);
     try {

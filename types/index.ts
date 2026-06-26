@@ -13,6 +13,7 @@ export interface GuestDoc {
   lastName: string;
   pax: number;
   role: GuestRole;
+  subRole?: string;
   rsvpCount: number | null;
   rsvpSubmittedAt: Timestamp | null;
   createdAt: Timestamp;

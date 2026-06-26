@@ -95,10 +95,72 @@ export async function listGuests(): Promise<GuestDoc[]> {
 
 type GuestCreateInput = Pick<
   GuestDoc,
-  "firstName" | "lastName" | "pax" | "role"
+  "firstName" | "lastName" | "pax" | "role" | "subRole"
 >;
 
-export async function createGuest(data: GuestCreateInput): Promise<GuestDoc> {
+export async function syncEntourageFromGuests(): Promise<void> {
+  const guests = await listGuests();
+  const groupsMap: Record<string, string[]> = {};
+
+  for (const guest of guests) {
+    if (guest.role === "Guest") continue;
+
+    let groupName = "Entourage";
+    if (guest.role === "Principal Sponsor") {
+      groupName = "Principal Sponsors";
+    } else if (guest.role === "Secondary Sponsor") {
+      groupName = "Secondary Sponsors";
+    } else if (guest.role === "Entourage") {
+      groupName = guest.subRole ? guest.subRole.trim() : "Entourage";
+    }
+
+    if (!groupName) {
+      groupName = "Entourage";
+    }
+
+    if (!groupsMap[groupName]) {
+      groupsMap[groupName] = [];
+    }
+
+    const fullName = `${guest.firstName} ${guest.lastName}`.trim();
+    if (fullName) {
+      groupsMap[groupName].push(fullName);
+    }
+  }
+
+  const entourageList: { role: string; members: string[] }[] = Object.keys(groupsMap).map((role) => ({
+    role,
+    members: groupsMap[role],
+  }));
+
+  const PRIORITY: Record<string, number> = {
+    "Principal Sponsors": 1,
+    "Secondary Sponsors": 2,
+    "Best Man": 3,
+    "Maid of Honor": 4,
+    "Groomsmen": 5,
+    "Bridesmaids": 6,
+  };
+
+  entourageList.sort((a, b) => {
+    const pA = PRIORITY[a.role] ?? 999;
+    const pB = PRIORITY[b.role] ?? 999;
+    if (pA !== pB) {
+      return pA - pB;
+    }
+    return a.role.localeCompare(b.role);
+  });
+
+  await updateDoc(weddingRef(), {
+    entourage: entourageList,
+    updatedAt: serverTimestamp(),
+  });
+}
+
+export async function createGuest(
+  data: GuestCreateInput,
+  skipSync = false
+): Promise<GuestDoc> {
   const newRef = doc(weddingCollection("guests"));
   const id = newRef.id;
   const token = generateToken();
@@ -112,29 +174,43 @@ export async function createGuest(data: GuestCreateInput): Promise<GuestDoc> {
     lastName: data.lastName,
     pax: data.pax,
     role: data.role,
+    subRole: data.subRole || "",
     rsvpCount: null,
     rsvpSubmittedAt: null,
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
   };
   await setDoc(newRef, payload);
-  // Re-read so we can return a doc with resolved timestamps
+
+  if (!skipSync) {
+    await syncEntourageFromGuests();
+  }
+
   const snap = await getDoc(newRef);
   return snap.data() as GuestDoc;
 }
 
 export async function updateGuest(
   id: string,
-  data: Partial<Pick<GuestDoc, "firstName" | "lastName" | "pax" | "role">>
+  data: Partial<Pick<GuestDoc, "firstName" | "lastName" | "pax" | "role" | "subRole">>,
+  skipSync = false
 ): Promise<void> {
   await updateDoc(guestRef(id), {
     ...data,
     updatedAt: serverTimestamp(),
   });
+
+  if (!skipSync) {
+    await syncEntourageFromGuests();
+  }
 }
 
-export async function deleteGuest(id: string): Promise<void> {
+export async function deleteGuest(id: string, skipSync = false): Promise<void> {
   await deleteDoc(guestRef(id));
+
+  if (!skipSync) {
+    await syncEntourageFromGuests();
+  }
 }
 
 export async function resetRSVP(id: string): Promise<void> {

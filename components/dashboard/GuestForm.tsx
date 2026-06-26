@@ -19,6 +19,7 @@ interface GuestFormProps {
     lastName: string;
     pax: number;
     role: GuestRole;
+    subRole: string;
   }) => Promise<void> | void;
   busy?: boolean;
 }
@@ -42,6 +43,7 @@ export function GuestForm({
   const [lastName, setLastName] = React.useState(initial?.lastName ?? "");
   const [pax, setPax] = React.useState<string>(String(initial?.pax ?? 1));
   const [role, setRole] = React.useState<GuestRole>(initial?.role ?? "Guest");
+  const [subRole, setSubRole] = React.useState(initial?.subRole ?? "");
   const [submitting, setSubmitting] = React.useState(false);
 
   React.useEffect(() => {
@@ -50,6 +52,7 @@ export function GuestForm({
       setLastName(initial?.lastName ?? "");
       setPax(String(initial?.pax ?? 1));
       setRole(initial?.role ?? "Guest");
+      setSubRole(initial?.subRole ?? "");
     }
   }, [isOpen, initial]);
 
@@ -66,6 +69,7 @@ export function GuestForm({
         lastName: lastName.trim(),
         pax: Math.max(1, Number(pax) || 1),
         role,
+        subRole: role === "Guest" ? "" : subRole.trim(),
       });
     } finally {
       setSubmitting(false);
@@ -152,6 +156,22 @@ export function GuestForm({
             />
           </FormField>
         </div>
+
+        {role !== "Guest" ? (
+          <FormField label="Sub-Role / Title (optional)" htmlFor="subRole">
+            <Input
+              id="subRole"
+              value={subRole}
+              onChange={setSubRole}
+              placeholder={
+                role === "Principal Sponsor"
+                  ? "e.g. Ninong, Ninang"
+                  : "e.g. Best Man, Groomsman, Bridesmaid, Maid of Honor"
+              }
+              disabled={submitting}
+            />
+          </FormField>
+        ) : null}
       </form>
     </Modal>
   );

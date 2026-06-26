@@ -5,7 +5,7 @@ import Papa from "papaparse";
 import { Modal } from "@/components/shared/Modal";
 import { Button } from "@/components/shared/Button";
 import { useToast } from "@/components/shared/ToastProvider";
-import { createGuest } from "@/lib/firestore";
+import { createGuest, syncEntourageFromGuests } from "@/lib/firestore";
 import type { GuestRole } from "@/types";
 
 interface CSVImportProps {
@@ -22,6 +22,7 @@ interface RawRow {
   lastName?: string;
   pax?: string;
   role?: string;
+  subrole?: string;
 }
 
 interface ParsedRow {
@@ -29,6 +30,7 @@ interface ParsedRow {
   lastName: string;
   pax: number;
   role: GuestRole;
+  subRole: string;
 }
 
 interface ImportPlan {
@@ -92,7 +94,8 @@ function buildPlan(raw: RawRow[], existingNames: Set<string>): ImportPlan {
       skipped.push({ row, reason: `Unknown role "${row.role}"` });
       continue;
     }
-    toImport.push({ firstName, lastName, pax: paxNum, role });
+    const subRole = (row.subrole ?? "").trim();
+    toImport.push({ firstName, lastName, pax: paxNum, role, subRole });
   }
 
   return { toImport, skipped };
@@ -128,7 +131,17 @@ export function CSVImport({
     const parsed = Papa.parse<RawRow>(text, {
       header: true,
       skipEmptyLines: true,
-      transformHeader: (h) => h.trim().toLowerCase(),
+      transformHeader: (h) => {
+        const cleaned = h.trim().toLowerCase().replace(/[^a-z0-9]+/g, "");
+        if (cleaned === "firstname" || cleaned === "first") return "firstName";
+        if (cleaned === "lastname" || cleaned === "last") return "lastName";
+        if (cleaned === "pax" || cleaned === "seats" || cleaned === "size") return "pax";
+        if (cleaned === "role") return "role";
+        if (cleaned === "subrole" || cleaned === "subrole_title" || cleaned === "subrole_name" || cleaned === "subroletitle" || cleaned === "title") {
+          return "subrole";
+        }
+        return h.trim();
+      },
     });
     const raw = (parsed.data ?? []).filter(
       (r) => r && (r.firstName || r.lastName || r.pax || r.role)
@@ -144,17 +157,31 @@ export function CSVImport({
     let failure = 0;
     for (const row of plan.toImport) {
       try {
-        await createGuest({
-          firstName: row.firstName,
-          lastName: row.lastName,
-          pax: row.pax,
-          role: row.role,
-        });
+        await createGuest(
+          {
+            firstName: row.firstName,
+            lastName: row.lastName,
+            pax: row.pax,
+            role: row.role,
+            subRole: row.subRole,
+          },
+          true // skipSync = true
+        );
         success += 1;
       } catch {
         failure += 1;
       }
     }
+
+    // Single sync after all rows are imported
+    if (success > 0) {
+      try {
+        await syncEntourageFromGuests();
+      } catch (err) {
+        console.error("Failed to sync entourage after CSV import:", err);
+      }
+    }
+
     setImportedCount(success);
     setImportedError(failure > 0 ? `${failure} row(s) failed` : null);
     setImporting(false);
@@ -237,7 +264,7 @@ export function CSVImport({
             overwritten.
           </p>
           <div className="text-xs text-warm-grey bg-stone-light/40 rounded-md px-3 py-2 font-mono">
-            firstName, lastName, pax, role
+            firstName, lastName, pax, role, subRole (optional)
           </div>
           <label
             className="block border-2 border-dashed border-stone rounded-xl p-8 text-center cursor-pointer hover:bg-stone-light/40 transition-colors"
@@ -305,6 +332,9 @@ export function CSVImport({
                     <th className="px-3 py-2 text-xs uppercase tracking-wider">
                       Role
                     </th>
+                    <th className="px-3 py-2 text-xs uppercase tracking-wider">
+                      Sub-Role
+                    </th>
                     <th className="px-3 py-2 text-xs uppercase tracking-wider text-center">
                       Pax
                     </th>
@@ -317,6 +347,9 @@ export function CSVImport({
                         {r.firstName} {r.lastName}
                       </td>
                       <td className="px-3 py-2 text-warm-grey">{r.role}</td>
+                      <td className="px-3 py-2 text-warm-grey italic text-xs">
+                        {r.subRole || "—"}
+                      </td>
                       <td className="px-3 py-2 text-charcoal text-center">
                         {r.pax}
                       </td>
@@ -325,7 +358,7 @@ export function CSVImport({
                   {plan.toImport.length > PREVIEW_LIMIT ? (
                     <tr>
                       <td
-                        colSpan={3}
+                        colSpan={4}
                         className="px-3 py-2 text-warm-grey italic text-center"
                       >
                         …and {plan.toImport.length - PREVIEW_LIMIT} more

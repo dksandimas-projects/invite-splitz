@@ -62,6 +62,10 @@ export function GuestCard({
           <p className="text-sm font-medium text-charcoal">{fullName}</p>
           <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-warm-grey">
             <Badge variant={roleToBadgeVariant(guest.role)} label={roleToLabel(guest.role)} />
+            {guest.subRole ? (
+              <span className="italic font-normal text-[11px] text-warm-grey">({guest.subRole})</span>
+            ) : null}
+            <span>•</span>
             <span>{guest.pax} pax</span>
           </div>
         </div>
