@@ -115,6 +115,20 @@ export function CSVImport({
   const [importedError, setImportedError] = React.useState<string | null>(null);
   const { showToast } = useToast();
 
+  const downloadTemplate = () => {
+    const headers = "firstName,lastName,pax,role,subRole\n";
+    const sample = "Maria,Santos,2,Principal Sponsor,Ninang\n";
+    const blob = new Blob([headers + sample], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", "guests_import_template.csv");
+    link.style.visibility = "hidden";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   React.useEffect(() => {
     if (isOpen) {
       setStep("upload");
@@ -263,8 +277,31 @@ export function CSVImport({
             Upload a CSV file to bulk-add guests. Existing guests will not be
             overwritten.
           </p>
-          <div className="text-xs text-warm-grey bg-stone-light/40 rounded-md px-3 py-2 font-mono">
-            firstName, lastName, pax, role, subRole (optional)
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <span className="text-xs text-warm-grey bg-stone-light/40 rounded-md px-3 py-2 font-mono flex-1">
+              firstName, lastName, pax, role, subRole (optional)
+            </span>
+            <button
+              type="button"
+              onClick={downloadTemplate}
+              className="text-xs font-semibold text-forest hover:text-garden border border-garden rounded-full px-4 py-2 hover:bg-stone-light/20 transition-colors whitespace-nowrap min-h-[36px] flex items-center justify-center gap-1.5 self-start sm:self-auto"
+            >
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+              </svg>
+              Download Template
+            </button>
           </div>
           <label
             className="block border-2 border-dashed border-stone rounded-xl p-8 text-center cursor-pointer hover:bg-stone-light/40 transition-colors"
