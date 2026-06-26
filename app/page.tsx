@@ -10,6 +10,7 @@ import { EventDetails } from "@/components/site/EventDetails";
 import { DressCode } from "@/components/site/DressCode";
 import { PhotoQR } from "@/components/site/PhotoQR";
 import { BibleVerseFooter } from "@/components/site/BibleVerseFooter";
+import { ScrollDownGuide } from "@/components/site/ScrollDownGuide";
 import { weddingConfig } from "@/lib/config";
 import { DUMMY_GUESTS } from "@/lib/dummyData";
 
@@ -35,44 +36,84 @@ export default function Page({
     <>
       <GuestTopNav coupleName={weddingConfig.coupleName} />
       <main className="bg-offwhite min-h-screen">
-        <HeroSection
-          coupleName={weddingConfig.coupleName}
-          weddingDate={weddingConfig.weddingDate}
-          weddingDateLabel={weddingConfig.weddingDateLabel}
-        />
-        <GreetingSection guestName={guestName} />
-        <ImageBreak />
-        <NoPlusOneNotice text={weddingConfig.noPlusOneText} />
-        <GiftNote body={weddingConfig.giftNoteText} />
+        <div data-scroll-section>
+          <HeroSection
+            coupleName={weddingConfig.coupleName}
+            weddingDate={weddingConfig.weddingDate}
+            weddingDateLabel={weddingConfig.weddingDateLabel}
+          />
+          <ScrollDownGuide />
+        </div>
+
+        <div data-scroll-section>
+          <GreetingSection guestName={guestName} />
+          <ScrollDownGuide />
+        </div>
+
+        <div data-scroll-section>
+          <ImageBreak />
+          <ScrollDownGuide />
+        </div>
+
+        <div>
+          <NoPlusOneNotice text={weddingConfig.noPlusOneText} />
+        </div>
+
+        <div data-scroll-section>
+          <GiftNote body={weddingConfig.giftNoteText} />
+          {!resolvedGuest && <ScrollDownGuide />}
+        </div>
+
         {resolvedGuest ? (
-          <div id="rsvp">
+          <div id="rsvp" data-scroll-section>
             <RSVPSection
               token={resolvedGuest.token}
               pax={resolvedGuest.pax}
               existingRsvpCount={resolvedGuest.rsvpCount}
             />
+            <ScrollDownGuide />
           </div>
         ) : null}
-        <EntourageSection entourage={weddingConfig.entourage} />
-        <EventDetails
-          ceremony={weddingConfig.ceremony}
-          reception={weddingConfig.reception}
-        />
-        <DressCode
-          description={weddingConfig.dressCode.description}
-          palette={weddingConfig.dressCode.palette}
-        />
-        <PhotoQR
-          albumUrl={weddingConfig.photoAlbumUrl}
-          headline={weddingConfig.photoQRHeadline}
-          body={weddingConfig.photoQRBody}
-        />
-        <BibleVerseFooter
-          text={weddingConfig.bibleVerse.text}
-          reference={weddingConfig.bibleVerse.reference}
-          coupleName={weddingConfig.coupleName}
-        />
+
+        <div data-scroll-section>
+          <EntourageSection entourage={weddingConfig.entourage} />
+          <ScrollDownGuide />
+        </div>
+
+        <div data-scroll-section>
+          <EventDetails
+            ceremony={weddingConfig.ceremony}
+            reception={weddingConfig.reception}
+          />
+          <ScrollDownGuide />
+        </div>
+
+        <div data-scroll-section>
+          <DressCode
+            description={weddingConfig.dressCode.description}
+            palette={weddingConfig.dressCode.palette}
+          />
+          <ScrollDownGuide />
+        </div>
+
+        <div data-scroll-section>
+          <PhotoQR
+            albumUrl={weddingConfig.photoAlbumUrl}
+            headline={weddingConfig.photoQRHeadline}
+            body={weddingConfig.photoQRBody}
+          />
+          <ScrollDownGuide />
+        </div>
+
+        <div>
+          <BibleVerseFooter
+            text={weddingConfig.bibleVerse.text}
+            reference={weddingConfig.bibleVerse.reference}
+            coupleName={weddingConfig.coupleName}
+          />
+        </div>
       </main>
     </>
   );
 }
+
