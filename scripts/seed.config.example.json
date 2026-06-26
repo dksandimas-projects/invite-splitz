@@ -1,0 +1,35 @@
+{
+  "WEDDING_ID": "bretch-joyce",
+  "OWNER_ID": "PASTE_YOUR_FIREBASE_AUTH_UID_HERE",
+  "AUTHORIZED_EMAILS": [
+    "you@gmail.com"
+  ],
+  "coupleName": "Bretch & Joyce",
+  "weddingDate": "2026-08-01",
+  "hashtag": "#spendtheBRETCHofmylifewithJOYCE",
+  "photoAlbumUrl": "",
+  "ceremony": {
+    "time": "3:00 PM",
+    "venue": "",
+    "address": "",
+    "mapsUrl": ""
+  },
+  "reception": {
+    "time": "6:00 PM",
+    "venue": "",
+    "address": "",
+    "mapsUrl": ""
+  },
+  "dressCode": {
+    "description": "Semi-formal / Garden Party",
+    "palette": []
+  },
+  "entourage": [],
+  "GUEST": {
+    "id": "test1",
+    "firstName": "Test",
+    "lastName": "Guest",
+    "pax": 2,
+    "role": "Guest"
+  }
+}

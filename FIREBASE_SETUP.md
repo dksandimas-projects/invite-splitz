@@ -21,96 +21,139 @@ In the Firebase Console for the project:
 ## 3. Create your owner user
 
 1. **Authentication → Users** → **Add user** → enter your email + a password → **Add user**.
-2. Copy the **User UID** shown in the users list — this becomes `ownerId`.
+2. Copy the **User UID** shown in the users list — this becomes `ownerId` in the seed config.
 
-## 4. Seed the wedding doc
+## 4. Seed via script (recommended)
 
-**Build → Firestore Database → Start collection** → collection ID `weddings` → document ID `bretch-joyce` (matches `NEXT_PUBLIC_WEDDING_ID`).
+The repo includes a seed script that provisions all three docs (wedding, access, optional test guest) in one go.
 
-Add fields:
+### 4a. Download a service account key
 
-| Field           | Type        | Value                                            |
-| --------------- | ----------- | ------------------------------------------------ |
-| `ownerId`       | string      | `<paste your User UID from step 3>`              |
-| `coupleName`    | string      | `Bretch & Joyce`                                 |
-| `weddingDate`   | string      | `2026-08-01`                                     |
-| `hashtag`       | string      | `#spendtheBRETCHofmylifewithJOYCE`               |
-| `photoAlbumUrl` | string      | *(leave empty for now)*                           |
-| `ceremony`      | map         | `{ time, venue, address, mapsUrl }` (see below) |
-| `reception`     | map         | `{ time, venue, address, mapsUrl }`              |
-| `dressCode`     | map         | `{ description, palette }`                       |
-| `entourage`     | array (map) | `[{ role, members: [] }, ...]`                   |
-| `createdAt`     | timestamp   | **now**                                          |
-| `updatedAt`     | timestamp   | **now**                                          |
+**Project Settings → Service Accounts → Firebase Admin SDK** → **Generate new private key** → downloads a JSON file.
 
-Minimum ceremony/reception maps:
-```json
-{ "time": "3:00 PM", "venue": "TBD", "address": "TBD", "mapsUrl": "" }
-```
+Save it as `service-account.json` at the project root (it's gitignored).
 
-Minimum dressCode map:
-```json
-{ "description": "Semi-formal / Garden Party", "palette": [] }
-```
-
-Minimum entourage array (one example group, more can be added later):
-```json
-[{ "role": "Principal Sponsors", "members": [] }]
-```
-
-## 5. Seed the access doc
-
-Inside the `weddings/bretch-joyce` document, **Add collection** → collection ID `private` → document ID `access`.
-
-Add one field:
-
-| Field              | Type           | Value                                              |
-| ------------------ | -------------- | -------------------------------------------------- |
-| `authorizedEmails` | array (string) | `["you@gmail.com", "bride@gmail.com", "groom@gmail.com"]` |
-
-Replace the three emails with the real authorized dashboard users. DK is always one of them.
-
-## 6. (Optional) Seed a test guest
-
-**Add collection** inside `weddings/bretch-joyce` → collection ID `guests` → document ID anything (e.g. `test1`).
-
-Add fields:
-
-| Field            | Type      | Value                                          |
-| ---------------- | --------- | ---------------------------------------------- |
-| `token`          | string    | `testtoken123` (any 12+ char string)           |
-| `firstName`      | string    | `Test`                                         |
-| `lastName`       | string    | `Guest`                                        |
-| `pax`            | number    | `2`                                            |
-| `role`           | string    | `Guest`                                        |
-| `rsvpCount`      | number    | `null` (no response yet)                       |
-| `rsvpSubmittedAt`| timestamp | (leave empty / null)                           |
-| `createdAt`      | timestamp | **now**                                        |
-| `updatedAt`      | timestamp | **now**                                        |
-
-Test it by visiting `http://localhost:3000/?guest=testtoken123`.
-
-## 7. Deploy the security rules
-
-From the project root, with the Firebase CLI installed (`npm i -D firebase-tools`):
+### 4b. Create the seed config
 
 ```bash
-firebase login                  # if not already authenticated
+cp scripts/seed.config.example.json scripts/seed.config.json
+```
+
+Edit `scripts/seed.config.json` and fill in:
+- `OWNER_ID` — your Firebase Auth UID from step 3
+- `AUTHORIZED_EMAILS` — array of dashboard-allowed emails (start with just your own)
+- All other fields are optional and have sensible defaults
+
+### 4c. Run the seed
+
+```bash
+npm run seed
+```
+
+Output:
+```
+→ Seeding project: invite-splitz
+→ Wedding ID:     bretch-joyce
+→ Owner UID:      <your-uid>
+→ Authorized:     you@gmail.com
+→ Test guest:     Test Guest
+  + Creating WeddingDoc at weddings/bretch-joyce
+  + Creating AccessDoc at weddings/bretch-joyce/private/access
+  + Creating GuestDoc (token=xyz...) at weddings/bretch-joyce/guests/test1
+  ℹ Generated token: xyz...
+
+✓ Seed complete.
+```
+
+The script is **idempotent** — re-running will overwrite existing docs (with a warning). Pass `npm run seed:strict` to refuse overwrites.
+
+CLI flags:
+- `--strict` — refuse to overwrite existing docs
+- `--no-test-guest` — skip the test guest
+
+## 5. Seed via Console (fallback if you can't install firebase-admin)
+
+If you'd rather not deal with the Admin SDK, see the original manual walkthrough at the bottom of this file (search for "Doc 1: weddings/bretch-joyce").
+
+## 6. Deploy the security rules
+
+```bash
+firebase login
 firebase use --add              # link this directory to your Firebase project
 firebase deploy --only firestore:rules
 ```
 
-## 8. Run the emulator (optional, for testing rules locally)
+## 7. Run the emulator (optional, for testing rules locally)
 
 ```bash
 firebase emulators:start --only auth,firestore
 ```
 
-Then in another terminal, point the app at the emulator. Add to `.env.local` (only used when running the app with the emulator):
+To point the app at the emulator, add to `.env.local`:
 
 ```env
 NEXT_PUBLIC_FIREBASE_AUTH_EMULATOR_HOST=localhost:9099
 NEXT_PUBLIC_FIREBASE_FIRESTORE_EMULATOR_HOST=localhost:8080
 ```
 
-(Add emulator detection in `lib/firebase.ts` when you're ready to test the rules end-to-end. The helpers in `lib/firestore.ts` already use the `db` export from `firebase.ts`, so they will pick up the emulator config automatically once `connectFirestoreEmulator` is called in `lib/firebase.ts`.)
+(The helpers in `lib/firestore.ts` automatically pick up emulator config once `connectFirestoreEmulator` is wired into `lib/firebase.ts`.)
+
+---
+
+## Manual seeding walkthrough (fallback)
+
+### Doc 1: `weddings/bretch-joyce`
+
+**Build → Firestore Database → Start collection** (or if you see no `weddings` collection, the screen starts automatically)
+- Collection ID: `weddings`
+- Next
+- Document ID: `bretch-joyce`
+
+Add these fields one at a time:
+
+| Field            | Type      | Value                                                              |
+| ---------------- | --------- | ------------------------------------------------------------------ |
+| `ownerId`        | `string`  | `<your User UID>`                                                  |
+| `coupleName`     | `string`  | `Bretch & Joyce`                                                   |
+| `weddingDate`    | `string`  | `2026-08-01`                                                       |
+| `hashtag`        | `string`  | `#spendtheBRETCHofmylifewithJOYCE`                                 |
+| `photoAlbumUrl`  | `string`  | *(empty)*                                                          |
+| `ceremony`       | `map`     | `{ time, venue, address, mapsUrl }` (each as `string`)            |
+| `reception`      | `map`     | same shape as `ceremony`                                           |
+| `dressCode`      | `map`     | `{ description: string, palette: array }`                          |
+| `entourage`      | `array`   | `[{ role: string, members: array }]`                              |
+| `createdAt`      | `timestamp` | **now**                                                          |
+| `updatedAt`      | `timestamp` | **now**                                                          |
+
+### Doc 2: `weddings/bretch-joyce/private/access`
+
+In the `weddings/bretch-joyce` document, click **+ Add collection**.
+- Collection ID: `private`
+- Next
+- Document ID: `access`
+
+Add one field:
+
+| Field              | Type           | Value                                                              |
+| ------------------ | -------------- | ------------------------------------------------------------------ |
+| `authorizedEmails` | `array`        | `["you@gmail.com"]` (add more later via the dashboard)             |
+
+### (Optional) Test guest `weddings/bretch-joyce/guests/test1`
+
+In the `weddings/bretch-joyce` document, click **+ Add collection**.
+- Collection ID: `guests`
+- Next
+- Document ID: `test1`
+
+Fields:
+- `token: string = "testtoken123"`
+- `firstName: string = "Test"`
+- `lastName: string = "Test"`
+- `pax: number = 2`
+- `role: string = "Guest"`
+- `rsvpCount: null` (type: `null`)
+- `rsvpSubmittedAt: null` (type: `null`)
+- `createdAt: timestamp = now`
+- `updatedAt: timestamp = now`
+
+Test at `http://localhost:3000/?guest=testtoken123`.

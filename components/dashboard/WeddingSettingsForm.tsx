@@ -51,7 +51,7 @@ export function WeddingSettingsForm({
   const [draft, setDraft] = React.useState<WeddingDraft>(seed);
   const [saved, setSaved] = React.useState<WeddingDraft>(seed);
   const [access, setAccess] = React.useState<AccessEntry[]>([
-    { email: "dksandimas.projects@gmail.com" },
+    { email: "dksandimas@gmail.com" },
   ]);
   const [accessDraft, setAccessDraft] = React.useState<AccessEntry[]>(access);
   const [newEmail, setNewEmail] = React.useState("");

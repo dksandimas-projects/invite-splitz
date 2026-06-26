@@ -33,7 +33,7 @@ export function DashboardHome({ weddingId }: DashboardHomeProps) {
         coupleName={weddingConfig.coupleName}
         weddingId={weddingId}
         activeSection="overview"
-        userEmail="dksandimas.projects@gmail.com"
+        userEmail="dksandimas@gmail.com"
       />
       <main className="flex-1 w-full max-w-4xl mx-auto px-4 sm:px-6 py-10 space-y-10">
         <header className="space-y-2">

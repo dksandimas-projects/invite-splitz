@@ -18,7 +18,7 @@ export function SettingsScreen({ weddingId }: SettingsScreenProps) {
         coupleName={weddingConfig.coupleName}
         weddingId={weddingId}
         activeSection="settings"
-        userEmail="dksandimas.projects@gmail.com"
+        userEmail="dksandimas@gmail.com"
       />
       <main className="flex-1 w-full max-w-[576px] mx-auto px-4 sm:px-6 py-10">
         <PageHeader

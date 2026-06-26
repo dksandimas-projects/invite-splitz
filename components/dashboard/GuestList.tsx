@@ -83,7 +83,7 @@ export function GuestList({ weddingId, baseUrl }: GuestListProps) {
         coupleName={weddingConfig.coupleName}
         weddingId={weddingId}
         activeSection="guests"
-        userEmail="dksandimas.projects@gmail.com"
+        userEmail="dksandimas@gmail.com"
       />
       <main className="flex-1 w-full max-w-5xl mx-auto px-4 sm:px-6 py-10">
         <PageHeader
