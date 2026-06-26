@@ -10,6 +10,15 @@ const nextConfig = {
       { protocol: "https", hostname: "lh3.googleusercontent.com" },
     ],
   },
+  async rewrites() {
+    const weddingId = process.env.NEXT_PUBLIC_WEDDING_ID || "bretch-joyce";
+    return [
+      {
+        source: `/${weddingId}`,
+        destination: "/",
+      },
+    ];
+  },
 };
 
 export default nextConfig;
