@@ -213,6 +213,27 @@ export async function deleteGuest(id: string, skipSync = false): Promise<void> {
   }
 }
 
+export async function deleteAllGuests(): Promise<void> {
+  const snap = await getDocs(weddingCollection("guests"));
+  if (snap.empty) return;
+
+  // Firestore batches are capped at 500 ops each
+  const BATCH_SIZE = 500;
+  const docs = snap.docs;
+
+  for (let i = 0; i < docs.length; i += BATCH_SIZE) {
+    const batch = writeBatch(db);
+    docs.slice(i, i + BATCH_SIZE).forEach((d) => batch.delete(d.ref));
+    await batch.commit();
+  }
+
+  // Clear the entourage list in the wedding doc
+  await updateDoc(weddingRef(), {
+    entourage: [],
+    updatedAt: serverTimestamp(),
+  });
+}
+
 export async function resetRSVP(id: string): Promise<void> {
   await updateDoc(guestRef(id), {
     rsvpCount: null,

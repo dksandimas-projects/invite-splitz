@@ -23,65 +23,136 @@ const PinIcon = () => (
   </svg>
 );
 
+/**
+ * Converts a Google Maps share URL into an embed src.
+ * Handles:
+ *   https://maps.google.com/?q=...
+ *   https://www.google.com/maps?q=...
+ *   https://www.google.com/maps/place/...
+ *   Falls back to a plain query search from the venue name + address.
+ */
+function toEmbedUrl(mapsUrl: string, venue: string, address: string): string {
+  try {
+    const url = new URL(mapsUrl);
+
+    // Already an embed URL — return as-is
+    if (url.searchParams.get("output") === "embed") return mapsUrl;
+
+    // Has a ?q= param → reuse it
+    const q = url.searchParams.get("q");
+    if (q) {
+      return `https://maps.google.com/maps?q=${encodeURIComponent(q)}&output=embed&z=15`;
+    }
+
+    // /maps/place/ style URL — try to extract the place slug
+    const placeMatch = url.pathname.match(/\/maps\/place\/([^/]+)/);
+    if (placeMatch) {
+      return `https://maps.google.com/maps?q=${placeMatch[1]}&output=embed&z=15`;
+    }
+  } catch {
+    // Not a valid URL — fall through
+  }
+
+  // Fallback: build a query from venue name + address
+  const fallback = [venue, address].filter(Boolean).join(", ");
+  return `https://maps.google.com/maps?q=${encodeURIComponent(fallback)}&output=embed&z=15`;
+}
+
+function MapEmbed({ mapsUrl, venue, address, label }: { mapsUrl: string; venue: string; address: string; label: string }) {
+  const embedSrc = toEmbedUrl(mapsUrl, venue, address);
+
+  return (
+    <div className="rounded-md overflow-hidden border border-stone -mx-2 sm:mx-0">
+      <iframe
+        title={`Map for ${label}`}
+        src={embedSrc}
+        width="100%"
+        height="200"
+        style={{ border: 0, display: "block" }}
+        allowFullScreen={false}
+        loading="lazy"
+        referrerPolicy="no-referrer-when-downgrade"
+        aria-label={`Google Maps location of ${label}`}
+      />
+    </div>
+  );
+}
+
 function EventCard({ label, info }: { label: string; info: EventInfo }) {
   return (
-    <div className="border border-stone bg-white rounded-md p-6 sm:p-8 space-y-3">
-      <p className="text-xs tracking-[0.2em] uppercase text-warm-grey">
-        {label}
-      </p>
-      <h3 className="font-serif text-2xl text-charcoal">{info.venue}</h3>
-      <p className="text-warm-grey text-sm whitespace-pre-line leading-relaxed">
-        {info.address}
-      </p>
-      <p className="text-sm text-charcoal">{info.time}</p>
-      <a
-        href={info.mapsUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="inline-flex items-center gap-2 text-forest text-sm font-medium hover:underline min-h-[44px]"
-      >
-        <PinIcon />
-        Get Directions
-      </a>
+    <div className="border border-stone bg-white rounded-md overflow-hidden">
+      <MapEmbed
+        mapsUrl={info.mapsUrl}
+        venue={info.venue}
+        address={info.address}
+        label={`${label} — ${info.venue}`}
+      />
+      <div className="p-6 sm:p-8 space-y-3">
+        <p className="text-xs tracking-[0.2em] uppercase text-warm-grey">
+          {label}
+        </p>
+        <h3 className="font-serif text-2xl text-charcoal">{info.venue}</h3>
+        <p className="text-warm-grey text-sm whitespace-pre-line leading-relaxed">
+          {info.address}
+        </p>
+        <p className="text-sm text-charcoal">{info.time}</p>
+        <a
+          href={info.mapsUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 text-forest text-sm font-medium hover:underline min-h-[44px]"
+        >
+          <PinIcon />
+          Get Directions
+        </a>
+      </div>
     </div>
   );
 }
 
 function CombinedEventCard({ ceremony, reception }: { ceremony: EventInfo; reception: EventInfo }) {
   return (
-    <div className="border border-stone bg-white rounded-md p-6 sm:p-8 space-y-4 max-w-md mx-auto w-full">
-      <p className="text-xs tracking-[0.2em] uppercase text-warm-grey">
-        Ceremony &amp; Reception
-      </p>
-      <h3 className="font-serif text-2xl text-charcoal">{ceremony.venue}</h3>
-      <p className="text-warm-grey text-sm whitespace-pre-line leading-relaxed">
-        {ceremony.address}
-      </p>
-      {/* Timeline of times */}
-      <div className="flex flex-col gap-2 pt-1">
-        <div className="flex items-center gap-3">
-          <span className="text-xs tracking-widest uppercase text-warm-grey w-20 shrink-0">
-            Ceremony
-          </span>
-          <span className="text-sm text-charcoal">{ceremony.time}</span>
+    <div className="border border-stone bg-white rounded-md overflow-hidden max-w-md mx-auto w-full">
+      <MapEmbed
+        mapsUrl={ceremony.mapsUrl}
+        venue={ceremony.venue}
+        address={ceremony.address}
+        label={`Ceremony & Reception — ${ceremony.venue}`}
+      />
+      <div className="p-6 sm:p-8 space-y-4">
+        <p className="text-xs tracking-[0.2em] uppercase text-warm-grey">
+          Ceremony &amp; Reception
+        </p>
+        <h3 className="font-serif text-2xl text-charcoal">{ceremony.venue}</h3>
+        <p className="text-warm-grey text-sm whitespace-pre-line leading-relaxed">
+          {ceremony.address}
+        </p>
+        {/* Timeline of times */}
+        <div className="flex flex-col gap-2 pt-1">
+          <div className="flex items-center gap-3">
+            <span className="text-xs tracking-widest uppercase text-warm-grey w-20 shrink-0">
+              Ceremony
+            </span>
+            <span className="text-sm text-charcoal">{ceremony.time}</span>
+          </div>
+          <div className="w-px h-4 bg-stone ml-9" aria-hidden />
+          <div className="flex items-center gap-3">
+            <span className="text-xs tracking-widest uppercase text-warm-grey w-20 shrink-0">
+              Reception
+            </span>
+            <span className="text-sm text-charcoal">{reception.time}</span>
+          </div>
         </div>
-        <div className="w-px h-4 bg-stone ml-9" aria-hidden />
-        <div className="flex items-center gap-3">
-          <span className="text-xs tracking-widest uppercase text-warm-grey w-20 shrink-0">
-            Reception
-          </span>
-          <span className="text-sm text-charcoal">{reception.time}</span>
-        </div>
+        <a
+          href={ceremony.mapsUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 text-forest text-sm font-medium hover:underline min-h-[44px]"
+        >
+          <PinIcon />
+          Get Directions
+        </a>
       </div>
-      <a
-        href={ceremony.mapsUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="inline-flex items-center gap-2 text-forest text-sm font-medium hover:underline min-h-[44px]"
-      >
-        <PinIcon />
-        Get Directions
-      </a>
     </div>
   );
 }

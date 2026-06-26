@@ -10,11 +10,13 @@ import { GuestTable } from "@/components/dashboard/GuestTable";
 import { GuestCard } from "@/components/dashboard/GuestCard";
 import { GuestForm } from "@/components/dashboard/GuestForm";
 import { DeleteDialog } from "@/components/dashboard/DeleteDialog";
+import { DeleteAllDialog } from "@/components/dashboard/DeleteAllDialog";
 import { ResetRSVPDialog } from "@/components/dashboard/ResetRSVPDialog";
 import { CSVImport } from "@/components/dashboard/CSVImport";
 import { useToast } from "@/components/shared/ToastProvider";
 import {
   createGuest,
+  deleteAllGuests,
   deleteGuest,
   resetRSVP,
   updateGuest,
@@ -60,6 +62,7 @@ export function GuestList({
   const [deleteTarget, setDeleteTarget] = React.useState<SerializedGuest | null>(null);
   const [resetTarget, setResetTarget] = React.useState<SerializedGuest | null>(null);
   const [importOpen, setImportOpen] = React.useState(false);
+  const [deleteAllOpen, setDeleteAllOpen] = React.useState(false);
   const [copiedToken, setCopiedToken] = React.useState<string | null>(null);
   const [busy, setBusy] = React.useState(false);
   const { showToast } = useToast();
@@ -177,6 +180,24 @@ export function GuestList({
     }
   };
 
+  const handleDeleteAll = async () => {
+    setBusy(true);
+    try {
+      await deleteAllGuests();
+      setGuests([]);
+      setDeleteAllOpen(false);
+      showToast({ message: "All guests have been removed.", variant: "neutral" });
+    } catch (err) {
+      console.error(err);
+      showToast({
+        message: "Something went wrong. Please try again.",
+        variant: "error",
+      });
+    } finally {
+      setBusy(false);
+    }
+  };
+
   const handleResetRSVP = async () => {
     if (!resetTarget) return;
     const id = resetTarget.id;
@@ -216,6 +237,15 @@ export function GuestList({
           subtitle={`${guests.length} guests · ${summary.totalPax} invited heads`}
           actions={
             <>
+              {guests.length > 0 && (
+                <Button
+                  variant="danger"
+                  size="md"
+                  onClick={() => setDeleteAllOpen(true)}
+                >
+                  Delete All
+                </Button>
+              )}
               <Button
                 variant="ghost"
                 size="md"
@@ -325,6 +355,13 @@ export function GuestList({
         existingNames={new Set(
           guests.map((g) => `${g.firstName.toLowerCase()}|${g.lastName.toLowerCase()}`)
         )}
+      />
+      <DeleteAllDialog
+        isOpen={deleteAllOpen}
+        guestCount={guests.length}
+        onClose={() => setDeleteAllOpen(false)}
+        onConfirm={handleDeleteAll}
+        loading={busy}
       />
 
       <button
