@@ -23,6 +23,7 @@ import {
 } from "@/lib/firestore";
 import type { GuestRole } from "@/types";
 import { serializeGuest, serializeWedding, type SerializedGuest, type SerializedWedding } from "@/lib/serialize";
+import { inviteHref, WEDDING_ID } from "@/lib/nav";
 import { subscribeToGuests, subscribeToWedding } from "@/lib/firestore";
 
 interface GuestListProps {
@@ -95,7 +96,7 @@ export function GuestList({
   const summary = rsvpSummary(guests);
 
   const handleCopyLink = async (g: SerializedGuest) => {
-    const url = `${baseUrl}/?guest=${g.token}`;
+    const url = `${baseUrl}${inviteHref(WEDDING_ID, g.token)}`;
     try {
       await navigator.clipboard.writeText(url);
       setCopiedToken(g.token);

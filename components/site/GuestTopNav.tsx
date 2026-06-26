@@ -1,3 +1,5 @@
+import { dashboardHref, WEDDING_ID } from "@/lib/nav";
+
 interface GuestTopNavProps {
   coupleName: string;
   monogram?: string;
@@ -26,9 +28,9 @@ export function GuestTopNav({ coupleName, monogram }: GuestTopNavProps) {
         </span>
         <div className="flex gap-4">
           <a
-            href="#rsvp"
+            href={dashboardHref(WEDDING_ID)}
             className="text-primary hover:opacity-80 transition-opacity min-h-[44px] min-w-[44px] flex items-center justify-center"
-            aria-label="Jump to RSVP"
+            aria-label="Open dashboard"
           >
             <svg
               width="20"

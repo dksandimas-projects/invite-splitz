@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { inviteHref, WEDDING_ID } from "@/lib/nav";
 
 export default function DashboardError({
   error,
@@ -41,7 +42,7 @@ export default function DashboardError({
             Try again
           </button>
           <a
-            href="/"
+            href={inviteHref(WEDDING_ID)}
             className="inline-flex items-center justify-center min-h-[48px] px-6 py-3 rounded-full border border-garden text-forest text-sm font-medium hover:bg-stone-light transition-colors"
           >
             Go to invitation

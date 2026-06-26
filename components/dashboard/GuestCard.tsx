@@ -4,6 +4,7 @@ import * as React from "react";
 import { Badge } from "@/components/shared/Badge";
 import type { GuestRole } from "@/types";
 import type { SerializedGuest } from "@/lib/serialize";
+import { inviteHref, WEDDING_ID } from "@/lib/nav";
 
 interface GuestCardProps {
   guest: SerializedGuest;
@@ -75,7 +76,7 @@ export function GuestCard({
       </div>
       <div className="flex items-center justify-between gap-2 px-3 py-2 rounded-md bg-stone-light/40">
         <span className="text-xs text-warm-grey truncate font-mono">
-          {`/?guest=${guest.token.slice(0, 6)}…`}
+          {`${inviteHref(WEDDING_ID)}?guest=${guest.token.slice(0, 6)}…`}
         </span>
         <button
           type="button"

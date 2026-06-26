@@ -10,16 +10,18 @@
 
 | Route | Access | Description |
 |---|---|---|
-| `/` | Public | Guest-facing wedding site |
-| `/dashboard/[weddingId]` | Private (email + password Auth) | Couple's dashboard home |
-| `/dashboard/[weddingId]/guests` | Private (email + password Auth) | Guest list management |
-| `/dashboard/[weddingId]/settings` | Private (email + password Auth) | Wedding config editor |
+| `/` | — | **404.** No landing page. The invite lives at `/{weddingId}`. |
+| `/{weddingId}` | Public | Guest-facing wedding site (with optional `?guest=<token>` for personalization) |
+| `/dashboard/{weddingId}` | Private (email + password Auth) | Couple's dashboard home |
+| `/dashboard/{weddingId}/guests` | Private (email + password Auth) | Guest list management |
+| `/dashboard/{weddingId}/settings` | Private (email + password Auth) | Wedding config editor |
+| `/og` | Public | OG image used for social previews of invite links |
 
-**`weddingId` in single-tenant mode:** Always equals `process.env.NEXT_PUBLIC_WEDDING_ID`. Build a `useDashboardPath()` hook or a `dashboardHref(path)` helper in `/lib/nav.ts` that prepends the weddingId so it's never hardcoded across components.
+**`weddingId` in single-tenant mode:** Always equals `process.env.NEXT_PUBLIC_WEDDING_ID`. Build a `useDashboardPath()` hook or a `dashboardHref(path)` helper in `/lib/nav.ts` that prepends the weddingId so it's never hardcoded across components. The `inviteHref(weddingId, token?)` helper in the same file builds `/{weddingId}` and `/{weddingId}?guest=<token>` URLs — never hardcode the path or the query string in components.
 
 ---
 
-## Guest Site — `/app/page.tsx`
+## Guest Site — `/app/[weddingId]/page.tsx`
 
 ### Page behavior
 

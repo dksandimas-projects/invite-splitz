@@ -4,6 +4,7 @@ import * as React from "react";
 import { Badge } from "@/components/shared/Badge";
 import type { GuestRole } from "@/types";
 import type { SerializedGuest } from "@/lib/serialize";
+import { inviteHref, WEDDING_ID } from "@/lib/nav";
 
 interface GuestTableProps {
   guests: SerializedGuest[];
@@ -112,7 +113,7 @@ export function GuestTable({
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-2">
                       <span className="text-xs text-warm-grey truncate max-w-[160px] font-mono">
-                        {`/?guest=${guest.token.slice(0, 8)}…`}
+                        {`${inviteHref(WEDDING_ID)}?guest=${guest.token.slice(0, 8)}…`}
                       </span>
                       <button
                         type="button"

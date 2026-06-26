@@ -9,9 +9,11 @@
 ## URL Format
 
 ```
-https://bretchandjoyce.vercel.app/?guest=<token>
+https://bretchandjoyce.vercel.app/bretch-joyce?guest=<token>
 ```
 
+- The wedding slug is the first path segment — `/{weddingId}?guest=<token>`. In single-tenant mode `weddingId` is always `process.env.NEXT_PUBLIC_WEDDING_ID`
+- The root path `/` 404s — there is no landing page. The invite URL is always `{baseUrl}/{weddingId}` (with or without `?guest=<token>`)
 - `token` is a 12-character URL-safe random string (nanoid)
 - The token is the only identifier passed in the URL — no guest name, no ID, no email
 - The token never changes after assignment
@@ -23,29 +25,31 @@ https://bretchandjoyce.vercel.app/?guest=<token>
 **File:** `/lib/tokens.ts`
 
 ```ts
-import { nanoid } from "nanoid"
+import { customAlphabet } from "nanoid"
 
-/**
- * Generates a URL-safe token for a guest invite link.
- * 12 characters = ~71 bits of entropy — sufficient for this use case.
- * Not a security-critical secret; it's a convenience identifier.
- */
+// Lowercase alphanumeric only — 12 chars is the spec length.
+// Excludes ambiguous characters (0/O, 1/l/I) for token legibility.
+const ALPHABET = "23456789abcdefghjkmnpqrstuvwxyz";
+const generateRaw = customAlphabet(ALPHABET, 12);
+
 export function generateToken(): string {
-  return nanoid(12)
+  return generateRaw();
 }
+```
 
-/**
- * Builds the full invite URL for a guest.
- */
-export function buildInviteUrl(token: string): string {
-  const base = process.env.NEXT_PUBLIC_BASE_URL ?? "http://localhost:3000"
-  return `${base}/?guest=${token}`
+**Building the full URL** — do this in components / hooks, not in `tokens.ts`. The dashboard's copy button concatenates `NEXT_PUBLIC_BASE_URL` + `inviteHref(WEDDING_ID, token)`, where `inviteHref` lives in `/lib/nav.ts` and returns `/{weddingId}?guest=<token>`:
+
+```ts
+// /lib/nav.ts
+export function inviteHref(weddingId: string, token?: string): string {
+  const base = `/${weddingId}`;
+  return token ? `${base}?guest=${token}` : base;
 }
 ```
 
 **Why nanoid(12):**
-- 12 chars at 64-symbol alphabet = ~71 bits of entropy
-- Collision probability with 10,000 guests: negligible (~10⁻¹⁶)
+- 12 chars at 32-symbol alphabet = ~60 bits of entropy
+- Collision probability with 10,000 guests: negligible
 - Short enough to be copy-pasteable; long enough to be unguessable
 
 **Do not use:**
@@ -66,7 +70,7 @@ export function buildInviteUrl(token: string): string {
 
 ## Guest Resolution Flow
 
-On page load at `/?guest=<token>`:
+On page load at `/{weddingId}?guest=<token>` (the page at `app/[weddingId]/page.tsx`):
 
 ```
 1. Read `?guest` param from URL
@@ -76,12 +80,12 @@ On page load at `/?guest=<token>`:
 5. If Firestore returns a GuestDoc → render with guest = GuestDoc
 ```
 
-**Implementation in `/app/page.tsx` (Server Component):**
+**Implementation in `/app/[weddingId]/page.tsx` (Server Component):**
 
 ```ts
 import { getGuestByToken } from "@/lib/firestore"
 
-export default async function HomePage({
+export default async function InvitePage({
   searchParams,
 }: {
   searchParams: { guest?: string }
@@ -108,13 +112,15 @@ export default async function HomePage({
 
 **Cost:** 1 Firestore read per page load (when token is present). Acceptable.
 
+**Note:** The `[weddingId]` segment is decorative in single-tenant mode — the page always reads from `getWedding()` which uses `NEXT_PUBLIC_WEDDING_ID`. This preserves ADR-003's multi-tenant posture: making the segment dynamic today means a future multi-tenant deploy is a config change, not a route restructure.
+
 ---
 
 ## Invite Link Display in Dashboard
 
 The guest table includes an **Invite Link** column with:
-- Truncated URL display: `.../?guest=abc123`
-- **Copy** button: copies `buildInviteUrl(guest.token)` to clipboard
+- Truncated URL display: `/bretch-joyce?guest=abc123…` (built via `inviteHref(WEDDING_ID)` + the token prefix)
+- **Copy** button: copies `${NEXT_PUBLIC_BASE_URL}${inviteHref(WEDDING_ID, guest.token)}` to clipboard
 - On copy success: button briefly shows "Copied!" then reverts
 
 **Do not display the raw token** — always show the full URL so it's immediately shareable.
@@ -131,6 +137,8 @@ The guest table includes an **Invite Link** column with:
 | Token contains special characters | `nanoid` only produces URL-safe chars — this should not occur. If it does, URL parsing handles it |
 | Guest shares their link with someone else | The site renders with their name and pax. This is acceptable — we do not verify identity |
 | Two requests come in simultaneously for the same token | Firestore handles concurrent reads safely — both see the same guest doc |
+| Visit `/` (root, no weddingId segment) | 404 page — there is no landing page |
+| Visit `/{wrong-weddingId}` | Site still renders with the canonical wedding config (single-tenant). In multi-tenant this would be a real 404 |
 
 ---
 
@@ -146,10 +154,11 @@ The guest table includes an **Invite Link** column with:
 ## Acceptance Criteria
 
 - [ ] Every guest doc has a non-null, unique `token` after creation
-- [ ] `buildInviteUrl(token)` returns a correct, absolute URL using `NEXT_PUBLIC_BASE_URL`
-- [ ] `/?guest=<valid-token>` renders with guest's first name in greeting
-- [ ] `/?guest=<invalid-token>` renders generic site without error
-- [ ] `/?` (no guest param) renders generic site without error
+- [ ] `/{weddingId}?guest=<valid-token>` renders with guest's first name in greeting
+- [ ] `/{weddingId}?guest=<invalid-token>` renders generic site without error
+- [ ] `/{weddingId}` (no guest param) renders generic site without error
+- [ ] `/` returns 404
 - [ ] No Firestore call is made when token is absent
-- [ ] Dashboard copy button copies the full invite URL to clipboard
+- [ ] Dashboard copy button copies the full invite URL (`{baseUrl}/{weddingId}?guest=<token>`) to clipboard
+- [ ] All invite URLs in code are built via `inviteHref()` from `/lib/nav.ts` — no hardcoded `/?guest=` or `/bretch-joyce?guest=` strings
 - [ ] Tokens survive page refreshes and do not regenerate on re-render

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { weddingConfig } from "@/lib/config";
+import { dashboardHref, inviteHref, WEDDING_ID } from "@/lib/nav";
 
 export default function NotFound() {
   return (
@@ -17,13 +18,13 @@ export default function NotFound() {
         </p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Link
-            href="/"
+            href={inviteHref(WEDDING_ID)}
             className="inline-flex items-center justify-center min-h-[48px] px-6 py-3 rounded-full bg-sunflower text-charcoal text-sm font-medium hover:bg-sunflower-hover transition-colors"
           >
             Go to invitation
           </Link>
           <Link
-            href="/dashboard/bretch-joyce"
+            href={dashboardHref(WEDDING_ID)}
             className="inline-flex items-center justify-center min-h-[48px] px-6 py-3 rounded-full border border-garden text-forest text-sm font-medium hover:bg-stone-light transition-colors"
           >
             Dashboard
