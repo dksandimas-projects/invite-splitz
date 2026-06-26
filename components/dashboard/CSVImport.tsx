@@ -1,34 +1,172 @@
 "use client";
 
 import * as React from "react";
+import Papa from "papaparse";
 import { Modal } from "@/components/shared/Modal";
 import { Button } from "@/components/shared/Button";
+import { useToast } from "@/components/shared/ToastProvider";
+import { createGuest } from "@/lib/firestore";
+import type { GuestRole } from "@/types";
 
 interface CSVImportProps {
   isOpen: boolean;
   onClose: () => void;
+  existingNames?: Set<string>;
+  onImported?: () => void;
 }
 
 type Step = "upload" | "preview" | "done";
 
-const PREVIEW_ROWS = [
-  { firstName: "Maria", lastName: "Santos", pax: 2, role: "Principal Sponsor" },
-  { firstName: "Ricardo", lastName: "Dela Cruz", pax: 4, role: "Secondary Sponsor" },
-  { firstName: "Isabella", lastName: "Montenegro", pax: 1, role: "Entourage" },
-  { firstName: "Rafael", lastName: "Gomez", pax: 2, role: "Guest" },
-  { firstName: "Liam", lastName: "Wilson", pax: 1, role: "Entourage" },
+interface RawRow {
+  firstName?: string;
+  lastName?: string;
+  pax?: string;
+  role?: string;
+}
+
+interface ParsedRow {
+  firstName: string;
+  lastName: string;
+  pax: number;
+  role: GuestRole;
+}
+
+interface ImportPlan {
+  toImport: ParsedRow[];
+  skipped: { row: RawRow; reason: string }[];
+}
+
+const VALID_ROLES: GuestRole[] = [
+  "Guest",
+  "Entourage",
+  "Secondary Sponsor",
+  "Principal Sponsor",
 ];
 
-export function CSVImport({ isOpen, onClose }: CSVImportProps) {
+const PREVIEW_LIMIT = 5;
+
+function normalizeRole(input: string | undefined): GuestRole | null {
+  if (!input) return "Guest";
+  const trimmed = input.trim();
+  if (!trimmed) return "Guest";
+  // Allow case-insensitive / underscore variants like "principal_sponsor"
+  const cleaned = trimmed
+    .toLowerCase()
+    .replace(/[_-]+/g, " ")
+    .replace(/\s+/g, " ");
+  for (const role of VALID_ROLES) {
+    if (role.toLowerCase() === cleaned) return role;
+  }
+  // Match "principal sponsor" → "Principal Sponsor"
+  const titled = cleaned
+    .split(" ")
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(" ");
+  if (VALID_ROLES.includes(titled as GuestRole)) return titled as GuestRole;
+  return null;
+}
+
+function buildPlan(raw: RawRow[], existingNames: Set<string>): ImportPlan {
+  const toImport: ParsedRow[] = [];
+  const skipped: { row: RawRow; reason: string }[] = [];
+
+  for (const row of raw) {
+    const firstName = (row.firstName ?? "").trim();
+    const lastName = (row.lastName ?? "").trim();
+    if (!firstName || !lastName) {
+      skipped.push({ row, reason: "Missing firstName or lastName" });
+      continue;
+    }
+    const key = `${firstName.toLowerCase()}|${lastName.toLowerCase()}`;
+    if (existingNames.has(key)) {
+      skipped.push({ row, reason: "Already in guest list" });
+      continue;
+    }
+    const paxNum = Number(row.pax ?? "1");
+    if (!Number.isInteger(paxNum) || paxNum < 1) {
+      skipped.push({ row, reason: "Invalid pax (must be a positive integer)" });
+      continue;
+    }
+    const role = normalizeRole(row.role);
+    if (!role) {
+      skipped.push({ row, reason: `Unknown role "${row.role}"` });
+      continue;
+    }
+    toImport.push({ firstName, lastName, pax: paxNum, role });
+  }
+
+  return { toImport, skipped };
+}
+
+export function CSVImport({
+  isOpen,
+  onClose,
+  existingNames,
+  onImported,
+}: CSVImportProps) {
   const [step, setStep] = React.useState<Step>("upload");
   const [fileName, setFileName] = React.useState<string | null>(null);
+  const [plan, setPlan] = React.useState<ImportPlan | null>(null);
+  const [importing, setImporting] = React.useState(false);
+  const [importedCount, setImportedCount] = React.useState(0);
+  const [importedError, setImportedError] = React.useState<string | null>(null);
+  const { showToast } = useToast();
 
   React.useEffect(() => {
     if (isOpen) {
       setStep("upload");
       setFileName(null);
+      setPlan(null);
+      setImportedCount(0);
+      setImportedError(null);
     }
   }, [isOpen]);
+
+  const handleFile = async (file: File) => {
+    setFileName(file.name);
+    const text = await file.text();
+    const parsed = Papa.parse<RawRow>(text, {
+      header: true,
+      skipEmptyLines: true,
+      transformHeader: (h) => h.trim().toLowerCase(),
+    });
+    const raw = (parsed.data ?? []).filter(
+      (r) => r && (r.firstName || r.lastName || r.pax || r.role)
+    );
+    setPlan(buildPlan(raw, existingNames ?? new Set()));
+    setStep("preview");
+  };
+
+  const handleImport = async () => {
+    if (!plan) return;
+    setImporting(true);
+    let success = 0;
+    let failure = 0;
+    for (const row of plan.toImport) {
+      try {
+        await createGuest({
+          firstName: row.firstName,
+          lastName: row.lastName,
+          pax: row.pax,
+          role: row.role,
+        });
+        success += 1;
+      } catch {
+        failure += 1;
+      }
+    }
+    setImportedCount(success);
+    setImportedError(failure > 0 ? `${failure} row(s) failed` : null);
+    setImporting(false);
+    setStep("done");
+    onImported?.();
+    if (success > 0) {
+      showToast({
+        message: `${success} guest${success === 1 ? "" : "s"} imported.`,
+        variant: "success",
+      });
+    }
+  };
 
   return (
     <Modal
@@ -51,11 +189,15 @@ export function CSVImport({ isOpen, onClose }: CSVImportProps) {
             <Button
               variant="primary"
               size="sm"
-              onClick={() => setStep("preview")}
-              disabled={!fileName}
+              onClick={() => {
+                const input = document.getElementById(
+                  "csv-file-input"
+                ) as HTMLInputElement | null;
+                input?.click();
+              }}
               fullWidth
             >
-              Upload
+              Choose File
             </Button>
           </>
         ) : step === "preview" ? (
@@ -64,6 +206,7 @@ export function CSVImport({ isOpen, onClose }: CSVImportProps) {
               variant="ghost"
               size="sm"
               onClick={() => setStep("upload")}
+              disabled={importing}
               fullWidth
             >
               Back
@@ -71,10 +214,13 @@ export function CSVImport({ isOpen, onClose }: CSVImportProps) {
             <Button
               variant="primary"
               size="sm"
-              onClick={() => setStep("done")}
+              onClick={handleImport}
+              loading={importing}
+              disabled={!plan || plan.toImport.length === 0}
               fullWidth
             >
-              Import {PREVIEW_ROWS.length} Guests
+              Import {plan?.toImport.length ?? 0} Guest
+              {plan?.toImport.length === 1 ? "" : "s"}
             </Button>
           </>
         ) : (
@@ -94,8 +240,8 @@ export function CSVImport({ isOpen, onClose }: CSVImportProps) {
             firstName, lastName, pax, role
           </div>
           <label
-            className="block border-2 border-dashed border-stone rounded-lg p-8 text-center cursor-pointer hover:bg-stone-light/40 transition-colors"
-            htmlFor="csv-file"
+            className="block border-2 border-dashed border-stone rounded-xl p-8 text-center cursor-pointer hover:bg-stone-light/40 transition-colors"
+            htmlFor="csv-file-input"
           >
             <svg
               width="32"
@@ -118,54 +264,102 @@ export function CSVImport({ isOpen, onClose }: CSVImportProps) {
             </p>
             <p className="text-xs text-warm-grey mt-1">Accepts .csv only</p>
             <input
-              id="csv-file"
+              id="csv-file-input"
               type="file"
-              accept=".csv"
+              accept=".csv,text/csv"
               className="hidden"
               onChange={(e) => {
                 const f = e.target.files?.[0];
-                if (f) setFileName(f.name);
+                if (f) handleFile(f);
               }}
             />
           </label>
         </div>
       )}
 
-      {step === "preview" && (
+      {step === "preview" && plan && (
         <div className="space-y-4">
-          <div className="border border-stone rounded-md overflow-hidden">
-            <table className="w-full text-left text-sm">
-              <thead className="bg-stone-light/40 text-warm-grey border-b border-stone">
-                <tr>
-                  <th className="px-3 py-2 text-xs uppercase tracking-wider">
-                    Name
-                  </th>
-                  <th className="px-3 py-2 text-xs uppercase tracking-wider">
-                    Role
-                  </th>
-                  <th className="px-3 py-2 text-xs uppercase tracking-wider text-center">
-                    Pax
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-stone/60">
-                {PREVIEW_ROWS.slice(0, 5).map((r, i) => (
-                  <tr key={i}>
-                    <td className="px-3 py-2 text-charcoal">
-                      {r.firstName} {r.lastName}
-                    </td>
-                    <td className="px-3 py-2 text-warm-grey">{r.role}</td>
-                    <td className="px-3 py-2 text-charcoal text-center">
-                      {r.pax}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
           <p className="text-sm text-warm-grey">
-            {PREVIEW_ROWS.length} guests ready to import · 0 rows skipped
+            <span className="text-charcoal font-medium">
+              {plan.toImport.length}
+            </span>{" "}
+            guest{plan.toImport.length === 1 ? "" : "s"} ready to import
+            {plan.skipped.length > 0 ? (
+              <>
+                {" · "}
+                <span className="text-charcoal font-medium">
+                  {plan.skipped.length}
+                </span>{" "}
+                row{plan.skipped.length === 1 ? "" : "s"} skipped
+              </>
+            ) : null}
           </p>
+          {plan.toImport.length > 0 ? (
+            <div className="border border-stone rounded-xl overflow-hidden">
+              <table className="w-full text-left text-sm">
+                <thead className="bg-stone-light/40 text-warm-grey border-b border-stone">
+                  <tr>
+                    <th className="px-3 py-2 text-xs uppercase tracking-wider">
+                      Name
+                    </th>
+                    <th className="px-3 py-2 text-xs uppercase tracking-wider">
+                      Role
+                    </th>
+                    <th className="px-3 py-2 text-xs uppercase tracking-wider text-center">
+                      Pax
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-stone/60">
+                  {plan.toImport.slice(0, PREVIEW_LIMIT).map((r, i) => (
+                    <tr key={i}>
+                      <td className="px-3 py-2 text-charcoal">
+                        {r.firstName} {r.lastName}
+                      </td>
+                      <td className="px-3 py-2 text-warm-grey">{r.role}</td>
+                      <td className="px-3 py-2 text-charcoal text-center">
+                        {r.pax}
+                      </td>
+                    </tr>
+                  ))}
+                  {plan.toImport.length > PREVIEW_LIMIT ? (
+                    <tr>
+                      <td
+                        colSpan={3}
+                        className="px-3 py-2 text-warm-grey italic text-center"
+                      >
+                        …and {plan.toImport.length - PREVIEW_LIMIT} more
+                      </td>
+                    </tr>
+                  ) : null}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <p className="text-sm text-warm-grey italic">
+              No valid rows to import.
+            </p>
+          )}
+          {plan.skipped.length > 0 ? (
+            <details className="text-sm">
+              <summary className="cursor-pointer text-warm-grey">
+                Show {plan.skipped.length} skipped row
+                {plan.skipped.length === 1 ? "" : "s"}
+              </summary>
+              <ul className="mt-2 space-y-1 text-xs text-warm-grey">
+                {plan.skipped.map((s, i) => (
+                  <li key={i} className="flex justify-between gap-2">
+                    <span className="truncate">
+                      {s.row.firstName || "—"} {s.row.lastName || "—"}
+                    </span>
+                    <span className="text-error whitespace-nowrap">
+                      {s.reason}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </details>
+          ) : null}
         </div>
       )}
 
@@ -187,9 +381,12 @@ export function CSVImport({ isOpen, onClose }: CSVImportProps) {
             </svg>
           </div>
           <p className="text-warm-grey">
-            {PREVIEW_ROWS.length} guests added successfully to your wedding
-            list.
+            <span className="text-charcoal font-medium">{importedCount}</span>{" "}
+            guest{importedCount === 1 ? "" : "s"} added successfully.
           </p>
+          {importedError ? (
+            <p className="text-xs text-error">{importedError}</p>
+          ) : null}
         </div>
       )}
     </Modal>

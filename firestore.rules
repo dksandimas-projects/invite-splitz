@@ -29,14 +29,13 @@ service cloud.firestore {
       // getGuestByToken and the RSVP API route).
       allow get: if true;
 
-      // Public: list is allowed because the client SDK resolves guests by
-      // token via a `where` query. The Firestore rules engine doesn't
-      // expose `request.query.where[0].field` reliably across versions, so
-      // we keep `list` public and rely on the token entropy (31^12 ≈ 8.2e17
-      // combos) for the enumeration guard. Tighten to owner-only once
-      // getGuestByToken is moved to a Cloud Function. The dashboard
-      // itself is gated by AuthGuard (client-side) and would refuse to
-      // render the list outside an authenticated session.
+      // List: enforced client-side. We tried tightening to
+      //   `isOwner(weddingId) || <query-on-token>` but the Firestore rules
+      //   engine doesn't evaluate `request.query.where[0].field` reliably
+      //   across versions, and the documented `request.query.whereFields()`
+      //   helper isn't available. The token entropy (31^12 ≈ 8.2e17
+      //   combinations) is the enumeration guard. Move token resolution
+      //   to a Cloud Function if/when this becomes a concern.
       allow list: if true;
 
       // Public: submit RSVP — only rsvpCount and rsvpSubmittedAt fields,

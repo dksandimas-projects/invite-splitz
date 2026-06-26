@@ -5,6 +5,7 @@ import {
   getDoc,
   getDocs,
   limit,
+  onSnapshot,
   query,
   serverTimestamp,
   setDoc,
@@ -175,4 +176,40 @@ export async function submitRSVP(
     rsvpSubmittedAt: serverTimestamp(),
   });
   await batch.commit();
+}
+
+// ---------------- Real-time subscriptions ----------------
+
+export function subscribeToWedding(
+  callback: (wedding: WeddingDoc | null) => void
+): () => void {
+  return onSnapshot(
+    weddingRef(),
+    (snap) => {
+      callback(snap.exists() ? (snap.data() as WeddingDoc) : null);
+    },
+    (err) => {
+      console.error("subscribeToWedding error:", err);
+      callback(null);
+    }
+  );
+}
+
+export function subscribeToGuests(
+  callback: (guests: GuestDoc[]) => void
+): () => void {
+  return onSnapshot(
+    weddingCollection("guests"),
+    (snap) => {
+      const guests = snap.docs.map((d) => ({
+        id: d.id,
+        ...(d.data() as Omit<GuestDoc, "id">),
+      }));
+      callback(guests);
+    },
+    (err) => {
+      console.error("subscribeToGuests error:", err);
+      callback([]);
+    }
+  );
 }

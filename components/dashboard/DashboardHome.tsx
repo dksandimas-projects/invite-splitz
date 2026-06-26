@@ -7,7 +7,8 @@ import { RSVPSummary } from "@/components/dashboard/RSVPSummary";
 import { Button } from "@/components/shared/Button";
 import { CSVImport } from "@/components/dashboard/CSVImport";
 import { dashboardHref } from "@/lib/nav";
-import type { SerializedGuest, SerializedWedding } from "@/lib/serialize";
+import { serializeGuest, serializeWedding, type SerializedGuest, type SerializedWedding } from "@/lib/serialize";
+import { subscribeToGuests, subscribeToWedding } from "@/lib/firestore";
 
 interface DashboardHomeProps {
   weddingId: string;
@@ -30,9 +31,27 @@ function rsvpSummary(guests: SerializedGuest[]) {
 
 export function DashboardHome({ weddingId, wedding, guests }: DashboardHomeProps) {
   const [importOpen, setImportOpen] = React.useState(false);
-  const summary = rsvpSummary(guests);
+  const [liveGuests, setLiveGuests] = React.useState<SerializedGuest[]>(guests);
+  const [liveWedding, setLiveWedding] = React.useState<SerializedWedding | null>(wedding);
 
-  const recent = guests
+  // Live updates — refreshes the summary + recent responses whenever
+  // a guest RSVPs, is added, or any field changes.
+  React.useEffect(() => {
+    const unsubGuests = subscribeToGuests((next) => {
+      setLiveGuests(next.map(serializeGuest));
+    });
+    const unsubWedding = subscribeToWedding((next) => {
+      setLiveWedding(serializeWedding(next));
+    });
+    return () => {
+      unsubGuests();
+      unsubWedding();
+    };
+  }, []);
+
+  const summary = rsvpSummary(liveGuests);
+
+  const recent = liveGuests
     .filter((g) => g.rsvpSubmittedAt)
     .sort(
       (a, b) =>
@@ -41,7 +60,7 @@ export function DashboardHome({ weddingId, wedding, guests }: DashboardHomeProps
     )
     .slice(0, 5);
 
-  const coupleName = wedding?.coupleName ?? "Wedding Dashboard";
+  const coupleName = liveWedding?.coupleName ?? "Wedding Dashboard";
   const partnerName = coupleName.split("&").map((s) => s.trim()).pop() ?? "";
 
   return (
@@ -132,7 +151,15 @@ export function DashboardHome({ weddingId, wedding, guests }: DashboardHomeProps
         </div>
       </footer>
 
-      <CSVImport isOpen={importOpen} onClose={() => setImportOpen(false)} />
+      <CSVImport
+        isOpen={importOpen}
+        onClose={() => setImportOpen(false)}
+        existingNames={new Set(
+          liveGuests.map(
+            (g) => `${g.firstName.toLowerCase()}|${g.lastName.toLowerCase()}`
+          )
+        )}
+      />
     </div>
   );
 }

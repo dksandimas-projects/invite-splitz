@@ -20,7 +20,8 @@ import {
   updateGuest,
 } from "@/lib/firestore";
 import type { GuestRole } from "@/types";
-import { serializeGuest, type SerializedGuest, type SerializedWedding } from "@/lib/serialize";
+import { serializeGuest, serializeWedding, type SerializedGuest, type SerializedWedding } from "@/lib/serialize";
+import { subscribeToGuests, subscribeToWedding } from "@/lib/firestore";
 
 interface GuestListProps {
   weddingId: string;
@@ -49,6 +50,7 @@ export function GuestList({
   baseUrl,
 }: GuestListProps) {
   const [guests, setGuests] = React.useState<SerializedGuest[]>(initialGuests);
+  const [liveWedding, setLiveWedding] = React.useState<SerializedWedding | null>(wedding);
   const [search, setSearch] = React.useState("");
   const [formOpen, setFormOpen] = React.useState(false);
   const [formMode, setFormMode] = React.useState<"add" | "edit">("add");
@@ -61,6 +63,22 @@ export function GuestList({
   const [copiedToken, setCopiedToken] = React.useState<string | null>(null);
   const [busy, setBusy] = React.useState(false);
   const { showToast } = useToast();
+
+  // Live updates — the guest list and wedding doc refresh in real time.
+  // Manual state updates (from createGuest / updateGuest / etc.) still
+  // win immediately; the subscription reconciles on the next change.
+  React.useEffect(() => {
+    const unsubGuests = subscribeToGuests((next) => {
+      setGuests(next.map(serializeGuest));
+    });
+    const unsubWedding = subscribeToWedding((next) => {
+      setLiveWedding(serializeWedding(next));
+    });
+    return () => {
+      unsubGuests();
+      unsubWedding();
+    };
+  }, []);
 
   const filtered = guests.filter((g) => {
     if (!search) return true;
@@ -187,7 +205,7 @@ export function GuestList({
   return (
     <div className="min-h-screen flex flex-col bg-offwhite">
       <TopNav
-        coupleName={wedding?.coupleName ?? "Wedding Dashboard"}
+        coupleName={liveWedding?.coupleName ?? wedding?.coupleName ?? "Wedding Dashboard"}
         weddingId={weddingId}
         activeSection="guests"
       />
@@ -300,7 +318,13 @@ export function GuestList({
         firstName={resetTarget?.firstName ?? ""}
         loading={busy}
       />
-      <CSVImport isOpen={importOpen} onClose={() => setImportOpen(false)} />
+      <CSVImport
+        isOpen={importOpen}
+        onClose={() => setImportOpen(false)}
+        existingNames={new Set(
+          guests.map((g) => `${g.firstName.toLowerCase()}|${g.lastName.toLowerCase()}`)
+        )}
+      />
 
       <button
         type="button"
