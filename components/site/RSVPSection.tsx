@@ -8,12 +8,14 @@ interface RSVPSectionProps {
   token: string;
   pax: number;
   existingRsvpCount: number | null;
+  guestName?: string;
 }
 
 export function RSVPSection({
   token,
   pax,
   existingRsvpCount,
+  guestName,
 }: RSVPSectionProps) {
   const [status, setStatus] = React.useState<
     "idle" | "submitting" | "confirmed" | "error"
@@ -73,7 +75,7 @@ export function RSVPSection({
       <section className="px-6 mb-section-gap-mobile">
         <Card className="max-w-guest mx-auto text-center p-8 space-y-2">
           <h2 className="font-serif text-section-heading text-charcoal">
-            Thank you
+            {guestName ? `Thank you, ${guestName}` : "Thank you"}
           </h2>
           <p className="text-warm-grey">{message}</p>
           {resultCount !== null && resultCount > 0 ? (
@@ -110,8 +112,16 @@ export function RSVPSection({
           Kindly Reply
         </h2>
         <h3 className="font-serif text-section-heading text-charcoal">
-          {pax <= 1 || pax === 2
-            ? "Will you be joining us?"
+          {pax === 1
+            ? guestName
+              ? `Will you be joining us, ${guestName}?`
+              : "Will you be joining us?"
+            : pax === 2
+            ? guestName
+              ? `Will you and your guest be joining us, ${guestName}?`
+              : "Will you be joining us?"
+            : guestName
+            ? `${guestName}, how many from your group will be joining us?`
             : "How many from your group will be joining us?"}
         </h3>
 

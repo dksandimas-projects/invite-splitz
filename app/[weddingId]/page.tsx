@@ -127,6 +127,7 @@ export default async function Page({
               token={guest.token}
               pax={guest.pax}
               existingRsvpCount={guest.rsvpCount}
+              guestName={guest.firstName}
             />
             <ScrollDownGuide label="Scroll down for entourage" />
           </div>
