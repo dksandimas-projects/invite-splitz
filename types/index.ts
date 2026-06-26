@@ -46,6 +46,7 @@ export interface WeddingDoc {
   coupleName: string;
   weddingDate: string;
   hashtag: string;
+  couplePhotoUrl?: string;
   photoAlbumUrl: string;
   ceremony: EventInfo;
   reception: EventInfo;
@@ -68,6 +69,7 @@ export type WeddingConfigUpdate = Partial<
     | "coupleName"
     | "weddingDate"
     | "hashtag"
+    | "couplePhotoUrl"
     | "photoAlbumUrl"
     | "ceremony"
     | "reception"

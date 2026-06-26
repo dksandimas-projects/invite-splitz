@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Image from "next/image";
 import QRCode from "react-qr-code";
 import { Card } from "@/components/shared/Card";
 
@@ -8,12 +9,16 @@ interface PhotoQRProps {
   albumUrl: string;
   headline?: string;
   body?: string;
+  qrImageSrc?: string;
+  qrImageAlt?: string;
 }
 
 export function PhotoQR({
   albumUrl,
   headline = "Snap & Share",
   body = "Scan the QR code below to upload your photos to our shared album!",
+  qrImageSrc,
+  qrImageAlt = "QR code for the shared photo album",
 }: PhotoQRProps) {
   return (
     <section className="px-6 py-section-gap-mobile md:py-section-gap-desktop text-center">
@@ -23,7 +28,15 @@ export function PhotoQR({
         </h2>
         <p className="text-warm-grey mb-8">{body}</p>
         <Card padding="sm" className="inline-block">
-          {albumUrl ? (
+          {qrImageSrc ? (
+            <Image
+              src={qrImageSrc}
+              alt={qrImageAlt}
+              width={208}
+              height={208}
+              className="w-[208px] h-[208px]"
+            />
+          ) : albumUrl ? (
             <QRCode
               value={albumUrl}
               size={208}

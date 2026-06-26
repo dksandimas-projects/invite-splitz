@@ -32,11 +32,15 @@ export function CountdownTimer({ targetIso, className = "" }: CountdownTimerProp
     return new Date(Date.UTC(y, m - 1, d, -8, 0, 0));
   }, [targetIso]);
 
-  const [parts, setParts] = React.useState<ReturnType<typeof getPartsUntil>>(() =>
-    getPartsUntil(target)
-  );
+  // Render only on the client — the countdown is time-sensitive, so the
+  // server's clock value will not match the client's and would cause a
+  // hydration mismatch. We render placeholder zeroes on the server and
+  // swap in the real values after mount.
+  const [mounted, setMounted] = React.useState(false);
+  const [parts, setParts] = React.useState<ReturnType<typeof getPartsUntil>>(null);
 
   React.useEffect(() => {
+    setMounted(true);
     setParts(getPartsUntil(target));
     const id = window.setInterval(() => {
       setParts(getPartsUntil(target));
@@ -44,7 +48,7 @@ export function CountdownTimer({ targetIso, className = "" }: CountdownTimerProp
     return () => window.clearInterval(id);
   }, [target]);
 
-  if (parts === null) {
+  if (mounted && parts === null) {
     return (
       <div className={className}>
         <p className="font-serif text-2xl text-forest italic">
@@ -54,6 +58,8 @@ export function CountdownTimer({ targetIso, className = "" }: CountdownTimerProp
     );
   }
 
+  const display = parts ?? { days: 0, hours: 0, minutes: 0, seconds: 0 };
+
   return (
     <div
       className={[
@@ -62,10 +68,10 @@ export function CountdownTimer({ targetIso, className = "" }: CountdownTimerProp
       ].join(" ")}
       aria-label="Countdown to wedding"
     >
-      <Unit value={parts.days} label="Days" />
-      <Unit value={parts.hours} label="Hrs" />
-      <Unit value={parts.minutes} label="Mins" />
-      <Unit value={parts.seconds} label="Secs" hiddenOnMobile />
+      <Unit value={display.days} label="Days" />
+      <Unit value={display.hours} label="Hrs" />
+      <Unit value={display.minutes} label="Mins" />
+      <Unit value={display.seconds} label="Secs" hiddenOnMobile />
     </div>
   );
 }

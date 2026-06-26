@@ -70,6 +70,7 @@ export default async function Page({
   const weddingDateLabel =
     wedding?.weddingDate ? formatWeddingDate(wedding.weddingDate) : fallbackConfig.weddingDateLabel;
   const photoAlbumUrl = wedding?.photoAlbumUrl ?? fallbackConfig.photoAlbumUrl;
+  const couplePhotoUrl = wedding?.couplePhotoUrl ?? fallbackConfig.couplePhoto;
   const ceremony = wedding?.ceremony ?? fallbackConfig.ceremony;
   const reception = wedding?.reception ?? fallbackConfig.reception;
   const dressCode = wedding?.dressCode ?? fallbackConfig.dressCode;
@@ -85,12 +86,17 @@ export default async function Page({
             coupleName={coupleName}
             weddingDate={weddingDate}
             weddingDateLabel={weddingDateLabel}
+            backgroundImageUrl={couplePhotoUrl || undefined}
           />
         </div>
 
         <div data-scroll-section className="relative flex flex-col items-center w-full">
           <GreetingSection guestName={guestName} />
-          <ImageBreak />
+          <ImageBreak
+            src={fallbackConfig.couplePhoto}
+            alt={fallbackConfig.couplePhotoAlt}
+            priority
+          />
           <NoPlusOneNotice text={fallbackConfig.noPlusOneText} />
           <GiftNote body={fallbackConfig.giftNoteText} />
           <ScrollDownGuide
@@ -128,6 +134,8 @@ export default async function Page({
             albumUrl={photoAlbumUrl}
             headline={fallbackConfig.photoQRHeadline}
             body={fallbackConfig.photoQRBody}
+            qrImageSrc={fallbackConfig.qrCodeImage}
+            qrImageAlt={fallbackConfig.qrCodeAlt}
           />
         </div>
 

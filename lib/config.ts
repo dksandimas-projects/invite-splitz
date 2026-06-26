@@ -22,6 +22,10 @@ export const weddingConfig = {
   weddingDate: "2026-08-01",
   weddingDateLabel: "August 1, 2026",
   hashtag: "#spendtheBRETCHofmylifewithJOYCE",
+  couplePhoto: "/images/couple.png",
+  couplePhotoAlt: "Bretch and Joyce",
+  qrCodeImage: "/images/photo-qr.jpeg",
+  qrCodeAlt: "QR code for the shared photo album",
   photoAlbumUrl: "",
   ceremony: {
     time: "3:00 PM",

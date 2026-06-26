@@ -21,6 +21,7 @@ type WeddingDraft = {
   coupleName: string;
   weddingDate: string;
   hashtag: string;
+  couplePhotoUrl: string;
   photoAlbumUrl: string;
   ceremony: EventInfo;
   reception: EventInfo;
@@ -39,6 +40,7 @@ function toDraft(wedding: SerializedWedding | null): WeddingDraft {
       coupleName: wedding.coupleName,
       weddingDate: wedding.weddingDate,
       hashtag: wedding.hashtag,
+      couplePhotoUrl: wedding.couplePhotoUrl ?? "",
       photoAlbumUrl: wedding.photoAlbumUrl,
       ceremony: wedding.ceremony,
       reception: wedding.reception,
@@ -50,6 +52,7 @@ function toDraft(wedding: SerializedWedding | null): WeddingDraft {
     coupleName: fallbackConfig.coupleName,
     weddingDate: fallbackConfig.weddingDate,
     hashtag: fallbackConfig.hashtag,
+    couplePhotoUrl: "",
     photoAlbumUrl: fallbackConfig.photoAlbumUrl,
     ceremony: fallbackConfig.ceremony,
     reception: fallbackConfig.reception,
@@ -249,6 +252,37 @@ export function WeddingSettingsForm({
                 placeholder="e.g. #ourwedding"
               />
             </FormField>
+            <FormField
+              label="Couple Photo URL"
+              htmlFor="couplePhotoUrl"
+              hint="Paste a direct image URL (e.g. from Google Drive, Cloudinary, or Imgur). This appears as the background on the hero section of your invitation."
+            >
+              <Input
+                id="couplePhotoUrl"
+                type="url"
+                value={draft.couplePhotoUrl}
+                onChange={(v) => update("couplePhotoUrl", v)}
+                placeholder="https://example.com/photo.jpg"
+              />
+            </FormField>
+            {draft.couplePhotoUrl ? (
+              <div className="flex items-start gap-4 pt-1">
+                <div className="w-24 h-24 rounded-md overflow-hidden border border-stone flex-shrink-0 bg-stone-light/30">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={draft.couplePhotoUrl}
+                    alt="Couple photo preview"
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      (e.currentTarget as HTMLImageElement).style.display = "none";
+                    }}
+                  />
+                </div>
+                <p className="text-xs text-warm-grey leading-relaxed pt-1">
+                  Preview. If the image doesn't appear, the URL may not be publicly accessible or may not allow cross-origin display.
+                </p>
+              </div>
+            ) : null}
           </div>
         </SectionCard>
 

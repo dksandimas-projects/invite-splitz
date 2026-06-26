@@ -25,6 +25,7 @@ export interface SerializedWedding {
   coupleName: string;
   weddingDate: string;
   hashtag: string;
+  couplePhotoUrl?: string;
   photoAlbumUrl: string;
   ceremony: WeddingDoc["ceremony"];
   reception: WeddingDoc["reception"];

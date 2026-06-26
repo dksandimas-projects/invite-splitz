@@ -3,9 +3,14 @@ import Image from "next/image";
 interface ImageBreakProps {
   src?: string;
   alt?: string;
+  priority?: boolean;
 }
 
-export function ImageBreak({ src, alt = "" }: ImageBreakProps) {
+export function ImageBreak({
+  src,
+  alt = "",
+  priority = false,
+}: ImageBreakProps) {
   return (
     <div className="px-6 mb-section-gap-mobile">
       <div className="max-w-guest mx-auto w-full aspect-[4/5] rounded-xl overflow-hidden border border-stone bg-stone-light relative">
@@ -16,6 +21,7 @@ export function ImageBreak({ src, alt = "" }: ImageBreakProps) {
             fill
             sizes="(max-width: 768px) 100vw, 576px"
             className="object-cover"
+            priority={priority}
           />
         ) : null}
       </div>
