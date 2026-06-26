@@ -73,26 +73,6 @@ export function TopNav({
           </button>
         </div>
       </div>
-
-      <nav className="md:hidden flex items-center gap-4 px-4 py-2 border-t border-stone overflow-x-auto">
-        {navLinks.map((link) => {
-          const isActive = link.key === activeSection;
-          return (
-            <Link
-              key={link.key}
-              href={dashboardHref(weddingId, link.path)}
-              className={[
-                "text-xs py-1 px-2 whitespace-nowrap transition-colors",
-                isActive
-                  ? "text-charcoal font-semibold border-b-2 border-sunflower"
-                  : "text-warm-grey",
-              ].join(" ")}
-            >
-              {link.label}
-            </Link>
-          );
-        })}
-      </nav>
     </header>
   );
 }

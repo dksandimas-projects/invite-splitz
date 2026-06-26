@@ -32,8 +32,8 @@ export function CountdownTimer({ targetIso, className = "" }: CountdownTimerProp
     return new Date(Date.UTC(y, m - 1, d, -8, 0, 0));
   }, [targetIso]);
 
-  const [parts, setParts] = React.useState<ReturnType<typeof getPartsUntil> | null>(
-    null
+  const [parts, setParts] = React.useState<ReturnType<typeof getPartsUntil>>(() =>
+    getPartsUntil(target)
   );
 
   React.useEffect(() => {

@@ -20,7 +20,7 @@ export function SettingsScreen({ weddingId }: SettingsScreenProps) {
         activeSection="settings"
         userEmail="dksandimas.projects@gmail.com"
       />
-      <main className="flex-1 w-full max-w-2xl mx-auto px-4 sm:px-6 py-10">
+      <main className="flex-1 w-full max-w-[576px] mx-auto px-4 sm:px-6 py-10">
         <PageHeader
           title="Wedding Settings"
           subtitle="Changes are saved to your live site immediately."

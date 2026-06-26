@@ -1,5 +1,7 @@
+import { GuestTopNav } from "@/components/site/GuestTopNav";
 import { HeroSection } from "@/components/site/HeroSection";
 import { GreetingSection } from "@/components/site/GreetingSection";
+import { ImageBreak } from "@/components/site/ImageBreak";
 import { NoPlusOneNotice } from "@/components/site/NoPlusOneNotice";
 import { GiftNote } from "@/components/site/GiftNote";
 import { RSVPSection } from "@/components/site/RSVPSection";
@@ -30,41 +32,47 @@ export default function Page({
     : null;
 
   return (
-    <main className="bg-offwhite min-h-screen">
-      <HeroSection
-        coupleName={weddingConfig.coupleName}
-        weddingDate={weddingConfig.weddingDate}
-        weddingDateLabel={weddingConfig.weddingDateLabel}
-      />
-      <GreetingSection guestName={guestName} />
-      <NoPlusOneNotice text={weddingConfig.noPlusOneText} />
-      <GiftNote body={weddingConfig.giftNoteText} />
-      {resolvedGuest ? (
-        <RSVPSection
-          token={resolvedGuest.token}
-          pax={resolvedGuest.pax}
-          existingRsvpCount={resolvedGuest.rsvpCount}
+    <>
+      <GuestTopNav coupleName={weddingConfig.coupleName} />
+      <main className="bg-offwhite min-h-screen">
+        <HeroSection
+          coupleName={weddingConfig.coupleName}
+          weddingDate={weddingConfig.weddingDate}
+          weddingDateLabel={weddingConfig.weddingDateLabel}
         />
-      ) : null}
-      <EntourageSection entourage={weddingConfig.entourage} />
-      <EventDetails
-        ceremony={weddingConfig.ceremony}
-        reception={weddingConfig.reception}
-      />
-      <DressCode
-        description={weddingConfig.dressCode.description}
-        palette={weddingConfig.dressCode.palette}
-      />
-      <PhotoQR
-        albumUrl={weddingConfig.photoAlbumUrl}
-        headline={weddingConfig.photoQRHeadline}
-        body={weddingConfig.photoQRBody}
-      />
-      <BibleVerseFooter
-        text={weddingConfig.bibleVerse.text}
-        reference={weddingConfig.bibleVerse.reference}
-        coupleName={weddingConfig.coupleName}
-      />
-    </main>
+        <GreetingSection guestName={guestName} />
+        <ImageBreak />
+        <NoPlusOneNotice text={weddingConfig.noPlusOneText} />
+        <GiftNote body={weddingConfig.giftNoteText} />
+        {resolvedGuest ? (
+          <div id="rsvp">
+            <RSVPSection
+              token={resolvedGuest.token}
+              pax={resolvedGuest.pax}
+              existingRsvpCount={resolvedGuest.rsvpCount}
+            />
+          </div>
+        ) : null}
+        <EntourageSection entourage={weddingConfig.entourage} />
+        <EventDetails
+          ceremony={weddingConfig.ceremony}
+          reception={weddingConfig.reception}
+        />
+        <DressCode
+          description={weddingConfig.dressCode.description}
+          palette={weddingConfig.dressCode.palette}
+        />
+        <PhotoQR
+          albumUrl={weddingConfig.photoAlbumUrl}
+          headline={weddingConfig.photoQRHeadline}
+          body={weddingConfig.photoQRBody}
+        />
+        <BibleVerseFooter
+          text={weddingConfig.bibleVerse.text}
+          reference={weddingConfig.bibleVerse.reference}
+          coupleName={weddingConfig.coupleName}
+        />
+      </main>
+    </>
   );
 }

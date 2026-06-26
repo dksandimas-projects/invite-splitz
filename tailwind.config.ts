@@ -21,6 +21,8 @@ const config: Config = {
         "warm-grey": "#7A7670",
         stone: "#E2DED8",
         "stone-light": "#F0EDE8",
+        "surface-container-low": "#F4F4EF",
+        "surface-container-high": "#E8E8E4",
         error: "#EF4444",
       },
       fontFamily: {

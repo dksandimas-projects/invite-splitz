@@ -65,7 +65,7 @@ export function Modal({
         className={[
           "relative w-full bg-white shadow-xl",
           "sm:rounded-lg sm:my-8",
-          "rounded-t-2xl",
+          "rounded-t-[2rem]",
           "max-h-[90vh] overflow-y-auto",
           sizeClass[size],
         ].join(" ")}

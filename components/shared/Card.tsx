@@ -19,7 +19,7 @@ export function Card({ padding = "md", children, className = "" }: CardProps) {
   return (
     <div
       className={[
-        "bg-white rounded-lg shadow-soft",
+        "bg-white rounded-xl shadow-soft",
         paddingClass[padding],
         className,
       ]

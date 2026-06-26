@@ -7,7 +7,7 @@ export function NoPlusOneNotice({
 }: NoPlusOneNoticeProps) {
   return (
     <section className="px-6 mb-section-gap-mobile">
-      <div className="max-w-guest mx-auto border border-stone rounded-md px-6 py-4 text-center">
+      <div className="max-w-guest mx-auto bg-surface-container-low border border-stone rounded-xl p-8 text-center">
         <p className="text-xs tracking-[0.2em] uppercase text-warm-grey mb-2">
           Guest Policy
         </p>
