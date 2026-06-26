@@ -47,24 +47,55 @@ const VALID_ROLES: GuestRole[] = [
 
 const PREVIEW_LIMIT = 5;
 
-function normalizeRole(input: string | undefined): GuestRole | null {
-  if (!input) return "Guest";
+// Roles that map directly to the Entourage category, with the role name
+// becoming the subRole label in the entourage section.
+const ENTOURAGE_ROLE_ALIASES: Record<string, string> = {
+  "maid of honor": "Maid of Honor",
+  "matron of honor": "Matron of Honor",
+  "best man": "Best Man",
+  "groomsman": "Groomsmen",
+  "groomsmen": "Groomsmen",
+  "bridesmaid": "Bridesmaids",
+  "bridesmaids": "Bridesmaids",
+  "ring bearer": "Ring Bearer",
+  "coin bearer": "Coin Bearer",
+  "flower girl": "Flower Girl",
+  "junior groomsman": "Junior Groomsmen",
+  "junior groomsmen": "Junior Groomsmen",
+  "junior bridesmaid": "Junior Bridesmaids",
+  "junior bridesmaids": "Junior Bridesmaids",
+  "officiant": "Officiant",
+  "parent": "Parents",
+  "parents": "Parents",
+  "emcee": "Emcee",
+  "mc": "Emcee",
+};
+
+function normalizeRole(input: string | undefined): { role: GuestRole; impliedSubRole: string } | null {
+  if (!input) return { role: "Guest", impliedSubRole: "" };
   const trimmed = input.trim();
-  if (!trimmed) return "Guest";
-  // Allow case-insensitive / underscore variants like "principal_sponsor"
+  if (!trimmed) return { role: "Guest", impliedSubRole: "" };
+
   const cleaned = trimmed
     .toLowerCase()
     .replace(/[_-]+/g, " ")
     .replace(/\s+/g, " ");
+
+  // Direct match against the 4 valid roles
   for (const role of VALID_ROLES) {
-    if (role.toLowerCase() === cleaned) return role;
+    if (role.toLowerCase() === cleaned) return { role, impliedSubRole: "" };
   }
-  // Match "principal sponsor" → "Principal Sponsor"
   const titled = cleaned
     .split(" ")
     .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
     .join(" ");
-  if (VALID_ROLES.includes(titled as GuestRole)) return titled as GuestRole;
+  if (VALID_ROLES.includes(titled as GuestRole))
+    return { role: titled as GuestRole, impliedSubRole: "" };
+
+  // Check known entourage aliases → map to "Entourage" with implied subRole
+  const aliasLabel = ENTOURAGE_ROLE_ALIASES[cleaned];
+  if (aliasLabel) return { role: "Entourage", impliedSubRole: aliasLabel };
+
   return null;
 }
 
@@ -89,13 +120,16 @@ function buildPlan(raw: RawRow[], existingNames: Set<string>): ImportPlan {
       skipped.push({ row, reason: "Invalid pax (must be a positive integer)" });
       continue;
     }
-    const role = normalizeRole(row.role);
-    if (!role) {
+    const normalized = normalizeRole(row.role);
+    if (!normalized) {
       skipped.push({ row, reason: `Unknown role "${row.role}"` });
       continue;
     }
-    const subRole = (row.subrole ?? "").trim();
-    toImport.push({ firstName, lastName, pax: paxNum, role, subRole });
+    // Use the explicit subRole from CSV if provided; otherwise fall back to
+    // the implied subRole derived from the role alias (e.g. "Best Man")
+    const csvSubRole = (row.subrole ?? "").trim();
+    const subRole = csvSubRole || normalized.impliedSubRole;
+    toImport.push({ firstName, lastName, pax: paxNum, role: normalized.role, subRole });
   }
 
   return { toImport, skipped };
@@ -151,7 +185,14 @@ export function CSVImport({
         if (cleaned === "lastname" || cleaned === "last") return "lastName";
         if (cleaned === "pax" || cleaned === "seats" || cleaned === "size") return "pax";
         if (cleaned === "role") return "role";
-        if (cleaned === "subrole" || cleaned === "subrole_title" || cleaned === "subrole_name" || cleaned === "subroletitle" || cleaned === "title") {
+        if (
+          cleaned === "subrole" ||
+          cleaned === "sub_role" ||
+          cleaned === "subrole_title" ||
+          cleaned === "subrole_name" ||
+          cleaned === "subroletitle" ||
+          cleaned === "title"
+        ) {
           return "subrole";
         }
         return h.trim();
