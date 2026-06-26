@@ -105,31 +105,31 @@ export function BotanicalVines({ className = "", isRightSide = false }: Botanica
         }
         
         .botanical-sway-main {
-          transform-origin: 20px 800px;
+          transform-origin: 0px 800px;
           animation: botanicalSwayMain 18s ease-in-out infinite;
         }
         .botanical-branch-r1 {
-          transform-origin: 21px 680px;
+          transform-origin: 1px 680px;
           animation: botanicalSwayR1 12s ease-in-out infinite;
         }
         .botanical-branch-l1 {
-          transform-origin: 18px 580px;
+          transform-origin: -2px 580px;
           animation: botanicalSwayL1 10s ease-in-out infinite;
         }
         .botanical-branch-r2 {
-          transform-origin: 21px 460px;
+          transform-origin: 1px 460px;
           animation: botanicalSwayR2 13s ease-in-out infinite;
         }
         .botanical-branch-l2 {
-          transform-origin: 20px 350px;
+          transform-origin: 0px 350px;
           animation: botanicalSwayL2 9.5s ease-in-out infinite;
         }
         .botanical-branch-r3 {
-          transform-origin: 23px 240px;
+          transform-origin: 3px 240px;
           animation: botanicalSwayR3 14s ease-in-out infinite;
         }
         .botanical-branch-l3 {
-          transform-origin: 23px 130px;
+          transform-origin: 3px 130px;
           animation: botanicalSwayL3 8.5s ease-in-out infinite;
         }
         .botanical-filament {
@@ -140,16 +140,16 @@ export function BotanicalVines({ className = "", isRightSide = false }: Botanica
 
       {/* Main Vine Group */}
       <g className="botanical-sway-main">
-        {/* Main stem (wispy but clear) */}
+        {/* Main stem (wispy but clear, shifted left to start at X=0) */}
         <path
-          d="M 20 800 C 35 700, 15 580, 25 480 C 35 380, 18 280, 28 180 C 35 120, 20 70, 25 20"
+          d="M 0 800 C 15 700, -5 580, 5 480 C 15 380, -2 280, 8 180 C 15 120, 0 70, 5 20"
           stroke="#2C2B28"
           strokeWidth="1.6"
           strokeLinecap="round"
         />
         {/* Glowing golden filament running along the stem */}
         <path
-          d="M 20 800 C 35 700, 15 580, 25 480 C 35 380, 18 280, 28 180 C 35 120, 20 70, 25 20"
+          d="M 0 800 C 15 700, -5 580, 5 480 C 15 380, -2 280, 8 180 C 15 120, 0 70, 5 20"
           stroke="#E8C800"
           strokeWidth="1.0"
           strokeLinecap="round"
@@ -158,141 +158,141 @@ export function BotanicalVines({ className = "", isRightSide = false }: Botanica
         />
 
         {/* Top Stem Blossom Cluster */}
-        {renderBlossomCluster(25, 20, "main-top")}
+        {renderBlossomCluster(5, 20, "main-top")}
 
         {/* Branch A (Right, Lower) - Dichotomous Baby's Breath structure */}
         <g className="botanical-branch-r1">
           {/* Base branch */}
-          <path d="M 21 680 C 35 660, 50 630, 45 590" stroke="#2C2B28" strokeWidth="1.2" strokeLinecap="round" />
-          <path d="M 21 680 C 35 660, 50 630, 45 590" stroke="#E8C800" strokeWidth="0.8" filter="url(#gold-glow)" className="botanical-filament" />
+          <path d="M 1 680 C 15 660, 30 630, 25 590" stroke="#2C2B28" strokeWidth="1.2" strokeLinecap="round" />
+          <path d="M 1 680 C 15 660, 30 630, 25 590" stroke="#E8C800" strokeWidth="0.8" filter="url(#gold-glow)" className="botanical-filament" />
           
           {/* Sub-branch A1 */}
-          <path d="M 45 590 C 55 570, 65 550, 60 520" stroke="#2C2B28" strokeWidth="1.0" />
+          <path d="M 25 590 C 35 570, 45 550, 40 520" stroke="#2C2B28" strokeWidth="1.0" />
           {/* Twig A1a & A1b */}
-          <path d="M 60 520 C 65 505, 75 495, 70 475" stroke="#2C2B28" strokeWidth="0.8" />
-          <path d="M 60 520 C 55 505, 50 495, 52 480" stroke="#2C2B28" strokeWidth="0.8" />
+          <path d="M 40 520 C 45 505, 55 495, 50 475" stroke="#2C2B28" strokeWidth="0.8" />
+          <path d="M 40 520 C 35 505, 30 495, 32 480" stroke="#2C2B28" strokeWidth="0.8" />
 
           {/* Sub-branch A2 */}
-          <path d="M 45 590 C 35 570, 30 555, 32 540" stroke="#2C2B28" strokeWidth="1.0" />
+          <path d="M 25 590 C 15 570, 10 555, 12 540" stroke="#2C2B28" strokeWidth="1.0" />
           {/* Twig A2a & A2b */}
-          <path d="M 32 540 C 38 525, 42 515, 40 500" stroke="#2C2B28" strokeWidth="0.8" />
-          <path d="M 32 540 C 25 525, 20 515, 22 495" stroke="#2C2B28" strokeWidth="0.8" />
+          <path d="M 12 540 C 18 525, 22 515, 20 500" stroke="#2C2B28" strokeWidth="0.8" />
+          <path d="M 12 540 C 5 525, 0 515, 2 495" stroke="#2C2B28" strokeWidth="0.8" />
 
           {/* Blossoms */}
-          {renderBlossomCluster(70, 475, "a1a")}
-          {renderBlossomCluster(52, 480, "a1b")}
-          {renderBlossomCluster(40, 500, "a2a")}
-          {renderBlossomCluster(22, 495, "a2b")}
+          {renderBlossomCluster(50, 475, "a1a")}
+          {renderBlossomCluster(32, 480, "a1b")}
+          {renderBlossomCluster(20, 500, "a2a")}
+          {renderBlossomCluster(2, 495, "a2b")}
         </g>
 
         {/* Branch B (Left, Lower) - Dichotomous Baby's Breath structure */}
         <g className="botanical-branch-l1">
-          <path d="M 18 580 C 12 560, 5 535, 10 500" stroke="#2C2B28" strokeWidth="1.2" strokeLinecap="round" />
-          <path d="M 18 580 C 12 560, 5 535, 10 500" stroke="#E8C800" strokeWidth="0.8" filter="url(#gold-glow)" className="botanical-filament" />
+          <path d="M -2 580 C -8 560, -15 535, -10 500" stroke="#2C2B28" strokeWidth="1.2" strokeLinecap="round" />
+          <path d="M -2 580 C -8 560, -15 535, -10 500" stroke="#E8C800" strokeWidth="0.8" filter="url(#gold-glow)" className="botanical-filament" />
           
           {/* Sub-branch B1 */}
-          <path d="M 10 500 C 15 480, 18 460, 12 430" stroke="#2C2B28" strokeWidth="1.0" />
-          <path d="M 12 430 C 16 415, 22 405, 18 390" stroke="#2C2B28" strokeWidth="0.8" />
-          <path d="M 12 430 C 8 415, 2 405, 4 390" stroke="#2C2B28" strokeWidth="0.8" />
+          <path d="M -10 500 C -5 480, -2 460, -8 430" stroke="#2C2B28" strokeWidth="1.0" />
+          <path d="M -8 430 C -4 415, 2 405, -2 390" stroke="#2C2B28" strokeWidth="0.8" />
+          <path d="M -8 430 C -12 415, -18 405, -16 390" stroke="#2C2B28" strokeWidth="0.8" />
 
           {/* Sub-branch B2 */}
-          <path d="M 10 500 C 5 480, 2 465, 4 450" stroke="#2C2B28" strokeWidth="1.0" />
-          <path d="M 4 450 C 8 435, 12 425, 10 410" stroke="#2C2B28" strokeWidth="0.8" />
-          <path d="M 4 450 C 0 435, -2 425, 0 410" stroke="#2C2B28" strokeWidth="0.8" />
+          <path d="M -10 500 C -15 480, -18 465, -16 450" stroke="#2C2B28" strokeWidth="1.0" />
+          <path d="M -16 450 C -12 435, -8 425, -10 410" stroke="#2C2B28" strokeWidth="0.8" />
+          <path d="M -16 450 C -20 435, -22 425, -20 410" stroke="#2C2B28" strokeWidth="0.8" />
 
           {/* Blossoms */}
-          {renderBlossomCluster(18, 390, "b1a")}
-          {renderBlossomCluster(4, 390, "b1b")}
-          {renderBlossomCluster(10, 410, "b2a")}
-          {renderBlossomCluster(0, 410, "b2b")}
+          {renderBlossomCluster(-2, 390, "b1a")}
+          {renderBlossomCluster(-16, 390, "b1b")}
+          {renderBlossomCluster(-10, 410, "b2a")}
+          {renderBlossomCluster(-20, 410, "b2b")}
         </g>
 
         {/* Branch C (Right, Middle) */}
         <g className="botanical-branch-r2">
-          <path d="M 21 460 C 35 440, 50 410, 45 370" stroke="#2C2B28" strokeWidth="1.2" strokeLinecap="round" />
-          <path d="M 21 460 C 35 440, 50 410, 45 370" stroke="#E8C800" strokeWidth="0.8" filter="url(#gold-glow)" className="botanical-filament" />
+          <path d="M 1 460 C 15 440, 30 410, 25 370" stroke="#2C2B28" strokeWidth="1.2" strokeLinecap="round" />
+          <path d="M 1 460 C 15 440, 30 410, 25 370" stroke="#E8C800" strokeWidth="0.8" filter="url(#gold-glow)" className="botanical-filament" />
           
           {/* Sub-branch C1 */}
-          <path d="M 45 370 C 55 350, 65 330, 60 300" stroke="#2C2B28" strokeWidth="1.0" />
-          <path d="M 60 300 C 65 285, 75 275, 70 255" stroke="#2C2B28" strokeWidth="0.8" />
-          <path d="M 60 300 C 55 285, 50 275, 52 260" stroke="#2C2B28" strokeWidth="0.8" />
+          <path d="M 25 370 C 35 350, 45 330, 40 300" stroke="#2C2B28" strokeWidth="1.0" />
+          <path d="M 40 300 C 45 285, 55 275, 50 255" stroke="#2C2B28" strokeWidth="0.8" />
+          <path d="M 40 300 C 35 285, 30 275, 32 260" stroke="#2C2B28" strokeWidth="0.8" />
 
           {/* Sub-branch C2 */}
-          <path d="M 45 370 C 35 350, 30 335, 32 320" stroke="#2C2B28" strokeWidth="1.0" />
-          <path d="M 32 320 C 38 305, 42 295, 40 280" stroke="#2C2B28" strokeWidth="0.8" />
-          <path d="M 32 320 C 25 305, 20 295, 22 275" stroke="#2C2B28" strokeWidth="0.8" />
+          <path d="M 25 370 C 15 350, 10 335, 12 320" stroke="#2C2B28" strokeWidth="1.0" />
+          <path d="M 12 320 C 18 305, 22 295, 20 280" stroke="#2C2B28" strokeWidth="0.8" />
+          <path d="M 12 320 C 5 305, 0 295, 2 275" stroke="#2C2B28" strokeWidth="0.8" />
 
           {/* Blossoms */}
-          {renderBlossomCluster(70, 255, "c1a")}
-          {renderBlossomCluster(52, 260, "c1b")}
-          {renderBlossomCluster(40, 280, "c2a")}
-          {renderBlossomCluster(22, 275, "c2b")}
+          {renderBlossomCluster(50, 255, "c1a")}
+          {renderBlossomCluster(32, 260, "c1b")}
+          {renderBlossomCluster(20, 280, "c2a")}
+          {renderBlossomCluster(2, 275, "c2b")}
         </g>
 
         {/* Branch D (Left, Middle) */}
         <g className="botanical-branch-l2">
-          <path d="M 20 350 C 14 330, 6 305, 12 270" stroke="#2C2B28" strokeWidth="1.2" strokeLinecap="round" />
-          <path d="M 20 350 C 14 330, 6 305, 12 270" stroke="#E8C800" strokeWidth="0.8" filter="url(#gold-glow)" className="botanical-filament" />
+          <path d="M 0 350 C -6 330, -14 305, -8 270" stroke="#2C2B28" strokeWidth="1.2" strokeLinecap="round" />
+          <path d="M 0 350 C -6 330, -14 305, -8 270" stroke="#E8C800" strokeWidth="0.8" filter="url(#gold-glow)" className="botanical-filament" />
           
           {/* Sub-branch D1 */}
-          <path d="M 12 270 C 18 250, 22 230, 15 200" stroke="#2C2B28" strokeWidth="1.0" />
-          <path d="M 15 200 C 20 185, 26 175, 22 160" stroke="#2C2B28" strokeWidth="0.8" />
-          <path d="M 15 200 C 10 185, 5 175, 8 160" stroke="#2C2B28" strokeWidth="0.8" />
+          <path d="M -8 270 C -2 250, 2 230, -5 200" stroke="#2C2B28" strokeWidth="1.0" />
+          <path d="M -5 200 C 0 185, 6 175, 2 160" stroke="#2C2B28" strokeWidth="0.8" />
+          <path d="M -5 200 C -10 185, -15 175, -12 160" stroke="#2C2B28" strokeWidth="0.8" />
 
           {/* Sub-branch D2 */}
-          <path d="M 12 270 C 6 250, 2 235, 5 220" stroke="#2C2B28" strokeWidth="1.0" />
-          <path d="M 5 220 C 10 205, 14 195, 12 180" stroke="#2C2B28" strokeWidth="0.8" />
-          <path d="M 5 220 C 0 205, -2 195, 0 180" stroke="#2C2B28" strokeWidth="0.8" />
+          <path d="M -8 270 C -14 250, -18 235, -15 220" stroke="#2C2B28" strokeWidth="1.0" />
+          <path d="M -15 220 C -10 205, -6 195, -8 180" stroke="#2C2B28" strokeWidth="0.8" />
+          <path d="M -15 220 C -20 205, -22 195, -20 180" stroke="#2C2B28" strokeWidth="0.8" />
 
           {/* Blossoms */}
-          {renderBlossomCluster(22, 160, "d1a")}
-          {renderBlossomCluster(8, 160, "d1b")}
-          {renderBlossomCluster(12, 180, "d2a")}
-          {renderBlossomCluster(0, 180, "d2b")}
+          {renderBlossomCluster(2, 160, "d1a")}
+          {renderBlossomCluster(-12, 160, "d1b")}
+          {renderBlossomCluster(-8, 180, "d2a")}
+          {renderBlossomCluster(-20, 180, "d2b")}
         </g>
 
         {/* Branch E (Right, Upper) */}
         <g className="botanical-branch-r3">
-          <path d="M 23 240 C 37 220, 52 190, 47 150" stroke="#2C2B28" strokeWidth="1.2" strokeLinecap="round" />
-          <path d="M 23 240 C 37 220, 52 190, 47 150" stroke="#E8C800" strokeWidth="0.8" filter="url(#gold-glow)" className="botanical-filament" />
+          <path d="M 3 240 C 17 220, 32 190, 27 150" stroke="#2C2B28" strokeWidth="1.2" strokeLinecap="round" />
+          <path d="M 3 240 C 17 220, 32 190, 27 150" stroke="#E8C800" strokeWidth="0.8" filter="url(#gold-glow)" className="botanical-filament" />
           
           {/* Sub-branch E1 */}
-          <path d="M 47 150 C 57 130, 67 110, 62 80" stroke="#2C2B28" strokeWidth="1.0" />
-          <path d="M 62 80 C 67 65, 77 55, 72 35" stroke="#2C2B28" strokeWidth="0.8" />
-          <path d="M 62 80 C 57 65, 52 55, 54 40" stroke="#2C2B28" strokeWidth="0.8" />
+          <path d="M 27 150 C 37 130, 47 110, 42 80" stroke="#2C2B28" strokeWidth="1.0" />
+          <path d="M 42 80 C 47 65, 57 55, 52 35" stroke="#2C2B28" strokeWidth="0.8" />
+          <path d="M 42 80 C 37 65, 32 55, 34 40" stroke="#2C2B28" strokeWidth="0.8" />
 
           {/* Sub-branch E2 */}
-          <path d="M 47 150 C 37 130, 30 115, 32 100" stroke="#2C2B28" strokeWidth="1.0" />
-          <path d="M 32 100 C 38 85, 42 75, 40 60" stroke="#2C2B28" strokeWidth="0.8" />
-          <path d="M 32 100 C 25 85, 20 75, 22 55" stroke="#2C2B28" strokeWidth="0.8" />
+          <path d="M 27 150 C 17 130, 10 115, 12 100" stroke="#2C2B28" strokeWidth="1.0" />
+          <path d="M 12 100 C 18 85, 22 75, 20 60" stroke="#2C2B28" strokeWidth="0.8" />
+          <path d="M 12 100 C 5 85, 0 75, 2 55" stroke="#2C2B28" strokeWidth="0.8" />
 
           {/* Blossoms */}
-          {renderBlossomCluster(72, 35, "e1a")}
-          {renderBlossomCluster(54, 40, "e1b")}
-          {renderBlossomCluster(40, 60, "e2a")}
-          {renderBlossomCluster(22, 55, "e2b")}
+          {renderBlossomCluster(52, 35, "e1a")}
+          {renderBlossomCluster(34, 40, "e1b")}
+          {renderBlossomCluster(20, 60, "e2a")}
+          {renderBlossomCluster(2, 55, "e2b")}
         </g>
 
         {/* Branch F (Left, Upper) */}
         <g className="botanical-branch-l3">
-          <path d="M 23 130 C 17 110, 10 85, 14 50" stroke="#2C2B28" strokeWidth="1.2" strokeLinecap="round" />
-          <path d="M 23 130 C 17 110, 10 85, 14 50" stroke="#E8C800" strokeWidth="0.8" filter="url(#gold-glow)" className="botanical-filament" />
+          <path d="M 3 130 C -3 110, -10 85, -6 50" stroke="#2C2B28" strokeWidth="1.2" strokeLinecap="round" />
+          <path d="M 3 130 C -3 110, -10 85, -6 50" stroke="#E8C800" strokeWidth="0.8" filter="url(#gold-glow)" className="botanical-filament" />
           
           {/* Sub-branch F1 */}
-          <path d="M 14 50 C 20 30, 24 10, 18 -20" stroke="#2C2B28" strokeWidth="1.0" />
-          <path d="M 18 -20 C 22 -35, 28 -45, 24 -60" stroke="#2C2B28" strokeWidth="0.8" />
-          <path d="M 18 -20 C 14 -35, 8 -45, 11 -60" stroke="#2C2B28" strokeWidth="0.8" />
+          <path d="M -6 50 C 0 30, 4 10, -2 -20" stroke="#2C2B28" strokeWidth="1.0" />
+          <path d="M -2 -20 C 2 -35, 8 -45, 4 -60" stroke="#2C2B28" strokeWidth="0.8" />
+          <path d="M -2 -20 C -6 -35, -12 -45, -9 -60" stroke="#2C2B28" strokeWidth="0.8" />
 
           {/* Sub-branch F2 */}
-          <path d="M 14 50 C 8 30, 4 15, 6 0" stroke="#2C2B28" strokeWidth="1.0" />
-          <path d="M 6 0 C 11 -15, 15 -25, 13 -40" stroke="#2C2B28" strokeWidth="0.8" />
-          <path d="M 6 0 C 1 -15, -3 -25, 0 -40" stroke="#2C2B28" strokeWidth="0.8" />
+          <path d="M -6 50 C -12 30, -16 15, -14 0" stroke="#2C2B28" strokeWidth="1.0" />
+          <path d="M -14 0 C -9 -15, -5 -25, -7 -40" stroke="#2C2B28" strokeWidth="0.8" />
+          <path d="M -14 0 C -19 -15, -23 -25, -20 -40" stroke="#2C2B28" strokeWidth="0.8" />
 
           {/* Blossoms */}
-          {renderBlossomCluster(24, -60, "f1a")}
-          {renderBlossomCluster(11, -60, "f1b")}
-          {renderBlossomCluster(13, -40, "f2a")}
-          {renderBlossomCluster(0, -40, "f2b")}
+          {renderBlossomCluster(4, -60, "f1a")}
+          {renderBlossomCluster(-9, -60, "f1b")}
+          {renderBlossomCluster(-7, -40, "f2a")}
+          {renderBlossomCluster(-20, -40, "f2b")}
         </g>
       </g>
     </svg>

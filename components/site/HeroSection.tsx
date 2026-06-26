@@ -29,10 +29,10 @@ export function HeroSection({
       ) : null}
 
       {/* Botanical accents */}
-      <div className="absolute left-0 top-0 bottom-0 w-20 sm:w-32 md:w-44 overflow-hidden pointer-events-none opacity-50 sm:opacity-65 md:opacity-80 flex justify-start origin-bottom-left rotate-[3deg]">
+      <div className="absolute left-0 top-0 bottom-0 w-20 sm:w-32 md:w-44 overflow-hidden pointer-events-none opacity-50 sm:opacity-65 md:opacity-80 flex justify-start origin-bottom-left rotate-[3deg] z-50">
         <BotanicalVines className="h-full w-auto flex-shrink-0" />
       </div>
-      <div className="absolute right-0 top-0 bottom-0 w-20 sm:w-32 md:w-44 overflow-hidden pointer-events-none opacity-50 sm:opacity-65 md:opacity-80 flex justify-end origin-bottom-right -rotate-[3deg]">
+      <div className="absolute right-0 top-0 bottom-0 w-20 sm:w-32 md:w-44 overflow-hidden pointer-events-none opacity-50 sm:opacity-65 md:opacity-80 flex justify-end origin-bottom-right -rotate-[3deg] z-50">
         <BotanicalVines className="h-full w-auto flex-shrink-0" isRightSide />
       </div>
 
