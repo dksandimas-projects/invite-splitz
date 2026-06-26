@@ -6,7 +6,11 @@ Before writing any code, read the `/plan` folder in full.
 
 1. `/plan/overview.md` — project context, tech stack, scope, constraints
 2. `/plan/roadmap.md` — phased build order; follow phases sequentially
-3. The specific doc for the area you are working on:
+3. `/plan/decisions.md` — **why** key architectural choices were made; read before proposing alternatives
+4. `/plan/gotchas.md` — common traps and non-obvious constraints; read before writing any code
+5. `/plan/conventions.md` — naming rules, component patterns, and hard anti-patterns
+6. `/plan/env.md` — all environment variables: what they do, where they're used, how to set them
+7. The specific doc for the area you are working on:
    - Frontend / guest site → `/plan/frontend.md`
    - Firestore schema, types, rules → `/plan/backend.md`
    - Firebase Auth, dashboard access → `/plan/auth.md`
@@ -25,3 +29,5 @@ Before writing any code, read the `/plan` folder in full.
 - All hardcoded wedding content goes in `/lib/config.ts`, never inline in components.
 - Every plan doc has **Acceptance criteria** — treat these as your definition of done.
 - When a plan doc and the code conflict, ask before assuming which is correct.
+- Before proposing an alternative to any architectural choice, read `/plan/decisions.md` first — the reasoning is documented there.
+- Check `/plan/gotchas.md` before writing Firestore rules, auth logic, or UI components — common traps are catalogued there.
