@@ -429,31 +429,74 @@ export function WeddingSettingsForm({
             >
               Guests
             </a>{" "}
-            tab.
+            tab. Drag the arrows to reorder groups as they appear on the invitation.
           </p>
           {draft.entourage.length === 0 ? (
             <div className="border border-dashed border-stone rounded-md p-6 text-center text-warm-grey text-sm">
               No entourage groups yet. Assign roles to guests to populate the entourage list.
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-2">
               {draft.entourage.map((group, idx) => (
-                <div key={idx} className="bg-stone-light/30 rounded-md p-4">
-                  <h4 className="font-serif font-medium text-forest text-base mb-2">
-                    {group.role}
-                  </h4>
-                  <ul className="list-disc pl-5 space-y-1">
-                    {group.members.map((member, mIdx) => (
-                      <li key={mIdx} className="text-sm text-charcoal font-light">
-                        {member}
-                      </li>
-                    ))}
-                  </ul>
+                <div
+                  key={`${group.role}-${idx}`}
+                  className="flex items-start gap-2 bg-stone-light/30 rounded-md p-4"
+                >
+                  {/* Reorder buttons */}
+                  <div className="flex flex-col gap-0.5 shrink-0 mt-0.5">
+                    <button
+                      type="button"
+                      aria-label={`Move ${group.role} up`}
+                      disabled={idx === 0}
+                      onClick={() => {
+                        if (idx === 0) return;
+                        const next = [...draft.entourage];
+                        [next[idx - 1], next[idx]] = [next[idx], next[idx - 1]];
+                        update("entourage", next);
+                      }}
+                      className="w-6 h-6 flex items-center justify-center rounded text-warm-grey hover:text-forest hover:bg-stone/40 disabled:opacity-25 disabled:cursor-not-allowed transition-colors"
+                    >
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                        <polyline points="18 15 12 9 6 15" />
+                      </svg>
+                    </button>
+                    <button
+                      type="button"
+                      aria-label={`Move ${group.role} down`}
+                      disabled={idx === draft.entourage.length - 1}
+                      onClick={() => {
+                        if (idx === draft.entourage.length - 1) return;
+                        const next = [...draft.entourage];
+                        [next[idx], next[idx + 1]] = [next[idx + 1], next[idx]];
+                        update("entourage", next);
+                      }}
+                      className="w-6 h-6 flex items-center justify-center rounded text-warm-grey hover:text-forest hover:bg-stone/40 disabled:opacity-25 disabled:cursor-not-allowed transition-colors"
+                    >
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                        <polyline points="6 9 12 15 18 9" />
+                      </svg>
+                    </button>
+                  </div>
+
+                  {/* Group content */}
+                  <div className="flex-1 min-w-0">
+                    <h4 className="font-serif font-medium text-forest text-base mb-2">
+                      {group.role}
+                    </h4>
+                    <ul className="list-disc pl-5 space-y-1">
+                      {group.members.map((member, mIdx) => (
+                        <li key={mIdx} className="text-sm text-charcoal font-light">
+                          {member}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
               ))}
             </div>
           )}
         </SectionCard>
+
       </div>
 
       <FormFooter

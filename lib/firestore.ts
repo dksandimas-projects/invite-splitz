@@ -99,7 +99,11 @@ type GuestCreateInput = Pick<
 >;
 
 export async function syncEntourageFromGuests(): Promise<void> {
-  const guests = await listGuests();
+  const [guests, weddingSnap] = await Promise.all([
+    listGuests(),
+    getDoc(weddingRef()),
+  ]);
+
   const groupsMap: Record<string, string[]> = {};
 
   for (const guest of guests) {
@@ -130,10 +134,16 @@ export async function syncEntourageFromGuests(): Promise<void> {
     }
   }
 
-  const entourageList: { role: string; members: string[] }[] = Object.keys(groupsMap).map((role) => ({
-    role,
-    members: groupsMap[role],
-  }));
+  // Build the new list respecting any existing user-defined order.
+  // Groups that already exist in the saved order keep their position;
+  // newly added groups (not yet in the saved list) are appended at the
+  // end sorted by the default PRIORITY.
+  const savedOrder: string[] =
+    weddingSnap.exists()
+      ? ((weddingSnap.data() as { entourage?: { role: string }[] }).entourage ?? []).map(
+          (g) => g.role
+        )
+      : [];
 
   const PRIORITY: Record<string, number> = {
     "Officiant": 1,
@@ -145,14 +155,24 @@ export async function syncEntourageFromGuests(): Promise<void> {
     "Bridesmaids": 7,
   };
 
-  entourageList.sort((a, b) => {
-    const pA = PRIORITY[a.role] ?? 999;
-    const pB = PRIORITY[b.role] ?? 999;
-    if (pA !== pB) {
-      return pA - pB;
-    }
-    return a.role.localeCompare(b.role);
-  });
+  const allGroupNames = Object.keys(groupsMap);
+
+  // Groups in user's saved order (only if they still have members)
+  const ordered = savedOrder.filter((role) => groupsMap[role]);
+  // New groups not yet in the saved order — sort by priority
+  const newGroups = allGroupNames
+    .filter((role) => !savedOrder.includes(role))
+    .sort((a, b) => {
+      const pA = PRIORITY[a] ?? 999;
+      const pB = PRIORITY[b] ?? 999;
+      if (pA !== pB) return pA - pB;
+      return a.localeCompare(b);
+    });
+
+  const entourageList = [...ordered, ...newGroups].map((role) => ({
+    role,
+    members: groupsMap[role],
+  }));
 
   await updateDoc(weddingRef(), {
     entourage: entourageList,
