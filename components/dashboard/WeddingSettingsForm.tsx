@@ -10,8 +10,13 @@ import { FormFooter } from "@/components/shared/FormFooter";
 import { PaletteEditor } from "./PaletteEditor";
 import { EntourageEditor } from "./EntourageEditor";
 import { useToast } from "@/components/shared/ToastProvider";
-import { weddingConfig as initialConfig } from "@/lib/config";
+import { weddingConfig as fallbackConfig } from "@/lib/config";
+import {
+  updateAuthorizedEmails,
+  updateWeddingConfig,
+} from "@/lib/firestore";
 import type { EventInfo } from "@/types";
+import type { SerializedWedding } from "@/lib/serialize";
 
 type WeddingDraft = {
   coupleName: string;
@@ -25,37 +30,51 @@ type WeddingDraft = {
 };
 
 interface WeddingSettingsFormProps {
-  initial?: WeddingDraft;
-  onSave?: (next: WeddingDraft) => void;
+  wedding: SerializedWedding | null;
+  initialAccessEmails: string[];
 }
 
-interface AccessEntry {
-  email: string;
+function toDraft(wedding: SerializedWedding | null): WeddingDraft {
+  if (wedding) {
+    return {
+      coupleName: wedding.coupleName,
+      weddingDate: wedding.weddingDate,
+      hashtag: wedding.hashtag,
+      photoAlbumUrl: wedding.photoAlbumUrl,
+      ceremony: wedding.ceremony,
+      reception: wedding.reception,
+      dressCode: wedding.dressCode,
+      entourage: wedding.entourage,
+    };
+  }
+  return {
+    coupleName: fallbackConfig.coupleName,
+    weddingDate: fallbackConfig.weddingDate,
+    hashtag: fallbackConfig.hashtag,
+    photoAlbumUrl: fallbackConfig.photoAlbumUrl,
+    ceremony: fallbackConfig.ceremony,
+    reception: fallbackConfig.reception,
+    dressCode: fallbackConfig.dressCode,
+    entourage: fallbackConfig.entourage,
+  };
 }
 
 export function WeddingSettingsForm({
-  initial,
-  onSave,
+  wedding,
+  initialAccessEmails,
 }: WeddingSettingsFormProps) {
-  const seed: WeddingDraft = initial ?? {
-    coupleName: initialConfig.coupleName,
-    weddingDate: initialConfig.weddingDate,
-    hashtag: initialConfig.hashtag,
-    photoAlbumUrl: initialConfig.photoAlbumUrl,
-    ceremony: initialConfig.ceremony,
-    reception: initialConfig.reception,
-    dressCode: initialConfig.dressCode,
-    entourage: initialConfig.entourage,
-  };
+  const initialDraft = React.useMemo(() => toDraft(wedding), [wedding]);
+  const initialAccess = React.useMemo(
+    () => initialAccessEmails.map((email) => ({ email })),
+    [initialAccessEmails]
+  );
 
-  const [draft, setDraft] = React.useState<WeddingDraft>(seed);
-  const [saved, setSaved] = React.useState<WeddingDraft>(seed);
-  const [access, setAccess] = React.useState<AccessEntry[]>([
-    { email: "dksandimas@gmail.com" },
-  ]);
-  const [accessDraft, setAccessDraft] = React.useState<AccessEntry[]>(access);
+  const [draft, setDraft] = React.useState<WeddingDraft>(initialDraft);
+  const [saved, setSaved] = React.useState<WeddingDraft>(initialDraft);
+  const [accessDraft, setAccessDraft] = React.useState(initialAccess);
   const [newEmail, setNewEmail] = React.useState("");
   const [emailError, setEmailError] = React.useState<string | null>(null);
+  const [saving, setSaving] = React.useState(false);
   const [accessSaving, setAccessSaving] = React.useState(false);
 
   const { showToast } = useToast();
@@ -63,6 +82,10 @@ export function WeddingSettingsForm({
   const isDirty = React.useMemo(() => {
     return JSON.stringify(draft) !== JSON.stringify(saved);
   }, [draft, saved]);
+
+  const accessIsDirty = React.useMemo(() => {
+    return JSON.stringify(accessDraft) !== JSON.stringify(initialAccess);
+  }, [accessDraft, initialAccess]);
 
   const update = <K extends keyof WeddingDraft>(
     key: K,
@@ -78,13 +101,24 @@ export function WeddingSettingsForm({
     setDraft((d) => ({ ...d, [which]: { ...d[which], ...patch } }));
   };
 
-  const handleSave = () => {
-    onSave?.(draft);
-    setSaved(draft);
-    showToast({
-      message: "Settings saved. Your live site is updated.",
-      variant: "success",
-    });
+  const handleSave = async () => {
+    setSaving(true);
+    try {
+      await updateWeddingConfig(draft);
+      setSaved(draft);
+      showToast({
+        message: "Settings saved. Your live site is updated.",
+        variant: "success",
+      });
+    } catch (err) {
+      console.error(err);
+      showToast({
+        message: "Save failed. Please try again.",
+        variant: "error",
+      });
+    } finally {
+      setSaving(false);
+    }
   };
 
   const handleReset = () => {
@@ -111,7 +145,7 @@ export function WeddingSettingsForm({
     setAccessDraft((prev) => prev.filter((_, i) => i !== idx));
   };
 
-  const handleSaveAccess = () => {
+  const handleSaveAccess = async () => {
     if (accessDraft.length === 0) {
       showToast({
         message: "At least one email is required.",
@@ -120,14 +154,22 @@ export function WeddingSettingsForm({
       return;
     }
     setAccessSaving(true);
-    setTimeout(() => {
-      setAccess(accessDraft);
-      setAccessSaving(false);
+    try {
+      const emails = accessDraft.map((a) => a.email);
+      await updateAuthorizedEmails(emails);
       showToast({
         message: "Access list updated.",
         variant: "success",
       });
-    }, 300);
+    } catch (err) {
+      console.error(err);
+      showToast({
+        message: "Failed to update access list. Please try again.",
+        variant: "error",
+      });
+    } finally {
+      setAccessSaving(false);
+    }
   };
 
   return (
@@ -324,6 +366,7 @@ export function WeddingSettingsForm({
         onSave={handleSave}
         onReset={handleReset}
         isDirty={isDirty}
+        saving={saving}
       />
 
       <div className="mt-10">
@@ -379,8 +422,13 @@ export function WeddingSettingsForm({
               placeholder="email@example.com"
               error={emailError ?? undefined}
               className="flex-1"
+              disabled={accessSaving}
             />
-            <Button variant="ghost" onClick={addAccessEmail}>
+            <Button
+              variant="ghost"
+              onClick={addAccessEmail}
+              disabled={accessSaving}
+            >
               + Add
             </Button>
           </div>
@@ -390,6 +438,7 @@ export function WeddingSettingsForm({
               size="sm"
               onClick={handleSaveAccess}
               loading={accessSaving}
+              disabled={!accessIsDirty}
             >
               Save Access List
             </Button>

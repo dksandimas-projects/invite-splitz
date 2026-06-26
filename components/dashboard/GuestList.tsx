@@ -12,28 +12,54 @@ import { GuestForm } from "@/components/dashboard/GuestForm";
 import { DeleteDialog } from "@/components/dashboard/DeleteDialog";
 import { ResetRSVPDialog } from "@/components/dashboard/ResetRSVPDialog";
 import { CSVImport } from "@/components/dashboard/CSVImport";
-import { DUMMY_GUESTS, rsvpSummary } from "@/lib/dummyData";
-import { weddingConfig } from "@/lib/config";
 import { useToast } from "@/components/shared/ToastProvider";
-import type { Guest } from "@/types";
+import {
+  createGuest,
+  deleteGuest,
+  resetRSVP,
+  updateGuest,
+} from "@/lib/firestore";
+import type { GuestRole } from "@/types";
+import { serializeGuest, type SerializedGuest, type SerializedWedding } from "@/lib/serialize";
 
 interface GuestListProps {
   weddingId: string;
+  wedding: SerializedWedding | null;
+  initialGuests: SerializedGuest[];
   baseUrl: string;
 }
 
-export function GuestList({ weddingId, baseUrl }: GuestListProps) {
-  const [guests] = React.useState<Guest[]>(DUMMY_GUESTS);
+function rsvpSummary(guests: SerializedGuest[]) {
+  const totalPax = guests.reduce((sum, g) => sum + g.pax, 0);
+  let confirmed = 0;
+  let declined = 0;
+  let pending = 0;
+  for (const g of guests) {
+    if (g.rsvpCount === null) pending += 1;
+    else if (g.rsvpCount === 0) declined += 1;
+    else confirmed += g.rsvpCount;
+  }
+  return { confirmed, declined, pending, totalPax };
+}
+
+export function GuestList({
+  weddingId,
+  wedding,
+  initialGuests,
+  baseUrl,
+}: GuestListProps) {
+  const [guests, setGuests] = React.useState<SerializedGuest[]>(initialGuests);
   const [search, setSearch] = React.useState("");
   const [formOpen, setFormOpen] = React.useState(false);
   const [formMode, setFormMode] = React.useState<"add" | "edit">("add");
-  const [formInitial, setFormInitial] = React.useState<Guest | undefined>(
+  const [formInitial, setFormInitial] = React.useState<SerializedGuest | undefined>(
     undefined
   );
-  const [deleteTarget, setDeleteTarget] = React.useState<Guest | null>(null);
-  const [resetTarget, setResetTarget] = React.useState<Guest | null>(null);
+  const [deleteTarget, setDeleteTarget] = React.useState<SerializedGuest | null>(null);
+  const [resetTarget, setResetTarget] = React.useState<SerializedGuest | null>(null);
   const [importOpen, setImportOpen] = React.useState(false);
   const [copiedToken, setCopiedToken] = React.useState<string | null>(null);
+  const [busy, setBusy] = React.useState(false);
   const { showToast } = useToast();
 
   const filtered = guests.filter((g) => {
@@ -47,7 +73,7 @@ export function GuestList({ weddingId, baseUrl }: GuestListProps) {
 
   const summary = rsvpSummary(guests);
 
-  const handleCopyLink = async (g: Guest) => {
+  const handleCopyLink = async (g: SerializedGuest) => {
     const url = `${baseUrl}/?guest=${g.token}`;
     try {
       await navigator.clipboard.writeText(url);
@@ -71,19 +97,99 @@ export function GuestList({ weddingId, baseUrl }: GuestListProps) {
     setFormOpen(true);
   };
 
-  const openEdit = (g: Guest) => {
+  const openEdit = (g: SerializedGuest) => {
     setFormMode("edit");
     setFormInitial(g);
     setFormOpen(true);
   };
 
+  const handleFormSubmit = async (data: {
+    firstName: string;
+    lastName: string;
+    pax: number;
+    role: GuestRole;
+  }) => {
+    setBusy(true);
+    try {
+      if (formMode === "add") {
+        const created = await createGuest(data);
+        setGuests((prev) => [...prev, serializeGuest(created)]);
+        showToast({ message: "Guest added successfully.", variant: "success" });
+      } else if (formInitial) {
+        await updateGuest(formInitial.id, data);
+        setGuests((prev) =>
+          prev.map((g) =>
+            g.id === formInitial.id
+              ? { ...g, ...data, updatedAt: new Date().toISOString() }
+              : g
+          )
+        );
+        showToast({ message: "Changes saved.", variant: "success" });
+      }
+      setFormOpen(false);
+    } catch (err) {
+      console.error(err);
+      showToast({
+        message: "Something went wrong. Please try again.",
+        variant: "error",
+      });
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!deleteTarget) return;
+    const id = deleteTarget.id;
+    setBusy(true);
+    try {
+      await deleteGuest(id);
+      setGuests((prev) => prev.filter((g) => g.id !== id));
+      setDeleteTarget(null);
+      showToast({ message: "Guest removed.", variant: "neutral" });
+    } catch (err) {
+      console.error(err);
+      showToast({
+        message: "Something went wrong. Please try again.",
+        variant: "error",
+      });
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const handleResetRSVP = async () => {
+    if (!resetTarget) return;
+    const id = resetTarget.id;
+    setBusy(true);
+    try {
+      await resetRSVP(id);
+      setGuests((prev) =>
+        prev.map((g) =>
+          g.id === id
+            ? { ...g, rsvpCount: null, rsvpSubmittedAt: null }
+            : g
+        )
+      );
+      setResetTarget(null);
+      showToast({ message: "RSVP cleared.", variant: "neutral" });
+    } catch (err) {
+      console.error(err);
+      showToast({
+        message: "Something went wrong. Please try again.",
+        variant: "error",
+      });
+    } finally {
+      setBusy(false);
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-offwhite">
       <TopNav
-        coupleName={weddingConfig.coupleName}
+        coupleName={wedding?.coupleName ?? "Wedding Dashboard"}
         weddingId={weddingId}
         activeSection="guests"
-        userEmail="dksandimas@gmail.com"
       />
       <main className="flex-1 w-full max-w-5xl mx-auto px-4 sm:px-6 py-10">
         <PageHeader
@@ -117,9 +223,13 @@ export function GuestList({ weddingId, baseUrl }: GuestListProps) {
         </div>
 
         {filtered.length === 0 ? (
-          <div className="bg-white shadow-soft rounded-lg border border-stone">
+          <div className="bg-white shadow-soft rounded-xl border border-stone">
             <EmptyState
-              message="No guests match your search."
+              message={
+                guests.length === 0
+                  ? "No guests yet. Add your first guest or import a CSV."
+                  : "No guests match your search."
+              }
               action={
                 guests.length === 0
                   ? { label: "Add Guest", onClick: openAdd }
@@ -129,7 +239,6 @@ export function GuestList({ weddingId, baseUrl }: GuestListProps) {
           </div>
         ) : (
           <>
-            {/* Desktop table */}
             <div className="hidden md:block">
               <GuestTable
                 guests={filtered}
@@ -140,7 +249,6 @@ export function GuestList({ weddingId, baseUrl }: GuestListProps) {
                 onResetRSVP={setResetTarget}
               />
             </div>
-            {/* Mobile cards */}
             <div className="md:hidden space-y-3">
               {filtered.map((g) => (
                 <GuestCard
@@ -171,32 +279,29 @@ export function GuestList({ weddingId, baseUrl }: GuestListProps) {
         onClose={() => setFormOpen(false)}
         mode={formMode}
         initial={formInitial}
+        onSubmit={handleFormSubmit}
+        busy={busy}
       />
       <DeleteDialog
         isOpen={!!deleteTarget}
         onClose={() => setDeleteTarget(null)}
-        onConfirm={() => {
-          setDeleteTarget(null);
-          showToast({ message: "Guest removed.", variant: "neutral" });
-        }}
+        onConfirm={handleDelete}
         guestName={
           deleteTarget
             ? `${deleteTarget.firstName} ${deleteTarget.lastName}`
             : ""
         }
+        loading={busy}
       />
       <ResetRSVPDialog
         isOpen={!!resetTarget}
         onClose={() => setResetTarget(null)}
-        onConfirm={() => {
-          setResetTarget(null);
-          showToast({ message: "RSVP cleared.", variant: "neutral" });
-        }}
+        onConfirm={handleResetRSVP}
         firstName={resetTarget?.firstName ?? ""}
+        loading={busy}
       />
       <CSVImport isOpen={importOpen} onClose={() => setImportOpen(false)} />
 
-      {/* Mobile FAB for quick add */}
       <button
         type="button"
         onClick={openAdd}

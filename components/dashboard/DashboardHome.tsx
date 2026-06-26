@@ -6,34 +6,50 @@ import { TopNav } from "@/components/dashboard/TopNav";
 import { RSVPSummary } from "@/components/dashboard/RSVPSummary";
 import { Button } from "@/components/shared/Button";
 import { CSVImport } from "@/components/dashboard/CSVImport";
-import { DUMMY_GUESTS, rsvpSummary } from "@/lib/dummyData";
-import { weddingConfig } from "@/lib/config";
 import { dashboardHref } from "@/lib/nav";
+import type { SerializedGuest, SerializedWedding } from "@/lib/serialize";
 
 interface DashboardHomeProps {
   weddingId: string;
+  wedding: SerializedWedding | null;
+  guests: SerializedGuest[];
 }
 
-export function DashboardHome({ weddingId }: DashboardHomeProps) {
-  const [importOpen, setImportOpen] = React.useState(false);
-  const summary = rsvpSummary(DUMMY_GUESTS);
+function rsvpSummary(guests: SerializedGuest[]) {
+  const totalPax = guests.reduce((sum, g) => sum + g.pax, 0);
+  let confirmed = 0;
+  let declined = 0;
+  let pending = 0;
+  for (const g of guests) {
+    if (g.rsvpCount === null) pending += 1;
+    else if (g.rsvpCount === 0) declined += 1;
+    else confirmed += g.rsvpCount;
+  }
+  return { confirmed, declined, pending, totalPax };
+}
 
-  // Top 5 recent RSVPs (those with rsvpSubmittedAt set)
-  const recent = DUMMY_GUESTS.filter((g) => g.rsvpSubmittedAt)
+export function DashboardHome({ weddingId, wedding, guests }: DashboardHomeProps) {
+  const [importOpen, setImportOpen] = React.useState(false);
+  const summary = rsvpSummary(guests);
+
+  const recent = guests
+    .filter((g) => g.rsvpSubmittedAt)
     .sort(
       (a, b) =>
-        (b.rsvpSubmittedAt?.toMillis() ?? 0) -
-        (a.rsvpSubmittedAt?.toMillis() ?? 0)
+        new Date(b.rsvpSubmittedAt ?? 0).getTime() -
+        new Date(a.rsvpSubmittedAt ?? 0).getTime()
     )
     .slice(0, 5);
+
+  const coupleName = wedding?.coupleName ?? "Wedding Dashboard";
+  const partnerName = coupleName.split("&").map((s) => s.trim()).pop() ?? "";
 
   return (
     <div className="min-h-screen flex flex-col bg-offwhite">
       <TopNav
-        coupleName={weddingConfig.coupleName}
+        coupleName={coupleName}
         weddingId={weddingId}
         activeSection="overview"
-        userEmail="dksandimas@gmail.com"
       />
       <main className="flex-1 w-full max-w-4xl mx-auto px-4 sm:px-6 py-10 space-y-10">
         <header className="space-y-2">
@@ -41,7 +57,7 @@ export function DashboardHome({ weddingId }: DashboardHomeProps) {
             Wedding Registry &amp; RSVP
           </p>
           <h1 className="font-serif text-section-heading text-charcoal">
-            Welcome back, {weddingConfig.partnerTwo}
+            {partnerName ? `Welcome back, ${partnerName}` : "Welcome"}
           </h1>
         </header>
 
@@ -98,7 +114,7 @@ export function DashboardHome({ weddingId }: DashboardHomeProps) {
                   </div>
                   <span className="text-xs text-warm-grey italic">
                     {g.rsvpSubmittedAt
-                      ? formatRelative(g.rsvpSubmittedAt.toMillis())
+                      ? formatRelative(new Date(g.rsvpSubmittedAt).getTime())
                       : ""}
                   </span>
                 </li>

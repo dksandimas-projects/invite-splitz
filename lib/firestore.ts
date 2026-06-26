@@ -167,10 +167,12 @@ export async function submitRSVP(
     throw new Error("INVALID_COUNT");
   }
   const batch = writeBatch(db);
+  // Public RSVP rule only permits rsvpCount + rsvpSubmittedAt — do not
+  // touch updatedAt here (the rule's affectedKeys().hasOnly() check
+  // would deny the write otherwise).
   batch.update(guestDoc.ref, {
     rsvpCount: count,
     rsvpSubmittedAt: serverTimestamp(),
-    updatedAt: serverTimestamp(),
   });
   await batch.commit();
 }

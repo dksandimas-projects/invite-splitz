@@ -2,15 +2,16 @@
 
 import * as React from "react";
 import { Badge } from "@/components/shared/Badge";
-import type { Guest, GuestRole } from "@/types";
+import type { GuestRole } from "@/types";
+import type { SerializedGuest } from "@/lib/serialize";
 
 interface GuestTableProps {
-  guests: Guest[];
-  onCopyLink: (guest: Guest) => void;
+  guests: SerializedGuest[];
+  onCopyLink: (guest: SerializedGuest) => void;
   copiedToken: string | null;
-  onEdit: (guest: Guest) => void;
-  onDelete: (guest: Guest) => void;
-  onResetRSVP: (guest: Guest) => void;
+  onEdit: (guest: SerializedGuest) => void;
+  onDelete: (guest: SerializedGuest) => void;
+  onResetRSVP: (guest: SerializedGuest) => void;
 }
 
 function roleToBadgeVariant(role: GuestRole) {
@@ -30,7 +31,7 @@ function roleToLabel(role: GuestRole) {
   return role;
 }
 
-function rsvpBadge(guest: Guest) {
+function rsvpBadge(guest: SerializedGuest) {
   if (guest.rsvpCount === null) {
     return <Badge variant="rsvp-pending" label="Pending" />;
   }

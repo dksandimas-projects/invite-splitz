@@ -3,13 +3,13 @@
 import * as React from "react";
 import Link from "next/link";
 import { dashboardHref } from "@/lib/nav";
+import { useAuth } from "./AuthGuard";
+import { signOutUser } from "@/lib/auth";
 
 interface TopNavProps {
   coupleName: string;
   weddingId: string;
   activeSection: "overview" | "guests" | "settings";
-  userEmail?: string;
-  onSignOut?: () => void;
 }
 
 const navLinks: { key: "overview" | "guests" | "settings"; label: string; path: string }[] = [
@@ -18,13 +18,13 @@ const navLinks: { key: "overview" | "guests" | "settings"; label: string; path: 
   { key: "settings", label: "Settings", path: "settings" },
 ];
 
-export function TopNav({
-  coupleName,
-  weddingId,
-  activeSection,
-  userEmail,
-  onSignOut,
-}: TopNavProps) {
+export function TopNav({ coupleName, weddingId, activeSection }: TopNavProps) {
+  const { user } = useAuth();
+
+  const handleSignOut = async () => {
+    await signOutUser();
+  };
+
   return (
     <header className="sticky top-0 z-30 bg-white border-b border-stone">
       <div className="flex items-center justify-between px-4 sm:px-6 py-4 max-w-dashboard mx-auto">
@@ -56,14 +56,14 @@ export function TopNav({
         </nav>
 
         <div className="flex items-center gap-3">
-          {userEmail ? (
+          {user?.email ? (
             <span className="hidden md:inline text-xs text-warm-grey truncate max-w-[160px]">
-              {userEmail}
+              {user.email}
             </span>
           ) : null}
           <button
             type="button"
-            onClick={onSignOut}
+            onClick={handleSignOut}
             className="text-sm text-warm-grey hover:text-charcoal hover:underline transition-colors min-h-[44px] px-2"
           >
             <span className="hidden sm:inline">Sign out</span>

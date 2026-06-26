@@ -1,14 +1,25 @@
+import { getAuthorizedEmails, getWedding } from "@/lib/firestore";
+import { serializeWedding } from "@/lib/serialize";
 import { SettingsScreen } from "@/components/dashboard/SettingsScreen";
-import { weddingConfig } from "@/lib/config";
 
-export default function Page({
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
+export default async function Page({
   params,
 }: {
   params: { weddingId: string };
 }) {
-  return <SettingsScreen weddingId={params.weddingId} />;
-}
+  const [wedding, initialAccessEmails] = await Promise.all([
+    getWedding().catch(() => null),
+    getAuthorizedEmails().catch(() => [] as string[]),
+  ]);
 
-export const metadata = {
-  title: `Settings • ${weddingConfig.coupleName}`,
-};
+  return (
+    <SettingsScreen
+      weddingId={params.weddingId}
+      wedding={serializeWedding(wedding)}
+      initialAccessEmails={initialAccessEmails}
+    />
+  );
+}

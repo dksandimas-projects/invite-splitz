@@ -1,8 +1,12 @@
 import { headers } from "next/headers";
+import { getWedding, listGuests } from "@/lib/firestore";
+import { serializeGuests, serializeWedding } from "@/lib/serialize";
 import { GuestList } from "@/components/dashboard/GuestList";
-import { weddingConfig } from "@/lib/config";
 
-export default function Page({
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
+export default async function Page({
   params,
 }: {
   params: { weddingId: string };
@@ -14,9 +18,17 @@ export default function Page({
     process.env.NEXT_PUBLIC_BASE_URL?.replace(/\/$/, "") ??
     `${proto}://${host}`;
 
-  return <GuestList weddingId={params.weddingId} baseUrl={baseUrl} />;
-}
+  const [wedding, guests] = await Promise.all([
+    getWedding().catch(() => null),
+    listGuests().catch(() => []),
+  ]);
 
-export const metadata = {
-  title: `Guests • ${weddingConfig.coupleName}`,
-};
+  return (
+    <GuestList
+      weddingId={params.weddingId}
+      wedding={serializeWedding(wedding)}
+      initialGuests={serializeGuests(guests)}
+      baseUrl={baseUrl}
+    />
+  );
+}

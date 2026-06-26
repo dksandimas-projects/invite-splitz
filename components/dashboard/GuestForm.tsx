@@ -6,13 +6,21 @@ import { Button } from "@/components/shared/Button";
 import { FormField } from "@/components/shared/FormField";
 import { Input } from "@/components/shared/Input";
 import { Select } from "@/components/shared/Select";
-import type { Guest, GuestRole } from "@/types";
+import type { GuestRole } from "@/types";
+import type { SerializedGuest } from "@/lib/serialize";
 
 interface GuestFormProps {
   isOpen: boolean;
   onClose: () => void;
   mode: "add" | "edit";
-  initial?: Guest;
+  initial?: SerializedGuest;
+  onSubmit?: (data: {
+    firstName: string;
+    lastName: string;
+    pax: number;
+    role: GuestRole;
+  }) => Promise<void> | void;
+  busy?: boolean;
 }
 
 const ROLE_OPTIONS: { value: GuestRole; label: string }[] = [
@@ -22,11 +30,19 @@ const ROLE_OPTIONS: { value: GuestRole; label: string }[] = [
   { value: "Principal Sponsor", label: "Principal Sponsor" },
 ];
 
-export function GuestForm({ isOpen, onClose, mode, initial }: GuestFormProps) {
+export function GuestForm({
+  isOpen,
+  onClose,
+  mode,
+  initial,
+  onSubmit,
+  busy = false,
+}: GuestFormProps) {
   const [firstName, setFirstName] = React.useState(initial?.firstName ?? "");
   const [lastName, setLastName] = React.useState(initial?.lastName ?? "");
   const [pax, setPax] = React.useState<string>(String(initial?.pax ?? 1));
   const [role, setRole] = React.useState<GuestRole>(initial?.role ?? "Guest");
+  const [submitting, setSubmitting] = React.useState(false);
 
   React.useEffect(() => {
     if (isOpen) {
@@ -37,6 +53,33 @@ export function GuestForm({ isOpen, onClose, mode, initial }: GuestFormProps) {
     }
   }, [isOpen, initial]);
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!onSubmit) {
+      onClose();
+      return;
+    }
+    setSubmitting(true);
+    try {
+      await onSubmit({
+        firstName: firstName.trim(),
+        lastName: lastName.trim(),
+        pax: Math.max(1, Number(pax) || 1),
+        role,
+      });
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const isDisabled =
+    busy ||
+    submitting ||
+    !firstName.trim() ||
+    !lastName.trim() ||
+    !pax ||
+    Number(pax) < 1;
+
   return (
     <Modal
       isOpen={isOpen}
@@ -45,13 +88,21 @@ export function GuestForm({ isOpen, onClose, mode, initial }: GuestFormProps) {
       size="md"
       footer={
         <>
-          <Button variant="ghost" size="sm" onClick={onClose} fullWidth>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onClose}
+            disabled={submitting}
+            fullWidth
+          >
             Cancel
           </Button>
           <Button
+            type="submit"
             variant="primary"
             size="sm"
-            onClick={onClose}
+            loading={submitting || busy}
+            disabled={isDisabled}
             fullWidth
           >
             {mode === "add" ? "Add Guest" : "Save Changes"}
@@ -59,13 +110,7 @@ export function GuestForm({ isOpen, onClose, mode, initial }: GuestFormProps) {
         </>
       }
     >
-      <form
-        className="space-y-4"
-        onSubmit={(e) => {
-          e.preventDefault();
-          onClose();
-        }}
-      >
+      <form className="space-y-4" onSubmit={handleSubmit}>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <FormField label="First Name" required htmlFor="firstName">
             <Input
@@ -73,6 +118,7 @@ export function GuestForm({ isOpen, onClose, mode, initial }: GuestFormProps) {
               value={firstName}
               onChange={setFirstName}
               placeholder="e.g. Maria"
+              disabled={submitting}
             />
           </FormField>
           <FormField label="Last Name" required htmlFor="lastName">
@@ -81,6 +127,7 @@ export function GuestForm({ isOpen, onClose, mode, initial }: GuestFormProps) {
               value={lastName}
               onChange={setLastName}
               placeholder="e.g. Santos"
+              disabled={submitting}
             />
           </FormField>
         </div>
@@ -93,6 +140,7 @@ export function GuestForm({ isOpen, onClose, mode, initial }: GuestFormProps) {
               min={1}
               value={pax}
               onChange={setPax}
+              disabled={submitting}
             />
           </FormField>
           <FormField label="Role" required htmlFor="role">
@@ -104,9 +152,6 @@ export function GuestForm({ isOpen, onClose, mode, initial }: GuestFormProps) {
             />
           </FormField>
         </div>
-        <p className="text-xs text-warm-grey italic">
-          Static — saving will be enabled in a later phase.
-        </p>
       </form>
     </Modal>
   );

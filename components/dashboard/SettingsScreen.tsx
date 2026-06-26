@@ -4,28 +4,36 @@ import * as React from "react";
 import { TopNav } from "@/components/dashboard/TopNav";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { WeddingSettingsForm } from "@/components/dashboard/WeddingSettingsForm";
-import { weddingConfig } from "@/lib/config";
 import { dashboardHref } from "@/lib/nav";
+import type { SerializedWedding } from "@/lib/serialize";
 
 interface SettingsScreenProps {
   weddingId: string;
+  wedding: SerializedWedding | null;
+  initialAccessEmails: string[];
 }
 
-export function SettingsScreen({ weddingId }: SettingsScreenProps) {
+export function SettingsScreen({
+  weddingId,
+  wedding,
+  initialAccessEmails,
+}: SettingsScreenProps) {
   return (
     <div className="min-h-screen flex flex-col bg-offwhite">
       <TopNav
-        coupleName={weddingConfig.coupleName}
+        coupleName={wedding?.coupleName ?? "Wedding Dashboard"}
         weddingId={weddingId}
         activeSection="settings"
-        userEmail="dksandimas@gmail.com"
       />
       <main className="flex-1 w-full max-w-[576px] mx-auto px-4 sm:px-6 py-10">
         <PageHeader
           title="Wedding Settings"
           subtitle="Changes are saved to your live site immediately."
         />
-        <WeddingSettingsForm />
+        <WeddingSettingsForm
+          wedding={wedding}
+          initialAccessEmails={initialAccessEmails}
+        />
         <p className="mt-6 text-xs text-warm-grey text-center">
           <a
             href={dashboardHref(weddingId, "guests")}

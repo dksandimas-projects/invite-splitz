@@ -1,3 +1,5 @@
+import { getGuestByToken, getWedding } from "@/lib/firestore";
+import { weddingConfig as fallbackConfig } from "@/lib/config";
 import { GuestTopNav } from "@/components/site/GuestTopNav";
 import { HeroSection } from "@/components/site/HeroSection";
 import { GreetingSection } from "@/components/site/GreetingSection";
@@ -10,110 +12,88 @@ import { EventDetails } from "@/components/site/EventDetails";
 import { DressCode } from "@/components/site/DressCode";
 import { PhotoQR } from "@/components/site/PhotoQR";
 import { BibleVerseFooter } from "@/components/site/BibleVerseFooter";
-import { ScrollDownGuide } from "@/components/site/ScrollDownGuide";
-import { weddingConfig } from "@/lib/config";
-import { DUMMY_GUESTS } from "@/lib/dummyData";
 
 interface SearchParams {
   guest?: string;
 }
 
-export default function Page({
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
+export default async function Page({
   searchParams,
 }: {
   searchParams: SearchParams;
 }) {
-  // Phase 1: token resolution is static. Find a dummy guest whose token matches.
+  const wedding = await getWedding();
   const token = searchParams?.guest ?? "";
-  const resolvedGuest = token
-    ? DUMMY_GUESTS.find((g) => g.token === token) ?? null
-    : null;
-  const guestName = resolvedGuest
-    ? resolvedGuest.firstName
-    : null;
+  const guest = token ? await getGuestByToken(token) : null;
+
+  // Use the Firestore wedding doc when present; fall back to the local
+  // weddingConfig so the site still renders before the first deploy.
+  const coupleName = wedding?.coupleName ?? fallbackConfig.coupleName;
+  const weddingDate = wedding?.weddingDate ?? fallbackConfig.weddingDate;
+  const weddingDateLabel =
+    wedding?.weddingDate ? formatWeddingDate(wedding.weddingDate) : fallbackConfig.weddingDateLabel;
+  const photoAlbumUrl = wedding?.photoAlbumUrl ?? fallbackConfig.photoAlbumUrl;
+  const ceremony = wedding?.ceremony ?? fallbackConfig.ceremony;
+  const reception = wedding?.reception ?? fallbackConfig.reception;
+  const dressCode = wedding?.dressCode ?? fallbackConfig.dressCode;
+  const entourage = wedding?.entourage ?? fallbackConfig.entourage;
+  const guestName = guest ? guest.firstName : null;
 
   return (
     <>
-      <GuestTopNav coupleName={weddingConfig.coupleName} />
+      <GuestTopNav coupleName={coupleName} />
       <main className="bg-offwhite min-h-screen">
-        <div data-scroll-section>
-          <HeroSection
-            coupleName={weddingConfig.coupleName}
-            weddingDate={weddingConfig.weddingDate}
-            weddingDateLabel={weddingConfig.weddingDateLabel}
-          />
-          <ScrollDownGuide />
-        </div>
-
-        <div data-scroll-section>
-          <GreetingSection guestName={guestName} />
-          <ScrollDownGuide />
-        </div>
-
-        <div data-scroll-section>
-          <ImageBreak />
-          <ScrollDownGuide />
-        </div>
-
-        <div>
-          <NoPlusOneNotice text={weddingConfig.noPlusOneText} />
-        </div>
-
-        <div data-scroll-section>
-          <GiftNote body={weddingConfig.giftNoteText} />
-          {!resolvedGuest && <ScrollDownGuide />}
-        </div>
-
-        {resolvedGuest ? (
-          <div id="rsvp" data-scroll-section>
+        <HeroSection
+          coupleName={coupleName}
+          weddingDate={weddingDate}
+          weddingDateLabel={weddingDateLabel}
+        />
+        <GreetingSection guestName={guestName} />
+        <ImageBreak />
+        <NoPlusOneNotice text={fallbackConfig.noPlusOneText} />
+        <GiftNote body={fallbackConfig.giftNoteText} />
+        {guest ? (
+          <div id="rsvp">
             <RSVPSection
-              token={resolvedGuest.token}
-              pax={resolvedGuest.pax}
-              existingRsvpCount={resolvedGuest.rsvpCount}
+              token={guest.token}
+              pax={guest.pax}
+              existingRsvpCount={guest.rsvpCount}
             />
-            <ScrollDownGuide />
           </div>
         ) : null}
-
-        <div data-scroll-section>
-          <EntourageSection entourage={weddingConfig.entourage} />
-          <ScrollDownGuide />
-        </div>
-
-        <div data-scroll-section>
-          <EventDetails
-            ceremony={weddingConfig.ceremony}
-            reception={weddingConfig.reception}
-          />
-          <ScrollDownGuide />
-        </div>
-
-        <div data-scroll-section>
-          <DressCode
-            description={weddingConfig.dressCode.description}
-            palette={weddingConfig.dressCode.palette}
-          />
-          <ScrollDownGuide />
-        </div>
-
-        <div data-scroll-section>
-          <PhotoQR
-            albumUrl={weddingConfig.photoAlbumUrl}
-            headline={weddingConfig.photoQRHeadline}
-            body={weddingConfig.photoQRBody}
-          />
-          <ScrollDownGuide />
-        </div>
-
-        <div>
-          <BibleVerseFooter
-            text={weddingConfig.bibleVerse.text}
-            reference={weddingConfig.bibleVerse.reference}
-            coupleName={weddingConfig.coupleName}
-          />
-        </div>
+        <EntourageSection entourage={entourage} />
+        <EventDetails ceremony={ceremony} reception={reception} />
+        <DressCode
+          description={dressCode.description}
+          palette={dressCode.palette}
+        />
+        <PhotoQR
+          albumUrl={photoAlbumUrl}
+          headline={fallbackConfig.photoQRHeadline}
+          body={fallbackConfig.photoQRBody}
+        />
+        <BibleVerseFooter
+          text={fallbackConfig.bibleVerse.text}
+          reference={fallbackConfig.bibleVerse.reference}
+          coupleName={coupleName}
+        />
       </main>
     </>
   );
 }
 
+function formatWeddingDate(iso: string): string {
+  // "2026-08-01" → "August 1, 2026"
+  const [y, m, d] = iso.split("-").map(Number);
+  if (!y || !m || !d) return iso;
+  const date = new Date(Date.UTC(y, m - 1, d));
+  return date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    timeZone: "UTC",
+  });
+}
