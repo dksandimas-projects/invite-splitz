@@ -72,15 +72,20 @@
 
 ---
 
-## ADR-006 — Both Google Sign-in and email/password simultaneously
+## ADR-006 — Three sign-in methods, allowlist-gated access
 
-**Decision:** The sign-in screen supports both Google Sign-in (`signInWithPopup`) and email/password (`signInWithEmailAndPassword`) at the same time. No self-signup — DK creates email/password accounts manually in Firebase Console.
+**Decision:** The unauthenticated flow offers Google Sign-in (`signInWithPopup`), email/password sign-in (`signInWithEmailAndPassword`), self-signup (`createUserWithEmailAndPassword`), and a self-serve password reset (`sendPasswordResetEmail`). All three entry points funnel through the same `AuthGuard` allowlist check against `authorizedEmails` — that check is the only security gate.
 
-**Why:** The couple prefers not to manage a Google account for dashboard access. DK uses Google Sign-in for convenience. The bride/groom may use email/password. Both methods funnel through the same `AuthGuard` email check, so access control is method-agnostic.
+**Why:** Originally DK was the sole account creator and shared passwords out-of-band. That put DK in the loop for every new authorized user (couple, planner, photographer) and every password reset. The allowlist is already the security boundary, so opening self-signup + reset does not weaken it — it just removes DK from the routine flow. A user who signs up with an email that's not on the list is signed in then immediately signed out and shown Access Denied, identical to a non-allowlisted Google account.
 
-**What to never add:**
-- "Create account" or "Sign up" link on the sign-in screen
-- "Forgot password" flow (DK resets passwords via Firebase Console)
+**What this means for the codebase:**
+- The "Create an account" and "Forgot password?" sub-screens live inside `AuthGuard` as inline views (per G-008, no URL change, no new route).
+- The Forgot Password success message is identical whether or not the email has a Firebase Auth account — never reveal account existence.
+- DK's role shrinks to: keep `authorizedEmails` current via Wedding Settings → Team Access.
+
+**What not to do:**
+- Do not add email enumeration via the reset flow (always show the same success message).
+- Do not remove the `AuthGuard` allowlist check from any of the three methods.
 
 ---
 

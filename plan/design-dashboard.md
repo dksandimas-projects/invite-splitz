@@ -73,8 +73,11 @@ Present on all authenticated dashboard screens.
 - Email field: `type="email"`, label `"Email"`, placeholder `"you@example.com"`
 - Password field: `type="password"`, label `"Password"`, placeholder `"••••••••"`
   - Show/hide toggle: eye icon button, right edge of input, `min-w-[44px] min-h-[44px]`
+- `"Forgot password?"` — small text link, right-aligned, sits between the password field and the Sign In button. `text-xs`, warm grey, hover underline.
 - Submit button: `"Sign In"` — primary (sunflower), `w-full`, `min-h-[48px]`
-- No "Create account" link, no "Forgot password" link
+
+**Below the form (replaces the previous "no links" rule):**
+- `"New here? Create an account"` — small text link, centered. The "Create an account" portion is forest green, `font-medium`, hover underline. Routes to the Sign-Up sub-screen (Screen 1b).
 
 **Input style (applies to both fields):**
 - `w-full border border-[#E2DED8] rounded-md px-3 py-2 text-base` (16px — prevents iOS zoom)
@@ -90,6 +93,66 @@ Present on all authenticated dashboard screens.
 - Never reveal whether the email exists
 
 **Card size:** `max-w-sm w-full`, `p-8`, `bg-white`, `rounded-lg`, `shadow-sm`
+
+---
+
+### Screen 1b — Sign-Up
+
+**Route:** `/dashboard` (unauthenticated state, sign-up sub-view)
+**File:** Rendered inside `AuthGuard` as a sub-view of the unauthenticated state — toggled by clicking `"Create an account"` on Screen 1. No URL change (per G-008).
+
+**Layout:** Same centered card as Screen 1, same dimensions and chrome (couple name, "Dashboard" label, sunflower divider).
+
+**Body copy:** `"Create an account to access the dashboard. Your email must already be on the access list — ask the couple if it isn't."` — small, warm grey, centered. Sets expectations so a non-allowlisted signup attempt doesn't surprise the user with Access Denied.
+
+**Form fields (top to bottom):**
+- Email — `type="email"`, `autoComplete="email"`, same input style as Screen 1
+- Password — `type="password"`, `autoComplete="new-password"`, hint `"At least 6 characters"`, show/hide toggle
+- Confirm password — `type="password"`, `autoComplete="new-password"`, show/hide toggle
+
+**Submit button:** `"Create Account"` — primary (sunflower), `w-full`, `min-h-[48px]`
+
+**Error states:**
+- Inline, under the password field: `"Password must be at least 6 characters."` or `"Password is too weak. Use at least 6 characters."` (from `auth/weak-password`)
+- Inline, under the confirm field: `"Passwords do not match."`
+- Inline, under the email field: `"Please enter a valid email address."` (from `auth/invalid-email`)
+- Form-level, below the submit button: `"An account with this email already exists. Try signing in."` (from `auth/email-already-in-use`) or `"Sign-up failed. Please try again."` (other errors)
+
+**After success:** `onAuthStateChanged` fires → `AuthGuard` runs the allowlist check. Allowed → dashboard. Not allowed → Access Denied.
+
+**Below the form:**
+- `"Already have an account? Back to sign in"` — same style as the Screen 1 "Create an account" link. Routes back to Screen 1.
+
+---
+
+### Screen 1c — Forgot Password
+
+**Route:** `/dashboard` (unauthenticated state, forgot-password sub-view)
+**File:** Rendered inside `AuthGuard` as a sub-view of the unauthenticated state — toggled by clicking `"Forgot password?"` on Screen 1. No URL change.
+
+**Layout:** Same centered card as Screen 1, same chrome (couple name, "Dashboard" label, sunflower divider).
+
+**Body copy (form state):** `"Enter your email and we'll send you a link to reset your password."`
+
+**Body copy (success state, replaces the form):**
+- Heading: `"Check your inbox."` — `text-sm`, charcoal, centered
+- Body: `"If an account exists for {email}, we've sent a password reset link."` — `text-sm`, warm grey, centered
+
+**Form fields (form state only):**
+- Email — `type="email"`, `autoComplete="email"`, same input style as Screen 1
+
+**Submit button:** `"Send Reset Link"` — primary (sunflower), `w-full`, `min-h-[48px]`
+
+**Error states (form state):**
+- Inline, under the email field: `"Please enter a valid email address."` (from `auth/invalid-email`)
+- Form-level, below the submit button: `"Too many requests. Please try again later."` (from `auth/too-many-requests`) or `"Could not send reset link. Please try again."` (other errors)
+
+**Success behavior:** the form is replaced by the success body copy. The "Back to sign in" link remains. The user does not need to do anything further — they check their email in another tab/app.
+
+**Never reveal whether the email exists.** The success message wording is identical for existing and non-existing emails. This prevents account enumeration.
+
+**Below the card (always visible):**
+- `"Back to sign in"` — same style as the Screen 1 links. Routes back to Screen 1.
 
 ---
 

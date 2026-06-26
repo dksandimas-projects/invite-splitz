@@ -1,5 +1,7 @@
 import {
+  createUserWithEmailAndPassword,
   GoogleAuthProvider,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
@@ -17,6 +19,17 @@ export async function signInWithEmail(
   password: string
 ): Promise<void> {
   await signInWithEmailAndPassword(auth, email, password);
+}
+
+export async function createAccount(
+  email: string,
+  password: string
+): Promise<void> {
+  await createUserWithEmailAndPassword(auth, email, password);
+}
+
+export async function sendPasswordReset(email: string): Promise<void> {
+  await sendPasswordResetEmail(auth, email);
 }
 
 export async function signOutUser(): Promise<void> {

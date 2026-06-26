@@ -4,13 +4,20 @@ import * as React from "react";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { getAuthorizedEmails } from "@/lib/firestore";
-import { signOutUser, signInWithGoogle, signInWithEmail } from "@/lib/auth";
+import {
+  signOutUser,
+  signInWithGoogle,
+  signInWithEmail,
+  createAccount,
+  sendPasswordReset,
+} from "@/lib/auth";
 import { Spinner } from "@/components/shared/Spinner";
 import { Button } from "@/components/shared/Button";
 import { Input } from "@/components/shared/Input";
 import { FormField } from "@/components/shared/FormField";
 
 type AuthStatus = "loading" | "unauthenticated" | "denied" | "authorized";
+type AuthMode = "signIn" | "signUp" | "forgotPassword";
 
 interface AuthContextValue {
   user: User | null;
@@ -64,7 +71,7 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
   }
 
   if (status === "unauthenticated") {
-    return <SignInScreen />;
+    return <AuthFlow />;
   }
 
   if (status === "denied") {
@@ -84,7 +91,30 @@ export function AuthLoading() {
   );
 }
 
-function SignInScreen() {
+function AuthFlow() {
+  const [mode, setMode] = React.useState<AuthMode>("signIn");
+
+  if (mode === "signUp") {
+    return <SignUpScreen onBack={() => setMode("signIn")} />;
+  }
+  if (mode === "forgotPassword") {
+    return <ForgotPasswordScreen onBack={() => setMode("signIn")} />;
+  }
+  return (
+    <SignInScreen
+      onCreateAccount={() => setMode("signUp")}
+      onForgotPassword={() => setMode("forgotPassword")}
+    />
+  );
+}
+
+function SignInScreen({
+  onCreateAccount,
+  onForgotPassword,
+}: {
+  onCreateAccount: () => void;
+  onForgotPassword: () => void;
+}) {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [emailSubmitting, setEmailSubmitting] = React.useState(false);
@@ -161,6 +191,16 @@ function SignInScreen() {
               disabled={emailSubmitting}
             />
           </FormField>
+          <div className="flex justify-end -mt-2">
+            <button
+              type="button"
+              onClick={onForgotPassword}
+              disabled={emailSubmitting}
+              className="text-xs text-warm-grey hover:text-forest hover:underline disabled:opacity-50"
+            >
+              Forgot password?
+            </button>
+          </div>
           <Button
             type="submit"
             variant="primary"
@@ -195,8 +235,243 @@ function SignInScreen() {
           </Button>
         </form>
 
-        <p className="mt-8 text-xs text-warm-grey text-center leading-relaxed max-w-[240px]">
+        <p className="mt-6 text-xs text-warm-grey text-center">
+          New here?{" "}
+          <button
+            type="button"
+            onClick={onCreateAccount}
+            disabled={emailSubmitting}
+            className="text-forest font-medium hover:underline disabled:opacity-50"
+          >
+            Create an account
+          </button>
+        </p>
+
+        <p className="mt-6 text-xs text-warm-grey text-center leading-relaxed max-w-[240px]">
           Access is restricted to authorized accounts only.
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function SignUpScreen({ onBack }: { onBack: () => void }) {
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [confirm, setConfirm] = React.useState("");
+  const [submitting, setSubmitting] = React.useState(false);
+  const [error, setError] = React.useState<string | null>(null);
+  const [fieldError, setFieldError] = React.useState<string | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    setFieldError(null);
+    if (password.length < 6) {
+      setFieldError("Password must be at least 6 characters.");
+      return;
+    }
+    if (password !== confirm) {
+      setFieldError("Passwords do not match.");
+      return;
+    }
+    setSubmitting(true);
+    try {
+      await createAccount(email, password);
+    } catch (err) {
+      const code = (err as { code?: string })?.code;
+      if (code === "auth/email-already-in-use") {
+        setError("An account with this email already exists. Try signing in.");
+      } else if (code === "auth/weak-password") {
+        setFieldError("Password is too weak. Use at least 6 characters.");
+      } else if (code === "auth/invalid-email") {
+        setFieldError("Please enter a valid email address.");
+      } else {
+        setError("Sign-up failed. Please try again.");
+      }
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="min-h-[80vh] flex items-center justify-center px-4 py-10">
+      <div className="w-full max-w-sm bg-white shadow-soft border border-stone rounded-xl p-8 flex flex-col items-center">
+        <h1 className="font-serif text-section-heading text-charcoal text-center mb-1">
+          Bretch &amp; Joyce
+        </h1>
+        <p className="text-xs tracking-[0.2em] uppercase text-warm-grey text-center mb-6">
+          Dashboard
+        </p>
+        <div className="w-16 h-px bg-sunflower mb-6" />
+        <p className="text-sm text-warm-grey text-center mb-8 leading-relaxed">
+          Create an account to access the dashboard. Your email must already be
+          on the access list — ask the couple if it isn&apos;t.
+        </p>
+
+        <form className="w-full space-y-4" onSubmit={handleSubmit}>
+          <FormField label="Email" htmlFor="signup-email">
+            <Input
+              id="signup-email"
+              type="email"
+              value={email}
+              onChange={setEmail}
+              placeholder="you@example.com"
+              autoComplete="email"
+              disabled={submitting}
+            />
+          </FormField>
+          <FormField
+            label="Password"
+            htmlFor="signup-password"
+            hint="At least 6 characters"
+            error={fieldError && password.length < 6 ? fieldError : undefined}
+          >
+            <Input
+              id="signup-password"
+              type="password"
+              value={password}
+              onChange={setPassword}
+              placeholder="••••••••"
+              autoComplete="new-password"
+              disabled={submitting}
+            />
+          </FormField>
+          <FormField
+            label="Confirm password"
+            htmlFor="signup-confirm"
+            error={fieldError && password.length >= 6 && password !== confirm ? fieldError : undefined}
+          >
+            <Input
+              id="signup-confirm"
+              type="password"
+              value={confirm}
+              onChange={setConfirm}
+              placeholder="••••••••"
+              autoComplete="new-password"
+              disabled={submitting}
+            />
+          </FormField>
+          <Button
+            type="submit"
+            variant="primary"
+            size="md"
+            loading={submitting}
+            disabled={submitting}
+            fullWidth
+          >
+            Create Account
+          </Button>
+          {error ? (
+            <p className="text-xs text-red-500 text-center">{error}</p>
+          ) : null}
+        </form>
+
+        <p className="mt-6 text-xs text-warm-grey text-center">
+          Already have an account?{" "}
+          <button
+            type="button"
+            onClick={onBack}
+            disabled={submitting}
+            className="text-forest font-medium hover:underline disabled:opacity-50"
+          >
+            Back to sign in
+          </button>
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function ForgotPasswordScreen({ onBack }: { onBack: () => void }) {
+  const [email, setEmail] = React.useState("");
+  const [submitting, setSubmitting] = React.useState(false);
+  const [sent, setSent] = React.useState(false);
+  const [error, setError] = React.useState<string | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    setSubmitting(true);
+    try {
+      await sendPasswordReset(email);
+      setSent(true);
+    } catch (err) {
+      const code = (err as { code?: string })?.code;
+      if (code === "auth/invalid-email") {
+        setError("Please enter a valid email address.");
+      } else if (code === "auth/too-many-requests") {
+        setError("Too many requests. Please try again later.");
+      } else {
+        setError("Could not send reset link. Please try again.");
+      }
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="min-h-[80vh] flex items-center justify-center px-4 py-10">
+      <div className="w-full max-w-sm bg-white shadow-soft border border-stone rounded-xl p-8 flex flex-col items-center">
+        <h1 className="font-serif text-section-heading text-charcoal text-center mb-1">
+          Bretch &amp; Joyce
+        </h1>
+        <p className="text-xs tracking-[0.2em] uppercase text-warm-grey text-center mb-6">
+          Dashboard
+        </p>
+        <div className="w-16 h-px bg-sunflower mb-6" />
+        {sent ? (
+          <>
+            <p className="text-sm text-charcoal text-center mb-2 leading-relaxed">
+              Check your inbox.
+            </p>
+            <p className="text-sm text-warm-grey text-center mb-8 leading-relaxed">
+              If an account exists for <span className="font-medium text-charcoal">{email}</span>,
+              we&apos;ve sent a password reset link.
+            </p>
+          </>
+        ) : (
+          <p className="text-sm text-warm-grey text-center mb-8 leading-relaxed">
+            Enter your email and we&apos;ll send you a link to reset your password.
+          </p>
+        )}
+
+        {!sent ? (
+          <form className="w-full space-y-4" onSubmit={handleSubmit}>
+            <FormField label="Email" htmlFor="reset-email">
+              <Input
+                id="reset-email"
+                type="email"
+                value={email}
+                onChange={setEmail}
+                placeholder="you@example.com"
+                autoComplete="email"
+                disabled={submitting}
+              />
+            </FormField>
+            <Button
+              type="submit"
+              variant="primary"
+              size="md"
+              loading={submitting}
+              disabled={submitting}
+              fullWidth
+            >
+              Send Reset Link
+            </Button>
+            {error ? (
+              <p className="text-xs text-red-500 text-center">{error}</p>
+            ) : null}
+          </form>
+        ) : null}
+
+        <p className="mt-6 text-xs text-warm-grey text-center">
+          <button
+            type="button"
+            onClick={onBack}
+            className="text-forest font-medium hover:underline"
+          >
+            Back to sign in
+          </button>
         </p>
       </div>
     </div>

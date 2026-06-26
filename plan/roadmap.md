@@ -266,6 +266,7 @@ firestore.rules
 
 ### Tasks
 - [ ] Implement email + password sign-in using Firebase Auth (see `auth.md`)
+- [ ] Implement self-signup (`createUserWithEmailAndPassword`) and self-serve password reset (`sendPasswordResetEmail`) as sub-views inside `AuthGuard` — see `auth.md` "Sign-Up Screen" and "Forgot Password Screen"
 - [ ] Wrap all `/dashboard/[weddingId]` routes with `AuthGuard`
 - [ ] Build guest table: columns = Name, Pax, Role, Invite Link, RSVP Status (see `design-dashboard.md`)
 - [ ] Add/edit/delete guest functionality with modals

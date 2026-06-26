@@ -96,9 +96,11 @@ If the `private/access` doc hasn't been seeded yet, `getAuthorizedEmails()` will
 
 ---
 
-### G-010 — Email/password accounts must be created manually
+### G-010 — Self-signup is allowed but allowlist-gated
 
-There is no self-signup. DK creates email/password accounts via Firebase Console → Authentication → Users → Add user. If you try to call `createUserWithEmailAndPassword()` in code, remove it — it is not part of this codebase.
+Self-signup is enabled (`createUserWithEmailAndPassword()` is a legitimate call, used by the Sign-Up screen inside `AuthGuard`). A user who creates an account with an email not on `authorizedEmails` will be signed in then immediately signed out and shown Access Denied. The allowlist is the only security boundary — do not skip the `AuthGuard` check after signup.
+
+For the Forgot Password screen, always show the same success message regardless of whether the email exists in Firebase Auth. Never reveal account existence — see `auth.md` "Forgot Password Screen."
 
 ---
 

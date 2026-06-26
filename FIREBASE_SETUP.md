@@ -16,12 +16,14 @@ In the Firebase Console for the project:
 - **Build → Firestore Database** → **Create database** → start in **production mode** → choose region (e.g. `asia-southeast1`).
 - **Build → Authentication** → **Get started** → enable:
   - **Google** sign-in provider (add a support email).
-  - **Email/Password** sign-in provider.
+  - **Email/Password** sign-in provider (leave "Email link (passwordless sign-in)" off — only the password method is used).
 
 ## 3. Create your owner user
 
 1. **Authentication → Users** → **Add user** → enter your email + a password → **Add user**.
 2. Copy the **User UID** shown in the users list — this becomes `ownerId` in the seed config.
+
+> **Note:** This step is only needed to seed the Firestore wedding doc with your `ownerId` (Firestore rules use it). After that, all new dashboard users sign themselves up via the "Create an account" link on the sign-in screen. The allowlist (`weddings/{weddingId}/private/access.authorizedEmails`) is the security gate.
 
 ## 4. Seed via script (recommended)
 
