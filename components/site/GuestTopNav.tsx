@@ -13,9 +13,9 @@ export function GuestTopNav({ coupleName, monogram }: GuestTopNavProps) {
       .map((s) => s.trim()[0])
       .filter(Boolean)
       .slice(0, 2)
-      .join("")
+      .join("+")
       .toUpperCase() ||
-      "B&J");
+      "B+J");
 
   return (
     <nav

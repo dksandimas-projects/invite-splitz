@@ -22,8 +22,20 @@ export function BibleVerseFooter({
           — {reference}
         </p>
         <div className="w-8 h-px bg-sunflower mx-auto" />
-        <p className="text-[10px] tracking-widest uppercase text-warm-grey">
-          {coupleName} • invite-splitz
+        <p className="text-[10px] tracking-widest uppercase text-warm-grey flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2">
+          <span>{coupleName} • invite-splitz</span>
+          <span className="hidden sm:inline">•</span>
+          <span>
+            Created by{" "}
+            <a
+              href="https://instagram.com/dksandimas"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline hover:text-charcoal transition-colors"
+            >
+              @dksandimas
+            </a>
+          </span>
         </p>
       </div>
     </footer>
