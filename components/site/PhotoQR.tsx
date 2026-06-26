@@ -52,16 +52,31 @@ export function PhotoQR({
           )}
         </Card>
         {albumUrl ? (
-          <p className="mt-4">
+          <div className="mt-6 flex flex-col items-center gap-3">
+            <span className="text-xs tracking-widest uppercase text-warm-grey">or</span>
             <a
               href={albumUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-forest text-sm font-medium hover:underline min-h-[44px] inline-flex items-center"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-forest text-white text-sm font-medium tracking-wide hover:bg-garden transition-colors duration-200 min-h-[48px] shadow-sm"
             >
-              Or tap here to open the album
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden
+              >
+                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+                <circle cx="12" cy="13" r="4" />
+              </svg>
+              Open Photo Album
             </a>
-          </p>
+          </div>
         ) : null}
       </div>
     </section>
