@@ -16,7 +16,10 @@ export function GuestTopNav({ coupleName, monogram }: GuestTopNavProps) {
       "B&J");
 
   return (
-    <nav className="fixed top-0 w-full z-50 bg-offwhite/80 backdrop-blur-md">
+    <nav
+      className="fixed top-0 w-full z-50 bg-offwhite/80 backdrop-blur-md"
+      style={{ paddingTop: "env(safe-area-inset-top)" }}
+    >
       <div className="flex justify-between items-center px-6 max-w-guest mx-auto h-16">
         <span className="font-serif text-section-heading text-primary">
           {initials}

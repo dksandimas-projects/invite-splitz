@@ -20,6 +20,15 @@ const sizeClass: Record<Size, string> = {
   lg: "max-w-lg",
 };
 
+const FOCUSABLE_SELECTOR = [
+  "a[href]",
+  "button:not([disabled])",
+  "input:not([disabled])",
+  "select:not([disabled])",
+  "textarea:not([disabled])",
+  "[tabindex]:not([tabindex='-1'])",
+].join(",");
+
 export function Modal({
   isOpen,
   onClose,
@@ -29,6 +38,9 @@ export function Modal({
   footer,
   hideCloseButton = false,
 }: ModalProps) {
+  const panelRef = React.useRef<HTMLDivElement>(null);
+  const previouslyFocused = React.useRef<HTMLElement | null>(null);
+
   // Escape key to close
   React.useEffect(() => {
     if (!isOpen) return;
@@ -39,14 +51,59 @@ export function Modal({
     return () => document.removeEventListener("keydown", handler);
   }, [isOpen, onClose]);
 
-  // Lock body scroll while open
+  // Lock body scroll + focus management
   React.useEffect(() => {
     if (!isOpen) return;
     const previous = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+    previouslyFocused.current =
+      (document.activeElement as HTMLElement | null) ?? null;
+    // Defer focus to next tick so the panel is in the DOM
+    const id = window.setTimeout(() => {
+      const panel = panelRef.current;
+      if (!panel) return;
+      const focusables = panel.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR);
+      const first = focusables[0] ?? panel;
+      first.focus();
+    }, 0);
     return () => {
+      window.clearTimeout(id);
       document.body.style.overflow = previous;
+      previouslyFocused.current?.focus?.();
     };
+  }, [isOpen]);
+
+  // Focus trap on Tab
+  React.useEffect(() => {
+    if (!isOpen) return;
+    const panel = panelRef.current;
+    if (!panel) return;
+    const handler = (e: KeyboardEvent) => {
+      if (e.key !== "Tab") return;
+      const focusables = Array.from(
+        panel.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)
+      ).filter((el) => !el.hasAttribute("aria-hidden"));
+      if (focusables.length === 0) {
+        e.preventDefault();
+        return;
+      }
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      const active = document.activeElement as HTMLElement | null;
+      if (e.shiftKey) {
+        if (active === first || !panel.contains(active)) {
+          e.preventDefault();
+          last.focus();
+        }
+      } else {
+        if (active === last || !panel.contains(active)) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    };
+    document.addEventListener("keydown", handler);
+    return () => document.removeEventListener("keydown", handler);
   }, [isOpen]);
 
   if (!isOpen) return null;
@@ -62,6 +119,7 @@ export function Modal({
       }}
     >
       <div
+        ref={panelRef}
         className={[
           "relative w-full bg-white shadow-xl",
           "sm:rounded-lg sm:my-8",
@@ -69,6 +127,9 @@ export function Modal({
           "max-h-[90vh] overflow-y-auto",
           sizeClass[size],
         ].join(" ")}
+        // The dialog panel itself is not focusable by default; first
+        // focusable child receives initial focus via the effect above.
+        tabIndex={-1}
       >
         {/* Mobile drag handle */}
         <div className="sm:hidden flex justify-center pt-3 pb-1">

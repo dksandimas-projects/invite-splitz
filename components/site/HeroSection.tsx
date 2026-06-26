@@ -19,7 +19,7 @@ export function HeroSection({
   const parts = coupleName.split("&").map((s) => s.trim());
 
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center text-center py-24 sm:py-24 overflow-hidden">
+    <section className="relative min-h-[100dvh] flex flex-col items-center justify-center text-center py-24 sm:py-24 overflow-hidden">
       {backgroundImageUrl ? (
         <div
           className="absolute inset-0 bg-cover bg-center opacity-30"

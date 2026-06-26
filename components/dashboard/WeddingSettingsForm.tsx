@@ -345,7 +345,7 @@ export function WeddingSettingsForm({
                   href={draft.photoAlbumUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-forest text-sm hover:underline"
+                  className="text-forest text-sm font-medium hover:underline"
                 >
                   Open album ↗
                 </a>

@@ -21,7 +21,7 @@ function EventCard({ label, info }: { label: string; info: EventInfo }) {
         href={info.mapsUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="inline-flex items-center gap-2 text-forest text-sm hover:underline min-h-[44px]"
+        className="inline-flex items-center gap-2 text-forest text-sm font-medium hover:underline min-h-[44px]"
       >
         <svg
           width="16"

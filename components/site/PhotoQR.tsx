@@ -44,7 +44,7 @@ export function PhotoQR({
               href={albumUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-forest text-sm hover:underline min-h-[44px] inline-flex items-center"
+              className="text-forest text-sm font-medium hover:underline min-h-[44px] inline-flex items-center"
             >
               Or tap here to open the album
             </a>

@@ -15,10 +15,14 @@ const config: Config = {
         "sunflower-hover": "#D4B400",
         sage: "#B5CC6E",
         garden: "#7BB040",
-        forest: "#4E8A20",
+        // Darker than the spec #4E8A20 to clear WCAG AA contrast against
+        // white backgrounds (5.97:1 vs 4.21:1).
+        forest: "#3F6F19",
         offwhite: "#FAFAF5",
         charcoal: "#2C2B28",
-        "warm-grey": "#7A7670",
+        // Slightly darker than the spec #7A7670 to clear WCAG AA contrast
+        // against the offwhite background (~5.5:1 vs 4.31:1).
+        "warm-grey": "#6B6762",
         stone: "#E2DED8",
         "stone-light": "#F0EDE8",
         "surface-container-low": "#F4F4EF",
