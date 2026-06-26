@@ -1,49 +1,12 @@
 import * as React from "react";
 import { CountdownTimer } from "./CountdownTimer";
+import { BotanicalVines } from "./BotanicalVines";
 
 interface HeroSectionProps {
   coupleName: string;
   weddingDate: string; // ISO string, e.g. "2026-08-01"
   weddingDateLabel: string;
   backgroundImageUrl?: string;
-}
-
-function BotanicalLeft({ className = "" }: { className?: string }) {
-  return (
-    <svg
-      className={className}
-      viewBox="0 0 120 600"
-      width="120"
-      height="600"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-hidden
-    >
-      <path
-        d="M20 580 C 20 580 90 460 60 320 C 30 200 80 40 80 40"
-        stroke="#7BB040"
-        strokeWidth="1"
-        strokeDasharray="4 4"
-      />
-      <circle cx="80" cy="40" fill="#4E8A20" r="3" />
-      <circle cx="20" cy="580" fill="#4E8A20" r="3" />
-      <path
-        d="M30 460 q 40 -20 60 -60"
-        stroke="#7BB040"
-        strokeWidth="1"
-        fill="none"
-      />
-      <path
-        d="M40 320 q 30 -20 50 -50"
-        stroke="#7BB040"
-        strokeWidth="1"
-        fill="none"
-      />
-      <circle cx="90" cy="240" fill="#B5CC6E" r="2" />
-      <circle cx="70" cy="180" fill="#B5CC6E" r="2" />
-      <circle cx="55" cy="120" fill="#B5CC6E" r="2" />
-    </svg>
-  );
 }
 
 export function HeroSection({
@@ -65,12 +28,12 @@ export function HeroSection({
         />
       ) : null}
 
-      {/* Botanical accents — desktop only */}
-      <div className="hidden md:block absolute left-0 top-0 bottom-0 w-32 pointer-events-none opacity-40">
-        <BotanicalLeft className="h-full w-auto" />
+      {/* Botanical accents */}
+      <div className="absolute left-0 top-0 bottom-0 w-20 sm:w-32 md:w-44 overflow-hidden pointer-events-none opacity-50 sm:opacity-65 md:opacity-80 flex justify-start origin-bottom-left rotate-[3deg]">
+        <BotanicalVines className="h-full w-auto flex-shrink-0" />
       </div>
-      <div className="hidden md:block absolute right-0 top-0 bottom-0 w-32 pointer-events-none opacity-40 -scale-x-100">
-        <BotanicalLeft className="h-full w-auto" />
+      <div className="absolute right-0 top-0 bottom-0 w-20 sm:w-32 md:w-44 overflow-hidden pointer-events-none opacity-50 sm:opacity-65 md:opacity-80 flex justify-end origin-bottom-right -rotate-[3deg]">
+        <BotanicalVines className="h-full w-auto flex-shrink-0" isRightSide />
       </div>
 
       <div className="relative px-6 max-w-guest w-full mx-auto">
@@ -96,3 +59,4 @@ export function HeroSection({
     </section>
   );
 }
+
